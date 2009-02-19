@@ -1,0 +1,69 @@
+#!/bin/bash
+# $Id: release 69 2009-02-08 22:26:19Z albert.thuswaldner $
+# Last modified Thu Feb 19 23:31:46 2009 on violator
+# Update count: 97
+#
+# Created 2009-01-29, Albert Thuswaldner
+
+if [ $# -lt 1 ]; then 
+    cat <<HELP
+release  tag, build and register a new release of the project. 
+  
+USAGE: ./release versionnumber 
+
+HELP
+    exit 0
+fi  
+# Set variables       
+VER=$1
+
+# Get repository info
+PROJ="subdms"
+SRVREPO="https://"$PROJ$".googlecode.com/svn"
+SUBDIR="trunk/"
+TAGNAME=$PROJ"-"${VER//./-}
+MESSAGE="Tagging version "$VER
+INITFILE=$PROJ"/__init__.py"
+SETUPFILE="setup.py"
+
+# Set repodir
+REPODIR=$SRVREPO"/"$SUBDIR
+TAGDIR=$SRVREPO"/tags/"$TAGNAME
+
+# Ask user to confirm
+echo Tagging....
+echo $REPODIR to: 
+echo $TAGDIR
+
+while true; do
+  read -p "Confirm (y/n)? " 
+  case $REPLY in
+      y* | Y* ) 
+	  # Update files with new version number
+	  sed "s/__version__\ =\ [^ ]*/__version__\ =\ '$VER'/g" \
+	      $INITFILE > temp 
+	  mv -f temp $INITFILE
+	  sed "s/version=[^ ]*/version='$VER',/g" $SETUPFILE > temp 
+	  mv -f temp $SETUPFILE
+
+	  svn ci -m "Uped version" $INITFILE $SETUPFILE  
+	  
+	  # Tagging version
+	  svn copy $REPODIR $TAGDIR -m "$MESSAGE"
+
+	  # bulid source distribution and register 
+	  python ./setup.py sdist
+	  python ./setup.py register
+	  python ./googlecode_upload.py -s "version "$VER -p $PROJ \
+	      dist/$PROJ-$VER.tar.gz
+ 
+	  break;
+	  ;; 
+      [nN]* )   command ; break 
+	  ;;
+      q* ) exit 
+	  ;;
+      * ) echo "Enter yes or no" 
+	  ;;
+  esac
+done
