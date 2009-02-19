@@ -1,0 +1,47 @@
+#!/usr/bin/env python
+
+from pysqlite2 import dbapi2 as sqlite
+from optparse import OptionParser
+
+def command_output(cmd):
+  " Capture a command's standard output. "
+  import subprocess
+  return subprocess.Popen(
+      cmd.split(), stdout=subprocess.PIPE).communicate()[0]
+
+def main():
+  usage = """usage: %prog REPOS TXN
+#
+#Run pre-commit options on a repository transaction."""
+
+  parser = OptionParser(usage=usage)
+
+  (opts,(repos, rvn)) = parser.parse_args()
+
+  # Construct svnlook command 
+  look_opt = "--revision"
+  svn_look = "/usr/bin/svnlook"
+  look_cmd = "%s %s %s %s %s" % (svn_look, "%s", repos, look_opt, rvn)
+#  print look_cmd 
+
+  # Get info about commit
+  log_message = command_output(look_cmd % "log").rstrip("\n").rstrip()
+  changed = command_output(look_cmd % "changed")
+  author = command_output(look_cmd % "author")
+  filename = changed.split("/").pop().rstrip("\n").rstrip()
+  print filename 
+  if filename != "":
+      # Create a connection to the database file
+      con = sqlite.connect("./repodb")
+      cur = con.cursor()
+
+      # Construct sql command string
+      db_str="insert into revlist(revnum,filename,author,logtext) values("+rvn+",'"+filename+"','"+author+"','"+log_message+"')"
+      print db_str
+      
+      # Excecute sql command
+      cur.execute(db_str)
+
+if __name__ == "__main__":
+  import sys
+  sys.exit(main())
