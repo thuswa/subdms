@@ -1,6 +1,6 @@
 $Id$
-Last modified Sun Sep 28 23:31:57 2008 on violator
-update count: 17
+Last modified Thu Feb 19 23:41:18 2009 on violator
+update count: 18
 
 Subdms - Subversion Based Document Management System
 ####################################################
@@ -35,7 +35,7 @@ svn daemon                 db daemon
 - Documents are stored in a single subversion repository
 - Tree structure Project/Doctype/DocFolder/Doc.file
 - A workaround for the inability to check-out a single file 
-  in svn is to store each document in 
+  in svn is to store each document in a dedicated directory.
 
 1.2 Svn server demon
 --------------------
