@@ -1,16 +1,17 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Fri Feb 20 20:41:23 2009 on violator
-# update count: 5
+# Last modified Sun Feb 22 00:13:36 2009 on violator
+# update count: 10
 # -*- coding:  utf-8 -*-
 
 import ConfigParser
-import string
+#import string
 
 config = ConfigParser.ConfigParser()
 
 # Read 
-config.read("samples/sample.ini")
+config.read("subdmsrc")
 
 # print summary
-config.get("book", "title"))
+print config.get("Path", "repository")
+print config.get("Document", "type")
