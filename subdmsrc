@@ -1,6 +1,6 @@
-[Paths]
+[Path]
 repository: ./repo
 workspace: ./workspace
 
-[Documents]
-types: note report list spec
+[Document]
+type: note report list spec
