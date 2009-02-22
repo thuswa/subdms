@@ -1,17 +1,19 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Sun Feb 22 00:13:36 2009 on violator
-# update count: 10
+# Last modified Sun Feb 22 22:07:54 2009 on violator
+# update count: 11
 # -*- coding:  utf-8 -*-
 
 import ConfigParser
 #import string
 
-config = ConfigParser.ConfigParser()
+class dmsconfig:
+    config = ConfigParser.ConfigParser()
+    
+    # Read 
+    config.read("subdmsrc")
 
-# Read 
-config.read("subdmsrc")
-
-# print summary
-print config.get("Path", "repository")
-print config.get("Document", "type")
+    # print summary
+    def __init__(self):
+        self.repopath = config.get("Path", "repository")
+        self.doctypes = config.get("Document", "type")
