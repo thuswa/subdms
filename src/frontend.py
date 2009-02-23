@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Mon Feb 23 00:38:44 2009 on violator
-# update count: 90
+# Last modified Mon Feb 23 14:53:11 2009 on havoc
+# update count: 91
 
 """
 
@@ -20,7 +20,7 @@ def createproject(proj):
    #for doc in doctype:
    #   client.mkdir(URR+"/"+proj+"/"+doc,"create doc dirs",1)
 
-def createdocument(docname,doctitle):
+def createdocument(docname, doctitle):
    """    
    """
    
