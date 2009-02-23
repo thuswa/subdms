@@ -1,12 +1,13 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Mon Feb 23 00:36:00 2009 on violator
-# update count: 8
+# Last modified Mon Feb 23 15:05:56 2009 on havoc
+# update count: 20
 # -*- coding:  utf-8 -*-
 
 import os
 import pysvn
 import config
+import createdb
 
 conf = config.dmsconfig()
 client = pysvn.Client()
@@ -18,18 +19,19 @@ PROJNAME="project"
 DOCTYPE="note report"
 NRDOCS=2;
 
-# create test repo
+# create workspace directory
+if not os.path.isdir(conf.workpath):
+    os.mkdir(conf.workpath)
+
+# create db
+createdb.creatdb(conf.dbpath)
+
+# create subversion repository
 svnadmin create $REPONAME
 
 # copy hook to repo dir
 cp post-commit ./$REPONAME/hooks
 chmod +x ./$REPONAME/hooks/post-commit
-
-# create db
-./createdb.py
-
-# create temporary check-out dir
-mkdir ./workspace
 
 # create project layout and add some docs
 for DOC in $DOCTYPE; 
