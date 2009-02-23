@@ -1,16 +1,16 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Mon Feb 23 14:58:49 2009 on havoc
-# update count: 73
+# Last modified Mon Feb 23 23:32:02 2009 on violator
+# update count: 77
 # -*- coding:  utf-8 -*-
 
 from pysqlite2 import dbapi2 as sqlite
 
 """
-create database. Foŕ now a simple sqlite2 database is used
+create database. For now a simple sqlite2 database is used.
 """
 
-def creatdb(dbpath):
+def createdb(dbpath):
     # Create a connection to the database file
     con = sqlite.connect(dbpath)
     
@@ -34,5 +34,5 @@ def creatdb(dbpath):
 #cur.execute("select * from filelist")
     cur.execute("select * from revlist")
 
-print cur.fetchall()
+    print cur.fetchall()
 
