@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Mon Feb 23 15:05:56 2009 on havoc
-# update count: 20
+# Last modified Mon Feb 23 16:39:22 2009 on havoc
+# update count: 29
 # -*- coding:  utf-8 -*-
 
 import os
@@ -13,11 +13,8 @@ conf = config.dmsconfig()
 client = pysvn.Client()
 
 # set some vars
-REPONAME="repo"
-URR="file://"$PWD/$REPONAME
-PROJNAME="project"
-DOCTYPE="note report"
-NRDOCS=2;
+projname="project"
+nrdocs=2;
 
 # create workspace directory
 if not os.path.isdir(conf.workpath):
@@ -34,10 +31,8 @@ cp post-commit ./$REPONAME/hooks
 chmod +x ./$REPONAME/hooks/post-commit
 
 # create project layout and add some docs
-for DOC in $DOCTYPE; 
-do
-    for N in 1 $NRDOCS; 
-    do
+for DOC in conf.doctypes: 
+    for N in 1 nrdocs: 
 	svn mkdir --parents  -m "create doc dirs" $URR/$PROJ/$DOC/000$N
 	svn co $URR/$PROJ/$DOC/000$N ./workspace
 	DOCNAME=$PROJNAME-$DOC-000$N".txt"
