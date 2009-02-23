@@ -1,19 +1,18 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Sun Feb 22 22:07:54 2009 on violator
-# update count: 11
+# Last modified Mon Feb 23 00:38:15 2009 on violator
+# update count: 27
 # -*- coding:  utf-8 -*-
 
 import ConfigParser
-#import string
 
 class dmsconfig:
-    config = ConfigParser.ConfigParser()
     
-    # Read 
-    config.read("subdmsrc")
-
-    # print summary
     def __init__(self):
-        self.repopath = config.get("Path", "repository")
-        self.doctypes = config.get("Document", "type")
+        conf = ConfigParser.ConfigParser()
+        conf.read("subdms.cfg")
+        
+        self.repopath = conf.get("Path", "repository")
+        self.repourl = "file://" + self.repopath
+        self.workpath = conf.get("Path", "workspace")
+        self.doctypes = list(conf.get("Document", "type").split())

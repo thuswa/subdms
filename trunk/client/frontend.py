@@ -1,20 +1,17 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Thu Oct  9 23:26:15 2008 on violator
-# update count: 79
+# Last modified Mon Feb 23 00:38:44 2009 on violator
+# update count: 90
 
 """
 
 """
 import os
 import pysvn
+import config
 
 client = pysvn.Client()
-
-REPONAME="repo"
-URR="file://"+os.getcwd()+"/"+REPONAME
-doctype=["note","report","list"]
-workdir="./workspace"
+conf = config.dmsconfig()
 
 def createproject(proj):
    """    
@@ -36,17 +33,17 @@ def adddocument(docname,doctitle):
 
 def commit(docname,message):
    "commit changes on file"
-   client.checkin(work+"/"+docname.replace("-","/"), message)
+   client.checkin(conf.workpath+"/"+docname.replace("-","/"), message)
 
 def checkin(docname,message):
    "check-in file from workspace"
    commit(docname,message) 
-   os.remove(work+"/"+docname.replace("-","/"))  ##fix me
+   os.remove(conf.workpath+"/"+docname.replace("-","/"))  ##fix me
 
    
 def checkout(docname):
   "check-out file to workspace"
-  client.checkout(URR+docname.replace("-","/"),work)
+  client.checkout(conf.repourl+docname.replace("-","/"),conf.workpath)
 #  client.lock( 'file.txt', 'reason for locking' )
 
 def release(docname):
