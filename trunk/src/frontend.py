@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Mon Feb 23 23:12:16 2009 on violator
-# update count: 104
+# Last modified Tue Feb 24 16:37:22 2009 on havoc
+# update count: 107
 # -*- coding:  utf-8 -*-
 
 import os
@@ -16,8 +16,7 @@ client = pysvn.Client()
 conf = config.dmsconfig()
 
 def createproject(proj):
-   """    
-   """
+   """Create a project"""
    print proj
    for doc in conf.doctypes:
       client.mkdir(conf.repourl+"/"+proj+"/"+doc, \
@@ -25,14 +24,14 @@ def createproject(proj):
 
 def createdocument(docname, doctitle):
    """create document"""
-   docname.spl
-   client.checkout(conf.repourl+'/'+docname.replace("-","/"),conf.workpath)
+
    return None
 
 def adddocument(docname,doctitle):
    """    
+
    """
-   return None
+   client.checkout(conf.repourl+'/'+docname.replace("-","/"),conf.workpath)
 
 def commit(docname,message):
    """commit changes on file"""
