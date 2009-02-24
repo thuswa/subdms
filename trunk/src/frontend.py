@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Tue Feb 24 16:37:22 2009 on havoc
-# update count: 107
+# Last modified Tue Feb 24 16:38:10 2009 on havoc
+# update count: 108
 # -*- coding:  utf-8 -*-
 
 import os
@@ -24,7 +24,7 @@ def createproject(proj):
 
 def createdocument(docname, doctitle):
    """create document"""
-
+   adddocument(docname, doctitle)
    return None
 
 def adddocument(docname,doctitle):
