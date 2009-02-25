@@ -1,11 +1,13 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Tue Feb 24 16:38:10 2009 on havoc
-# update count: 108
+# Last modified Wed Feb 25 23:35:53 2009 on violator
+# update count: 148
 # -*- coding:  utf-8 -*-
 
 import os
 import pysvn
+import string
+
 import config
 
 """
@@ -19,7 +21,7 @@ def createproject(proj):
    """Create a project"""
    print proj
    for doc in conf.doctypes:
-      client.mkdir(conf.repourl+"/"+proj+"/"+doc, \
+      client.mkdir(os.path.join(conf.repourl,proj,doc), \
                    "create directory for project: "+proj,1)
 
 def createdocument(docname, doctitle):
@@ -27,12 +29,33 @@ def createdocument(docname, doctitle):
    adddocument(docname, doctitle)
    return None
 
-def adddocument(docname,doctitle):
+def adddocument(docnamelist, doctitle, addfile):
    """    
-
+   Add a document
+   
+   docnamelist: list containing the building blocks of the document name
+   doctitle: document title string.
+   addfile: path to the file to be added.
    """
-   client.checkout(conf.repourl+'/'+docname.replace("-","/"),conf.workpath)
+   docname=__const_docname(docnamelist)
+   conslist=[conf.repourl]
+   conslist.extend(docnamelist)
+   docurl=string.join(conslist[:-1], '/')
+   checkoutpath=os.path.join(conf.workpath, os.path.splitext(docname))
+   docpath=os.path.join(checkoutpath, docname)
 
+   # Create doc url in repository and check it out to workspace
+   client.mkdir(docurl,"create directory for : "+docname,1)
+   client.checkout(docurl, checkoutpath)
+
+   # Copy file to workspace and commit it
+   shutil.copyfile(addfile, docpath)
+   client.add(docpath)
+   client.checkin(docpath,"adding document: "+docname)
+
+   # Remove file from workspace
+
+   
 def commit(docname,message):
    """commit changes on file"""
    client.checkin(conf.workpath+"/"+docname.replace("-","/"), message)
@@ -56,8 +79,12 @@ def release(docname):
 ###############################################################################
 # Helper functions
 
+def __const_docname(docnamelist):
+   """ Construct the document file name. """
+   return string.join(doclist[:-1],'-')+'.'+docnamelist[-1:]
+
 def __command_output(cmd):
-  " Capture a command's standard output. "
+  """ Capture a command's standard output. """
   import subprocess
   return subprocess.Popen(
       cmd.split(), stdout=subprocess.PIPE).communicate()[0]
