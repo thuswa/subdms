@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Thu Feb 26 21:57:41 2009 on violator
-# update count: 156
+# Last modified Thu Feb 26 22:53:44 2009 on violator
+# update count: 161
 # -*- coding:  utf-8 -*-
 
 import os
@@ -22,13 +22,17 @@ def createproject(proj):
    """Create a project"""
    print proj
    for doc in conf.doctypes:
-      client.mkdir(os.path.join(conf.repourl,proj,doc), \
+      client.mkdir(os.path.join(conf.repourl, proj, doc), \
                    "create directory for project: "+proj,1)
 
-def createdocument(docname, doctitle):
-   """create document"""
-   adddocument(docname, doctitle)
-   return None
+def createdocument(docnamelist, doctitle):
+   """
+   Create a document
+   
+   docnamelist: list containing the building blocks of the document name
+   doctitle: document title string.
+   """
+   adddocument(docnamelist, doctitle, conf.tmpltxt)
 
 def adddocument(docnamelist, doctitle, addfile):
    """    
@@ -44,13 +48,13 @@ def adddocument(docnamelist, doctitle, addfile):
    docpath=os.path.join(checkoutpath, docname)
 
    # Create doc url in repository and check it out to workspace
-   client.mkdir(docurl,"create directory for : "+docname,1)
+   client.mkdir(docurl, "create directory for : "+docname,1)
    client.checkout(docurl, checkoutpath)
 
    # Copy file to workspace and commit it
    shutil.copyfile(addfile, docpath)
    client.add(docpath)
-   client.checkin(docpath,"adding document: "+docname)
+   client.checkin(docpath, "adding document: "+docname)
 
    # Set document title
    client.propset(title, doctitle, docpath)
