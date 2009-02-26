@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Thu Feb 26 13:23:54 2009 on havoc
-# update count: 45
+# Last modified Thu Feb 26 22:50:44 2009 on violator
+# update count: 47
 # -*- coding:  utf-8 -*-
 
 import os
@@ -28,6 +28,8 @@ if not os.path.isdir(conf.workpath):
 if not os.path.isdir(conf.tmplpath):
     os.makedirs(conf.tmplpath)
 
+# install templates
+#shutil.copyfile(conf.tmpltxt, conf.tmplpath)
 
 # create db
 database.createdb(conf.dbpath)
