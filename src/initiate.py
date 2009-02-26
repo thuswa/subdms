@@ -1,14 +1,16 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Mon Feb 23 23:38:10 2009 on violator
-# update count: 41
+# Last modified Thu Feb 26 13:23:54 2009 on havoc
+# update count: 45
 # -*- coding:  utf-8 -*-
 
 import os
 import pysvn
+import shutil
+import subprocess 
+
 import config
 import database
-import subprocess 
 import frontend
 
 conf = config.dmsconfig()
@@ -22,6 +24,11 @@ nrdocs=2;
 if not os.path.isdir(conf.workpath):
     os.makedirs(conf.workpath)
 
+# create template directory and install templates
+if not os.path.isdir(conf.tmplpath):
+    os.makedirs(conf.tmplpath)
+
+
 # create db
 database.createdb(conf.dbpath)
 
@@ -34,6 +41,7 @@ subprocess.call(['svnadmin','create',conf.repopath])
 
 # create project layout and add some docs
 frontend.createproject("test")
+
 
 #for n in 1 nrdocs: 
 #    svn mkdir --parents  -m "create doc dirs" $URR/$PROJ/$DOC/000$N

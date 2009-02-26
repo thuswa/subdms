@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Mon Feb 23 14:52:02 2009 on havoc
-# update count: 29
+# Last modified Thu Feb 26 13:21:22 2009 on havoc
+# update count: 30
 # -*- coding:  utf-8 -*-
 
 import ConfigParser
@@ -16,4 +16,5 @@ class dmsconfig:
         self.repourl = "file://" + self.repopath
         self.workpath = conf.get("Path", "workspace")
         self.dbpath = conf.get("Path", "database")
+        self.tmplpath = conf.get("Path", "template")
         self.doctypes = list(conf.get("Document", "type").split())
