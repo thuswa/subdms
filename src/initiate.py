@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Thu Feb 26 22:50:44 2009 on violator
-# update count: 47
+# Last modified Thu Feb 26 23:42:35 2009 on violator
+# update count: 49
 # -*- coding:  utf-8 -*-
 
 import os
@@ -45,7 +45,10 @@ subprocess.call(['svnadmin','create',conf.repopath])
 frontend.createproject("test")
 
 
-#for n in 1 nrdocs: 
+#for n in 1 nrdocs:
+docnamelist=['test','note','0001','txt']
+doctitle='Test note'
+frontend.createdocument(docnamelist, doctitle)
 #    svn mkdir --parents  -m "create doc dirs" $URR/$PROJ/$DOC/000$N
 #    svn co $URR/$PROJ/$DOC/000$N ./workspace
 #    DOCNAME=$PROJNAME-$DOC-000$N".txt"

@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Thu Feb 26 22:53:44 2009 on violator
-# update count: 161
+# Last modified Thu Feb 26 23:53:57 2009 on violator
+# update count: 170
 # -*- coding:  utf-8 -*-
 
 import os
@@ -44,7 +44,7 @@ def adddocument(docnamelist, doctitle, addfile):
    """
    docname=__const_docname(docnamelist)
    docurl=__const_docurl(docnamelist)
-   checkoutpath=os.path.join(conf.workpath, os.path.splitext(docname))
+   checkoutpath=os.path.join(conf.workpath, os.path.splitext(docname)[0])
    docpath=os.path.join(checkoutpath, docname)
 
    # Create doc url in repository and check it out to workspace
@@ -57,7 +57,7 @@ def adddocument(docnamelist, doctitle, addfile):
    client.checkin(docpath, "adding document: "+docname)
 
    # Set document title
-   client.propset(title, doctitle, docpath)
+   client.propset('title', doctitle, docpath)
 
    # Remove file from workspace
    shutil.rmtree(checkoutpath)
@@ -87,7 +87,7 @@ def release(docname):
 
 def __const_docname(docnamelist):
    """ Construct the document file name. """
-   return string.join(doclist[:-1],'-')+'.'+docnamelist[-1:]
+   return string.join(docnamelist[:-1],'-')+'.'+docnamelist[-1:].pop()
 
 def __const_docurl(docnamelist):
    """ Construct the document url. """
