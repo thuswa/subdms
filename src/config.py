@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Thu Feb 26 13:21:22 2009 on havoc
-# update count: 30
+# Last modified Thu Feb 26 22:36:24 2009 on violator
+# update count: 31
 # -*- coding:  utf-8 -*-
 
 import ConfigParser
@@ -18,3 +18,4 @@ class dmsconfig:
         self.dbpath = conf.get("Path", "database")
         self.tmplpath = conf.get("Path", "template")
         self.doctypes = list(conf.get("Document", "type").split())
+        self.tmpltxt = conf.get("Template", "txt")
