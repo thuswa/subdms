@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Thu Feb 26 13:23:19 2009 on havoc
-# update count: 149
+# Last modified Thu Feb 26 21:57:41 2009 on violator
+# update count: 156
 # -*- coding:  utf-8 -*-
 
 import os
@@ -39,9 +39,7 @@ def adddocument(docnamelist, doctitle, addfile):
    addfile: path to the file to be added.
    """
    docname=__const_docname(docnamelist)
-   conslist=[conf.repourl]
-   conslist.extend(docnamelist)
-   docurl=string.join(conslist[:-1], '/')
+   docurl=__const_docurl(docnamelist)
    checkoutpath=os.path.join(conf.workpath, os.path.splitext(docname))
    docpath=os.path.join(checkoutpath, docname)
 
@@ -54,8 +52,11 @@ def adddocument(docnamelist, doctitle, addfile):
    client.add(docpath)
    client.checkin(docpath,"adding document: "+docname)
 
-   # Remove file from workspace
+   # Set document title
+   client.propset(title, doctitle, docpath)
 
+   # Remove file from workspace
+   shutil.rmtree(checkoutpath)
    
 def commit(docname,message):
    """commit changes on file"""
@@ -83,6 +84,12 @@ def release(docname):
 def __const_docname(docnamelist):
    """ Construct the document file name. """
    return string.join(doclist[:-1],'-')+'.'+docnamelist[-1:]
+
+def __const_docurl(docnamelist):
+   """ Construct the document url. """
+   conslist=[conf.repourl]
+   conslist.extend(docnamelist)
+   return string.join(conslist[:-1], '/')
 
 def __command_output(cmd):
   """ Capture a command's standard output. """
