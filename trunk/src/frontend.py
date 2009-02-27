@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Fri Feb 27 13:39:23 2009 on havoc
-# update count: 192
+# Last modified Fri Feb 27 14:38:06 2009 on havoc
+# update count: 193
 # -*- coding:  utf-8 -*-
 
 import os
@@ -83,7 +83,8 @@ def checkout(docnamelist):
 
 def release(docnamelist):
    """ Release the document"""
-   return None
+   client.propset('status', 'released', __const_doc)
+
 
 ###############################################################################
 # Helper functions
