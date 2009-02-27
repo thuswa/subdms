@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Thu Feb 26 23:53:57 2009 on violator
-# update count: 170
+# Last modified Fri Feb 27 13:39:23 2009 on havoc
+# update count: 192
 # -*- coding:  utf-8 -*-
 
 import os
@@ -44,46 +44,52 @@ def adddocument(docnamelist, doctitle, addfile):
    """
    docname=__const_docname(docnamelist)
    docurl=__const_docurl(docnamelist)
-   checkoutpath=os.path.join(conf.workpath, os.path.splitext(docname)[0])
-   docpath=os.path.join(checkoutpath, docname)
+   checkoutpath=__const_checkoutpath(docnamelist)
+   docpath=__const_docpath(docnamelist)
 
    # Create doc url in repository and check it out to workspace
    client.mkdir(docurl, "create directory for : "+docname,1)
    client.checkout(docurl, checkoutpath)
 
-   # Copy file to workspace and commit it
+   # Copy file to works
    shutil.copyfile(addfile, docpath)
    client.add(docpath)
-   client.checkin(docpath, "adding document: "+docname)
 
-   # Set document title
+   # Set document title and commit document
    client.propset('title', doctitle, docpath)
+   client.propset('issue', '1', docpath)
+   client.propset('status', 'preliminary', docpath)
+   client.checkin(docpath, "adding document: "+docname)
 
    # Remove file from workspace
    shutil.rmtree(checkoutpath)
    
-def commit(docname,message):
+def commit(docnamelist, message):
    """commit changes on file"""
-   client.checkin(conf.workpath+"/"+docname.replace("-","/"), message)
+   client.checkin(__const_docpath(docnamelist, message)
 
-def checkin(docname,message):
+def checkin(docnamelist, message):
    """check-in file from workspace"""
-   commit(docname,message) 
-   os.remove(conf.workpath+"/"+docname.replace("-","/"))  ##fix me
+   commit(docnamelist, message) 
 
-def checkout(docname):
+   # Remove file from workspace
+   shutil.rmtree(__const_checkoutpath(docnamelist))
+
+def checkout(docnamelist):
   """check-out file to workspace"""
-  client.checkout(conf.repourl+'/'+docname.replace("-","/"),conf.workpath)
+  client.checkout(__const_docurl(docnamelist), \
+                     __const_checkoutpath(docnamelist))
 #  client.lock( 'file.txt', 'reason for locking' )
 
-def release(docname):
-   """
-   """
-   
+def release(docnamelist):
+   """ Release the document"""
    return None
 
 ###############################################################################
 # Helper functions
+def __const_checkoutpath(docnamelist):
+   return os.path.join(conf.workpath, \
+                          os.path.splitext(__cons_docname(docnamelist))[0])
 
 def __const_docname(docnamelist):
    """ Construct the document file name. """
@@ -94,6 +100,10 @@ def __const_docurl(docnamelist):
    conslist=[conf.repourl]
    conslist.extend(docnamelist)
    return string.join(conslist[:-1], '/')
+
+def __const_docpath(docnamelist):
+   """ Construct the path to the checked out document. """
+   return os.path.join(checkoutpath, __const_docname(docnamelist))
 
 def __command_output(cmd):
   """ Capture a command's standard output. """
