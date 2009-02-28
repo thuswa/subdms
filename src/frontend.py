@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Fri Feb 27 23:40:46 2009 on violator
-# update count: 243
+# Last modified Sat Feb 28 11:42:40 2009 on violator
+# update count: 247
 # -*- coding:  utf-8 -*-
 
 import os
@@ -22,6 +22,12 @@ def createrepolayout():
    """Create repository layout"""
    client.mkdir(os.path.join(conf.repourl, 'trunk'), "create trunk directory",1)
    client.mkdir(os.path.join(conf.repourl, 'tags'), "create trunk directory",1)
+   client.mkdir(os.path.join(conf.repourl, 'templates'), \
+                "create templates directory",1)
+
+def installtemplates():
+   """ Install templates in repository """
+   return NONE
    
    
 def createproject(proj):
@@ -57,7 +63,7 @@ def adddocument(docnamelist, doctitle, addfile):
    client.mkdir(docurl, "create directory for : "+docname,1)
    client.checkout(docurl, checkoutpath)
 
-   # Copy file to works
+   # Copy file to workspace
    shutil.copyfile(addfile, docpath)
    client.add(docpath)
 
