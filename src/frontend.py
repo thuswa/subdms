@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Sat Feb 28 11:45:04 2009 on violator
-# update count: 249
+# Last modified Sat Feb 28 23:26:36 2009 on violator
+# update count: 270
 # -*- coding:  utf-8 -*-
 
 import os
@@ -19,16 +19,28 @@ client = pysvn.Client()
 conf = config.dmsconfig()
 
 def createrepolayout():
-   """Create repository layout"""
-   client.mkdir(os.path.join(conf.repourl, 'trunk'), "create trunk directory",1)
-   client.mkdir(os.path.join(conf.repourl, 'tags'), "create trunk directory",1)
-   client.mkdir(os.path.join(conf.repourl, 'templates'), \
-                "create templates directory",1)
+   """ Create repository layout """
+   client.mkdir(conf.trunkurl, "create trunk directory",1)
+   client.mkdir(conf.tagsurl, "create trunk directory",1)
+   client.mkdir(conf.tmplurl, "create templates directory",1)
 
 def installtemplates():
    """ Install templates in repository """
-   return NONE
+   tmplpath=os.path.join(conf.workpath,'templates')
+   txtpath=os.path.join(tmplpath, conf.tmpltxt.split('/')[1])
    
+   # Check out templates dir
+   client.checkout(conf.tmplurl, tmplpath)
+   
+   # Add templates to dir
+   shutil.copyfile(os.path.abspath(conf.tmpltxt), txtpath)
+   client.add(txtpath)
+
+   # Commit templates
+   client.checkin(tmplpath, "installing templates")
+   
+   # Remove file from workspace
+   shutil.rmtree(tmplpath)
    
 def createproject(proj):
    """Create a project"""

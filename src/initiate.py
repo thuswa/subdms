@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Fri Feb 27 23:27:12 2009 on violator
-# update count: 53
+# Last modified Sat Feb 28 23:14:42 2009 on violator
+# update count: 57
 # -*- coding:  utf-8 -*-
 
 import os
@@ -24,19 +24,15 @@ nrdocs=2;
 if not os.path.isdir(conf.workpath):
     os.makedirs(conf.workpath)
 
-# create template directory and install templates
-if not os.path.isdir(conf.tmplpath):
-    os.makedirs(conf.tmplpath)
-
-# install templates
-#shutil.copyfile(conf.tmpltxt, conf.tmplpath)
-
 # create db
 database.createdb(conf.dbpath)
 
 # create subversion repository and layout
 subprocess.call(['svnadmin','create',conf.repopath])
 frontend.createrepolayout()
+
+# install templates
+frontend.installtemplates()
 
 # copy hook to repo dir
 #cp post-commit ./$REPONAME/hooks
