@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Sat Feb 28 11:42:40 2009 on violator
-# update count: 247
+# Last modified Sat Feb 28 11:45:04 2009 on violator
+# update count: 249
 # -*- coding:  utf-8 -*-
 
 import os
@@ -97,7 +97,8 @@ def release(docnamelist):
    """Release the document"""
    issue_no = str(getissueno)
    client.propset('status', 'released', __const_docurl(docnamelist))
-   client.copy(__const_docurl(docnamelist), __const_doctagurl(docnamelist, issue_no))
+   client.copy(__const_docurl(docnamelist), \
+               __const_doctagurl(docnamelist, issue_no))
 
 def newissue(docnamelist):
    """Create new issue of the document"""
