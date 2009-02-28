@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Fri Feb 27 14:38:06 2009 on havoc
-# update count: 193
+# Last modified Fri Feb 27 23:40:46 2009 on violator
+# update count: 243
 # -*- coding:  utf-8 -*-
 
 import os
@@ -18,11 +18,17 @@ import config
 client = pysvn.Client()
 conf = config.dmsconfig()
 
+def createrepolayout():
+   """Create repository layout"""
+   client.mkdir(os.path.join(conf.repourl, 'trunk'), "create trunk directory",1)
+   client.mkdir(os.path.join(conf.repourl, 'tags'), "create trunk directory",1)
+   
+   
 def createproject(proj):
    """Create a project"""
    print proj
    for doc in conf.doctypes:
-      client.mkdir(os.path.join(conf.repourl, proj, doc), \
+      client.mkdir(os.path.join(conf.repourl, 'trunk', proj, doc), \
                    "create directory for project: "+proj,1)
 
 def createdocument(docnamelist, doctitle):
@@ -47,7 +53,7 @@ def adddocument(docnamelist, doctitle, addfile):
    checkoutpath=__const_checkoutpath(docnamelist)
    docpath=__const_docpath(docnamelist)
 
-   # Create doc url in repository and check it out to workspace
+   # Create document url in repository and check it out to workspace
    client.mkdir(docurl, "create directory for : "+docname,1)
    client.checkout(docurl, checkoutpath)
 
@@ -66,7 +72,7 @@ def adddocument(docnamelist, doctitle, addfile):
    
 def commit(docnamelist, message):
    """commit changes on file"""
-   client.checkin(__const_docpath(docnamelist, message)
+   client.checkin(__const_docpath(docnamelist, message))
 
 def checkin(docnamelist, message):
    """check-in file from workspace"""
@@ -82,15 +88,37 @@ def checkout(docnamelist):
 #  client.lock( 'file.txt', 'reason for locking' )
 
 def release(docnamelist):
-   """ Release the document"""
-   client.propset('status', 'released', __const_doc)
+   """Release the document"""
+   issue_no = str(getissueno)
+   client.propset('status', 'released', __const_docurl(docnamelist))
+   client.copy(__const_docurl(docnamelist), __const_doctagurl(docnamelist, issue_no))
+
+def newissue(docnamelist):
+   """Create new issue of the document"""
+   new_issue_no = str(getissueno + 1)
+   client.propset('status', 'preliminary', __const_docurl(docnamelist))
+   client.propset('issue', new_issue_no,  __const_docurl(docnamelist))
+   
+def getissueno(docnamelist):
+   """ Get document issue number """ 
+   return int(client.propget('issue', \
+                             __const_docurl(docnamelist)).values().pop())
+
+def gettitle(docnamelist):
+   """ Get document title """ 
+   return client.propget('title', __const_docurl(docnamelist)).values().pop()
+
+def getstatus(docnamelist):
+   """ Get document status """ 
+   return client.propget('status', __const_docurl(docnamelist)).values().pop()
 
 
 ###############################################################################
 # Helper functions
 def __const_checkoutpath(docnamelist):
+   """ Construct the check-out path """
    return os.path.join(conf.workpath, \
-                          os.path.splitext(__cons_docname(docnamelist))[0])
+                          os.path.splitext(__const_docname(docnamelist))[0])
 
 def __const_docname(docnamelist):
    """ Construct the document file name. """
@@ -98,13 +126,24 @@ def __const_docname(docnamelist):
 
 def __const_docurl(docnamelist):
    """ Construct the document url. """
-   conslist=[conf.repourl]
-   conslist.extend(docnamelist)
-   return string.join(conslist[:-1], '/')
+   docurllist=[conf.repourl]
+   docurllist.extend('trunk')
+   docurllist.extend(docnamelist[:-1])
+   return string.join(docurllist, '/')
+
+def __const_doctagurl(docnamelist, issue_no):
+   """ Construct the document tag url. """
+   docurllist=[conf.repourl]
+   docurllist.extend('tags')
+   docurllist.extend(docnamelist[:-1])
+   docurllist.extend(issueno)
+   return string.join(docurllist, '/')
+
 
 def __const_docpath(docnamelist):
    """ Construct the path to the checked out document. """
-   return os.path.join(checkoutpath, __const_docname(docnamelist))
+   return os.path.join(__const_checkoutpath(docnamelist), \
+                       __const_docname(docnamelist))
 
 def __command_output(cmd):
   """ Capture a command's standard output. """
