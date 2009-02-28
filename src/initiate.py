@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Thu Feb 26 23:42:35 2009 on violator
-# update count: 49
+# Last modified Fri Feb 27 23:27:12 2009 on violator
+# update count: 53
 # -*- coding:  utf-8 -*-
 
 import os
@@ -34,8 +34,9 @@ if not os.path.isdir(conf.tmplpath):
 # create db
 database.createdb(conf.dbpath)
 
-# create subversion repository
+# create subversion repository and layout
 subprocess.call(['svnadmin','create',conf.repopath])
+frontend.createrepolayout()
 
 # copy hook to repo dir
 #cp post-commit ./$REPONAME/hooks
