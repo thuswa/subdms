@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Sat Feb 28 23:26:36 2009 on violator
-# update count: 270
+# Last modified Sun Mar  1 22:30:05 2009 on violator
+# update count: 337
 # -*- coding:  utf-8 -*-
 
 import os
@@ -24,10 +24,17 @@ def createrepolayout():
    client.mkdir(conf.tagsurl, "create trunk directory",1)
    client.mkdir(conf.tmplurl, "create templates directory",1)
 
+def installhooks():
+   """ Install hooks in repository """
+   revhook='pre-revprop-change'
+   revhookpath=os.path.join(conf.hookspath, revhook)
+   shutil.copyfile(os.path.abspath(revhook), revhookpath)
+   os.chmod(revhookpath,0755)
+   
 def installtemplates():
    """ Install templates in repository """
    tmplpath=os.path.join(conf.workpath,'templates')
-   txtpath=os.path.join(tmplpath, conf.tmpltxt.split('/')[1])
+   txtpath=os.path.join(tmplpath, conf.tmpltxt.split('/')[1]) #fixme
    
    # Check out templates dir
    client.checkout(conf.tmplurl, tmplpath)
@@ -46,7 +53,7 @@ def createproject(proj):
    """Create a project"""
    print proj
    for doc in conf.doctypes:
-      client.mkdir(os.path.join(conf.repourl, 'trunk', proj, doc), \
+      client.mkdir(os.path.join(conf.trunkurl, proj, doc), \
                    "create directory for project: "+proj,1)
 
 def createdocument(docnamelist, doctitle):
@@ -56,7 +63,21 @@ def createdocument(docnamelist, doctitle):
    docnamelist: list containing the building blocks of the document name
    doctitle: document title string.
    """
-   adddocument(docnamelist, doctitle, conf.tmpltxt)
+   txtfileurl=os.path.join(conf.tmplurl, conf.tmpltxt.split('/')[1]) #fixme
+   docname=__const_docname(docnamelist)
+   docurl=__const_docurl(docnamelist)
+   docfileurl=__const_docfileurl(docnamelist)
+   
+   # Create document url in repository 
+   client.mkdir(docurl, "create directory for : "+docname,1)
+
+   # Create document from template
+   server_side_copy(txtfileurl, docfileurl, "Create document: "+docname)
+
+   # Set document title and commit document
+   client.revpropset('title', doctitle, docfileurl)
+   client.revpropset('issue', '1', docfileurl)
+   client.revpropset('status', 'preliminary', docfileurl)
 
 def adddocument(docnamelist, doctitle, addfile):
    """    
@@ -83,7 +104,7 @@ def adddocument(docnamelist, doctitle, addfile):
    client.propset('title', doctitle, docpath)
    client.propset('issue', '1', docpath)
    client.propset('status', 'preliminary', docpath)
-   client.checkin(docpath, "adding document: "+docname)
+   client.checkin(docpath, "Add document: "+docname)
 
    # Remove file from workspace
    shutil.rmtree(checkoutpath)
@@ -107,10 +128,16 @@ def checkout(docnamelist):
 
 def release(docnamelist):
    """Release the document"""
-   issue_no = str(getissueno)
+   issue_no=str(getissueno)
+   docname=__const_docname(docnamelist)
+
+   # Set status of document to released
    client.propset('status', 'released', __const_docurl(docnamelist))
-   client.copy(__const_docurl(docnamelist), \
-               __const_doctagurl(docnamelist, issue_no))
+
+   # Create tag
+   server_side_copy(__const_docurl(docnamelist), \
+                    __const_doctagurl(docnamelist, issue_no), \
+                    "Release "+docname+", issue "+issue_no)
 
 def newissue(docnamelist):
    """Create new issue of the document"""
@@ -131,6 +158,13 @@ def getstatus(docnamelist):
    """ Get document status """ 
    return client.propget('status', __const_docurl(docnamelist)).values().pop()
 
+def server_side_copy(source, target, log_message):
+   """ Server side copy in repository URL -> URL """
+   def get_log_message():
+      return True, log_message
+   client.callback_get_log_message = get_log_message
+   client.copy(source, target)
+
 
 ###############################################################################
 # Helper functions
@@ -145,15 +179,18 @@ def __const_docname(docnamelist):
 
 def __const_docurl(docnamelist):
    """ Construct the document url. """
-   docurllist=[conf.repourl]
-   docurllist.extend('trunk')
+   docurllist=[conf.trunkurl]
    docurllist.extend(docnamelist[:-1])
    return string.join(docurllist, '/')
 
+def __const_docfileurl(docnamelist):
+   """ Construct the document file url. """
+   return string.join([__const_docurl(docnamelist), \
+                       __const_docname(docnamelist)], '/')
+
 def __const_doctagurl(docnamelist, issue_no):
    """ Construct the document tag url. """
-   docurllist=[conf.repourl]
-   docurllist.extend('tags')
+   docurllist=[conf.tagsurl]
    docurllist.extend(docnamelist[:-1])
    docurllist.extend(issueno)
    return string.join(docurllist, '/')
