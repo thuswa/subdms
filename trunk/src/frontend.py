@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Sun Mar  1 22:59:16 2009 on violator
-# update count: 339
+# Last modified Sun Mar  1 23:53:55 2009 on violator
+# update count: 340
 # -*- coding:  utf-8 -*-
 
 import os
@@ -77,9 +77,9 @@ def createdocument(docnamelist, doctitle):
    server_side_copy(txtfileurl, docfileurl, "Create document: "+docname)
 
    # Set document title and commit document
-   client.revpropset('title', doctitle, docfileurl)
-   client.revpropset('issue', '1', docfileurl)
-   client.revpropset('status', 'preliminary', docfileurl)
+   client.propset('title', doctitle, docfileurl)
+   client.propset('issue', '1', docfileurl)
+   client.propset('status', 'preliminary', docfileurl)
 
 def adddocument(docnamelist, doctitle, addfile):
    """    
