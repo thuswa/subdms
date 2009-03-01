@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Sun Mar  1 22:30:05 2009 on violator
-# update count: 337
+# Last modified Sun Mar  1 22:59:16 2009 on violator
+# update count: 339
 # -*- coding:  utf-8 -*-
 
 import os
@@ -28,6 +28,8 @@ def installhooks():
    """ Install hooks in repository """
    revhook='pre-revprop-change'
    revhookpath=os.path.join(conf.hookspath, revhook)
+   
+   # Copy hooks to dir in repository and set to executable
    shutil.copyfile(os.path.abspath(revhook), revhookpath)
    os.chmod(revhookpath,0755)
    
