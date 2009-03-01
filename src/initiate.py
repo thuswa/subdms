@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Sun Mar  1 00:35:03 2009 on violator
-# update count: 61
+# Last modified Mon Mar  2 00:27:20 2009 on violator
+# update count: 65
 # -*- coding:  utf-8 -*-
 
 import os
@@ -45,9 +45,14 @@ frontend.installhooks()
 frontend.createproject("test")
 
 #for n in 1 nrdocs:
-docnamelist=['test','note','0001','txt']
-doctitle='Test note'
-frontend.createdocument(docnamelist, doctitle)
+docnamelist1=['test','note','0001','txt']
+doctitle1='Test note'
+frontend.createdocument(docnamelist1, doctitle1)
+docnamelist2=['test','list','0001','txt']
+doctitle2='Test list'
+frontend.createdocument(docnamelist2, doctitle2)
+
+
 #    svn mkdir --parents  -m "create doc dirs" $URR/$PROJ/$DOC/000$N
 #    svn co $URR/$PROJ/$DOC/000$N ./workspace
 #    DOCNAME=$PROJNAME-$DOC-000$N".txt"
