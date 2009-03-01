@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Sat Feb 28 23:14:42 2009 on violator
-# update count: 57
+# Last modified Sun Mar  1 00:35:03 2009 on violator
+# update count: 61
 # -*- coding:  utf-8 -*-
 
 import os
@@ -34,13 +34,15 @@ frontend.createrepolayout()
 # install templates
 frontend.installtemplates()
 
+# install hooks
+frontend.installhooks()
+
 # copy hook to repo dir
 #cp post-commit ./$REPONAME/hooks
 #chmod +x ./$REPONAME/hooks/post-commit
 
 # create project layout and add some docs
 frontend.createproject("test")
-
 
 #for n in 1 nrdocs:
 docnamelist=['test','note','0001','txt']
