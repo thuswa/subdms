@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Sat Feb 28 23:01:25 2009 on violator
-# update count: 33
+# Last modified Sun Mar  1 00:34:08 2009 on violator
+# update count: 34
 # -*- coding:  utf-8 -*-
 
 import ConfigParser
@@ -13,6 +13,7 @@ class dmsconfig:
         conf.read("../subdms.cfg")
         
         self.repopath = conf.get("Path", "repository")
+        self.hookspath = self.repopath + "/hooks" 
         self.repourl = "file://" + self.repopath
         self.trunkurl = self.repourl + "/trunk"
         self.tagsurl = self.repourl + "/tags"
