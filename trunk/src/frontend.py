@@ -1,13 +1,14 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Mon Mar  2 14:06:48 2009 on havoc
-# update count: 351
+# Last modified Mon Mar  2 22:48:00 2009 on violator
+# update count: 361
 # -*- coding:  utf-8 -*-
 
 import os
 import pysvn
 import shutil
 import string
+import subprocess 
 
 import config
 
@@ -69,18 +70,22 @@ def createdocument(docnamelist, doctitle):
    docname=__const_docname(docnamelist)
    docurl=__const_docurl(docnamelist)
    docfileurl=__const_docfileurl(docnamelist)
+   checkoutpath=__const_checkoutpath(docnamelist)
+   docpath=__const_docpath(docnamelist)
    
-   # Create document url in repository 
+   # Create document url in repository
    client.mkdir(docurl, "create directory for : "+docname,1)
 
    # Create document from template
    server_side_copy(txtfileurl, docfileurl, "Create document: "+docname)
-
+   client.checkout(docurl, checkoutpath)
+   
    # Set document title and commit document
-   client.propset('title', doctitle, docfileurl)
-   client.propset('issue', '1', docfileurl)
-   client.propset('status', 'preliminary', docfileurl)
-
+   client.propset('title', doctitle, docpath)
+   client.propset('issue', '1', docpath)
+   client.propset('status', 'preliminary', docpath)
+   client.checkin(docpath, "commit document properties for: "+docname)
+   
 def adddocument(docnamelist, doctitle, addfile):
    """    
    Add a document
@@ -108,9 +113,6 @@ def adddocument(docnamelist, doctitle, addfile):
    client.propset('status', 'preliminary', docpath)
    client.checkin(docpath, "Add document: "+docname)
 
-   # Remove file from workspace
-   shutil.rmtree(checkoutpath)
-   
 def commit(docnamelist, message):
    """commit changes on file"""
    client.checkin(__const_docpath(docnamelist, message))
@@ -166,10 +168,6 @@ def server_side_copy(source, target, log_message):
       return True, log_message
    client.callback_get_log_message = get_log_message
    client.copy(source, target)
-
-def server_side_propset(propname, propvalue, fileurl):
-   """ Workaround for setting properties in repo via URL """ 
-   subprocess.call(['svn','propset',conf.repopath])
 
 ###############################################################################
 # Helper functions
