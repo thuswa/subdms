@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Mon Mar  2 22:48:00 2009 on violator
-# update count: 361
+# Last modified Mon Mar  2 23:24:47 2009 on violator
+# update count: 376
 # -*- coding:  utf-8 -*-
 
 import os
@@ -134,15 +134,25 @@ def release(docnamelist):
    """Release the document"""
    issue_no=str(getissueno)
    docname=__const_docname(docnamelist)
-
+   newissuepath=__const_doctagurl(docnamelist, issue_no)
    # Set status of document to released
-   client.propset('status', 'released', __const_docurl(docnamelist))
-
+   client.propset('status', 'released', __const_docpath(docnamelist))
+   checkin(docnamelist, "Set status to released on "+docname)
+   
    # Create tag
    server_side_copy(__const_docurl(docnamelist), \
                     __const_doctagurl(docnamelist, issue_no), \
                     "Release "+docname+", issue "+issue_no)
 
+   # Set previous issue to obsolete
+   if issueno > 1:
+      oldissue=issue_no - 1
+      oldissuepath=__const_doctagurl(docnamelist, oldissue)
+      client.checkout(oldissuepath, __const_checkoutpath(docnamelist))
+      client.propset('status', 'obsolete', __const_docpath(docnamelist))
+      checkin(docnamelist, "Set status to obsolete on " \
+              +docname+" issue "+oldissue)
+      
 def newissue(docnamelist):
    """Create new issue of the document"""
    new_issue_no = str(getissueno + 1)
