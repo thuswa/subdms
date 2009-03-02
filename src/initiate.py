@@ -1,13 +1,12 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Mon Mar  2 14:01:40 2009 on havoc
-# update count: 67
+# Last modified Mon Mar  2 22:47:50 2009 on violator
+# update count: 68
 # -*- coding:  utf-8 -*-
 
 import os
 import pysvn
 import shutil
-import subprocess 
 
 import config
 import database
