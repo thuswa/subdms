@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Sun Mar  1 23:53:55 2009 on violator
-# update count: 340
+# Last modified Mon Mar  2 14:01:04 2009 on havoc
+# update count: 347
 # -*- coding:  utf-8 -*-
 
 import os
@@ -18,8 +18,9 @@ import config
 client = pysvn.Client()
 conf = config.dmsconfig()
 
-def createrepolayout():
-   """ Create repository layout """
+def createrepo():
+   """ create repsitory and layout """
+   subprocess.call(['svnadmin','create',conf.repopath])
    client.mkdir(conf.trunkurl, "create trunk directory",1)
    client.mkdir(conf.tagsurl, "create trunk directory",1)
    client.mkdir(conf.tmplurl, "create templates directory",1)
@@ -36,24 +37,23 @@ def installhooks():
 def installtemplates():
    """ Install templates in repository """
    tmplpath=os.path.join(conf.workpath,'templates')
-   txtpath=os.path.join(tmplpath, conf.tmpltxt.split('/')[1]) #fixme
+   txtfilepath=os.path.join(tmplpath, conf.tmpltxt.split('/')[1]) #fixme
    
    # Check out templates dir
    client.checkout(conf.tmplurl, tmplpath)
    
    # Add templates to dir
-   shutil.copyfile(os.path.abspath(conf.tmpltxt), txtpath)
-   client.add(txtpath)
+   shutil.copyfile(os.path.abspath(conf.tmpltxt), txtfilepath)
+   client.add(txtfilepath)
 
    # Commit templates
    client.checkin(tmplpath, "installing templates")
    
-   # Remove file from workspace
+   # Remove template dir from workspace
    shutil.rmtree(tmplpath)
    
 def createproject(proj):
    """Create a project"""
-   print proj
    for doc in conf.doctypes:
       client.mkdir(os.path.join(conf.trunkurl, proj, doc), \
                    "create directory for project: "+proj,1)
@@ -167,7 +167,6 @@ def server_side_copy(source, target, log_message):
    client.callback_get_log_message = get_log_message
    client.copy(source, target)
 
-
 ###############################################################################
 # Helper functions
 def __const_checkoutpath(docnamelist):
@@ -196,7 +195,6 @@ def __const_doctagurl(docnamelist, issue_no):
    docurllist.extend(docnamelist[:-1])
    docurllist.extend(issueno)
    return string.join(docurllist, '/')
-
 
 def __const_docpath(docnamelist):
    """ Construct the path to the checked out document. """
