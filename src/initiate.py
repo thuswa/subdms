@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Mon Mar  2 00:27:20 2009 on violator
-# update count: 65
+# Last modified Mon Mar  2 14:01:40 2009 on havoc
+# update count: 67
 # -*- coding:  utf-8 -*-
 
 import os
@@ -28,8 +28,7 @@ if not os.path.isdir(conf.workpath):
 database.createdb(conf.dbpath)
 
 # create subversion repository and layout
-subprocess.call(['svnadmin','create',conf.repopath])
-frontend.createrepolayout()
+frontend.createrepo()
 
 # install templates
 frontend.installtemplates()
