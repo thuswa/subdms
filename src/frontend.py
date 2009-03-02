@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Mon Mar  2 14:01:04 2009 on havoc
-# update count: 347
+# Last modified Mon Mar  2 14:06:48 2009 on havoc
+# update count: 351
 # -*- coding:  utf-8 -*-
 
 import os
@@ -166,6 +166,10 @@ def server_side_copy(source, target, log_message):
       return True, log_message
    client.callback_get_log_message = get_log_message
    client.copy(source, target)
+
+def server_side_propset(propname, propvalue, fileurl):
+   """ Workaround for setting properties in repo via URL """ 
+   subprocess.call(['svn','propset',conf.repopath])
 
 ###############################################################################
 # Helper functions
