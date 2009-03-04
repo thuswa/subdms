@@ -1,0 +1,10 @@
+#!/bin/bash
+# $Id$
+# Last modified Wed Mar  4 22:18:41 2009 on violator
+# Update count: 101
+#
+# Created 2009-03-04, Albert Thuswaldner
+
+pyuic4 createdocument.ui > createdocumentui.py
+pyuic4 createproj.ui > createprojui.py
+pyuic4 mainwindow.ui > mainwindow.py
