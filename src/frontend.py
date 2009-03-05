@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Mon Mar  2 23:24:47 2009 on violator
-# update count: 376
+# Last modified Thu Mar  5 21:46:48 2009 on violator
+# update count: 384
 # -*- coding:  utf-8 -*-
 
 import os
@@ -178,6 +178,15 @@ def server_side_copy(source, target, log_message):
       return True, log_message
    client.callback_get_log_message = get_log_message
    client.copy(source, target)
+
+def createdocumentlist(project, doctype, docext):
+   """
+   Create a documentlist - list containing the building blocks of
+   the document name
+   """
+   docno='0001'
+   return [project, doctype, docno, docext]
+   
 
 ###############################################################################
 # Helper functions
