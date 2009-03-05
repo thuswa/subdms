@@ -32,19 +32,21 @@ def main():
   log_message = command_output(look_cmd % "log").rstrip("\n").rstrip()
   changed = command_output(look_cmd % "changed")
   author = command_output(look_cmd % "author")
-  filename = changed.split("/").pop().rstrip("\n").rstrip()
-  print filename 
-  if filename != "":
+  docname = changed.split("/").pop().rstrip("\n").rstrip()
+  print docname 
+  if docname:
+      print docname 
       # Create a connection to the database file
-      con = sqlite.connect("/tmp/subdms/repo/repodb") #fixme
-      cur = con.cursor()
-
+#      con = sqlite.connect("/tmp/subdms/repo/repodb") #fixme
+#      cur = con.cursor()
+      command_output("echo "+docname+" >> /tmp/subdms/log.txt")
+      docnamelist=decons_docname(docname)
       # Construct sql command string
-      db_str="insert into revlist(revnum,filename,author,logtext) values("+rvn+",'"+filename+"','"+author+"','"+log_message+"')"
-      print db_str
+#      db_str="insert into revlist(revnum,filename,author,logtext) values("+rvn+",'"+filename+"','"+author+"','"+log_message+"')"
+#      print db_str
       
       # Excecute sql command
-      cur.execute(db_str)
+#      cur.execute(db_str)
 
 if __name__ == "__main__":
   import sys
