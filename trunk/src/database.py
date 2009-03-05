@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Mon Feb 23 23:46:19 2009 on violator
-# update count: 78
+# Last modified Thu Mar  5 21:34:52 2009 on violator
+# update count: 82
 # -*- coding:  utf-8 -*-
 
 from pysqlite2 import dbapi2 as sqlite
@@ -23,7 +23,7 @@ def createdb(dbpath):
 
     # Create the simpliest table 
     cur.execute("create table revlist(revnum INTEGER PRIMARY KEY," \
-                "filename, author, logtext TEXT)")
+                "project,doctype,docno,docext,doctitle,author, logtext TEXT)")
 
     #cur.execute("insert into filelist(filename) values ('file1.cpp')")  
     #cur.execute("insert into filelist(filename) values ('file3.cpp')")
