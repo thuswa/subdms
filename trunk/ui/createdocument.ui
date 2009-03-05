@@ -1,10 +1,11 @@
-<ui version="4.0" >
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
  <class>New_Document_Dialog</class>
- <widget class="QDialog" name="New_Document_Dialog" >
-  <property name="enabled" >
+ <widget class="QDialog" name="New_Document_Dialog">
+  <property name="enabled">
    <bool>true</bool>
   </property>
-  <property name="geometry" >
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
@@ -12,11 +13,11 @@
     <height>167</height>
    </rect>
   </property>
-  <property name="windowTitle" >
+  <property name="windowTitle">
    <string>Dialog</string>
   </property>
-  <widget class="QDialogButtonBox" name="New_Document_Confirm" >
-   <property name="geometry" >
+  <widget class="QDialogButtonBox" name="New_Document_Confirm">
+   <property name="geometry">
     <rect>
      <x>20</x>
      <y>120</y>
@@ -24,15 +25,15 @@
      <height>41</height>
     </rect>
    </property>
-   <property name="orientation" >
+   <property name="orientation">
     <enum>Qt::Horizontal</enum>
    </property>
-   <property name="standardButtons" >
+   <property name="standardButtons">
     <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
    </property>
   </widget>
-  <widget class="QLabel" name="label" >
-   <property name="geometry" >
+  <widget class="QLabel" name="label">
+   <property name="geometry">
     <rect>
      <x>10</x>
      <y>10</y>
@@ -40,12 +41,12 @@
      <height>16</height>
     </rect>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>Create Document:</string>
    </property>
   </widget>
-  <widget class="QComboBox" name="Select_Project_Box" >
-   <property name="geometry" >
+  <widget class="QComboBox" name="Select_Project_Box">
+   <property name="geometry">
     <rect>
      <x>10</x>
      <y>40</y>
@@ -54,8 +55,8 @@
     </rect>
    </property>
   </widget>
-  <widget class="QComboBox" name="Select_Type_Box" >
-   <property name="geometry" >
+  <widget class="QComboBox" name="Select_Type_Box">
+   <property name="geometry">
     <rect>
      <x>10</x>
      <y>80</y>
@@ -73,11 +74,11 @@
    <receiver>New_Document_Dialog</receiver>
    <slot>accept()</slot>
    <hints>
-    <hint type="sourcelabel" >
+    <hint type="sourcelabel">
      <x>248</x>
      <y>254</y>
     </hint>
-    <hint type="destinationlabel" >
+    <hint type="destinationlabel">
      <x>157</x>
      <y>274</y>
     </hint>
@@ -87,13 +88,13 @@
    <sender>New_Document_Confirm</sender>
    <signal>rejected()</signal>
    <receiver>New_Document_Dialog</receiver>
-   <slot>reject()</slot>
+   <slot>close()</slot>
    <hints>
-    <hint type="sourcelabel" >
+    <hint type="sourcelabel">
      <x>316</x>
      <y>260</y>
     </hint>
-    <hint type="destinationlabel" >
+    <hint type="destinationlabel">
      <x>286</x>
      <y>274</y>
     </hint>
