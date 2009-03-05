@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Thu Mar  5 00:24:48 2009 on violator
-# update count: 81
+# Last modified Thu Mar  5 19:37:51 2009 on havoc
+# update count: 118
 
 import sys
 from PyQt4 import QtGui
@@ -47,13 +47,16 @@ class ClientUi(QtGui.QMainWindow):
                      self.projectDialog)
 
     def projectDialog(self, parent=None):
-        QtGui.QWidget.__init__(self, parent)
+        QtGui.QDialog.__init__(self, parent)
         self.ui = Ui_New_Project_Dialog()
         self.ui.setupUi(self)
-        self.connect(self.ui.New_Project_Confirm, QtCore.SIGNAL("accepted()"), \
-                     frontend.createproject(unicode(self.ui.Project_name.displayText())))
-        self.connect(self.ui.New_Project_Confirm, QtCore.SIGNAL("rejected()"), self.ui.close())
-        
+        self.show()
+        ok = self.accept
+        self.connect(self.ui.New_Project_Confirm, QtCore.SIGNAL("accepted()"), QtCore.SLOT(frontend.createproject(unicode(self.ui.Project_name.displayText()))))
+#        self.connect(self.ui.New_Project_Confirm.Cancel, QtCore.SIGNAL("rejected()"), QtCore.SLOT(self.ui.close()))
+        def accept(self): 
+            self.close()
+
 if __name__ == "__main__":
     app = QtGui.QApplication(sys.argv)
     clientapp = ClientUi()
