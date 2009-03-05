@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Thu Mar  5 21:46:48 2009 on violator
-# update count: 384
+# Last modified Thu Mar  5 22:01:33 2009 on violator
+# update count: 385
 # -*- coding:  utf-8 -*-
 
 import os
@@ -28,7 +28,7 @@ def createrepo():
 
 def installhooks():
    """ Install hooks in repository """
-   revhook='pre-revprop-change'
+   revhook='post-commit'
    revhookpath=os.path.join(conf.hookspath, revhook)
    
    # Copy hooks to dir in repository and set to executable
