@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Thu Mar  5 21:34:52 2009 on violator
-# update count: 82
+# Last modified Thu Mar  5 22:46:29 2009 on violator
+# update count: 83
 # -*- coding:  utf-8 -*-
 
 from pysqlite2 import dbapi2 as sqlite
@@ -29,11 +29,11 @@ def createdb(dbpath):
     #cur.execute("insert into filelist(filename) values ('file3.cpp')")
     #cur.execute("insert into filelist(filename) values ('file8.cpp')")
 
-    cur.execute("insert into revlist(revnum,filename,author,logtext) "\
-                "values (1,'file8.cpp','thuswa','initial commit')")
+#    cur.execute("insert into revlist(revnum,filename,author,logtext) "\
+#                "values (1,'file8.cpp','thuswa','initial commit')")
 
     #cur.execute("select * from filelist")
-    cur.execute("select * from revlist")
+#    cur.execute("select * from revlist")
 
-    print cur.fetchall()
+#    print cur.fetchall()
 
