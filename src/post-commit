@@ -3,6 +3,10 @@
 from pysqlite2 import dbapi2 as sqlite
 from optparse import OptionParser
 
+def decons_docname(docname):
+  """ De-construct document file name"""
+  return docname.replace(".","-").split("-")  
+
 def command_output(cmd):
   " Capture a command's standard output. "
   import subprocess
