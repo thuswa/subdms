@@ -32,7 +32,7 @@ def main():
   print filename 
   if filename != "":
       # Create a connection to the database file
-      con = sqlite.connect("./repodb")
+      con = sqlite.connect("/tmp/subdms/repo/repodb") #fixme
       cur = con.cursor()
 
       # Construct sql command string
