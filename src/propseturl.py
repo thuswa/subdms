@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# $Id: config.py 53 2009-03-01 21:34:36Z albert.thuswaldner $
+# $Id$
 # Last modified Fri Mar  6 12:58:31 2009 on havoc
 # update count: 53
 # -*- coding:  utf-8 -*-
