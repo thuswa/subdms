@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Sun Mar  1 00:34:08 2009 on violator
-# update count: 34
+# Last modified Sun Mar  8 22:25:45 2009 on violator
+# update count: 55
 # -*- coding:  utf-8 -*-
 
 import ConfigParser
@@ -9,6 +9,7 @@ import ConfigParser
 class dmsconfig:
     
     def __init__(self):
+        """ set built-in and user defined configs """
         conf = ConfigParser.ConfigParser()
         conf.read("../subdms.cfg")
         
@@ -22,4 +23,14 @@ class dmsconfig:
         self.dbpath = conf.get("Path", "database")
         self.doctypes = list(conf.get("Document", "type").split())
         self.tmpltxt = conf.get("Template", "txt")
+        self.proplist = ['title', 'issue', 'status']
+        self.proplisthex = self.hexencode(self.proplist)
+        self.statuslist = ['preliminary', 'in-review' ,'rejected', 'approved', \
+                           'released', 'obsolete'] 
         
+    def hexencode(self, list):
+        """ encode list in hex """
+        returnlist=[]
+        for item in list:
+            returnlist.append(item.encode("hex"))
+        return returnlist    
