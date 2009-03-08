@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Sun Mar  8 22:25:45 2009 on violator
-# update count: 55
+# Last modified Sun Mar  8 23:49:33 2009 on violator
+# update count: 57
 # -*- coding:  utf-8 -*-
 
 import ConfigParser
@@ -24,13 +24,6 @@ class dmsconfig:
         self.doctypes = list(conf.get("Document", "type").split())
         self.tmpltxt = conf.get("Template", "txt")
         self.proplist = ['title', 'issue', 'status']
-        self.proplisthex = self.hexencode(self.proplist)
+        self.created = 'created'.encode("hex")
         self.statuslist = ['preliminary', 'in-review' ,'rejected', 'approved', \
                            'released', 'obsolete'] 
-        
-    def hexencode(self, list):
-        """ encode list in hex """
-        returnlist=[]
-        for item in list:
-            returnlist.append(item.encode("hex"))
-        return returnlist    
