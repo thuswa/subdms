@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Thu Mar  5 22:01:33 2009 on violator
-# update count: 385
+# Last modified Sun Mar  8 22:41:15 2009 on violator
+# update count: 398
 # -*- coding:  utf-8 -*-
 
 import os
@@ -81,10 +81,12 @@ def createdocument(docnamelist, doctitle):
    client.checkout(docurl, checkoutpath)
    
    # Set document title and commit document
-   client.propset('title', doctitle, docpath)
-   client.propset('issue', '1', docpath)
-   client.propset('status', 'preliminary', docpath)
-   client.checkin(docpath, "commit document properties for: "+docname)
+   client.propset(conf.proplist[0], doctitle, docpath)
+   client.propset(conf.proplist[1], '1', docpath)
+   client.propset(conf.proplist[2], conf.statuslist[0], docpath)
+   hexprops=string.join(conf.proplisthex[:3])
+   client.checkin(docpath, hexprops+" : commit document properties for: " \
+                  +docname)
    
 def adddocument(docnamelist, doctitle, addfile):
    """    
@@ -186,7 +188,6 @@ def createdocumentlist(project, doctype, docext):
    """
    docno='0001'
    return [project, doctype, docno, docext]
-   
 
 ###############################################################################
 # Helper functions
