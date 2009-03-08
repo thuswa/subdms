@@ -3,9 +3,12 @@
 from pysqlite2 import dbapi2 as sqlite
 from optparse import OptionParser
 
+import re
+import string
+
 def decons_docname(docname):
   """ De-construct document file name"""
-  return docname.replace(".","-").split("-")  
+  return list(docname.replace(".","-").split("-"))  
 
 def command_output(cmd):
   " Capture a command's standard output. "
@@ -20,6 +23,8 @@ def main():
 
   parser = OptionParser(usage=usage)
 
+  createdptrn = re.copile('63726561746564')
+
   (opts,(repos, rvn)) = parser.parse_args()
 
   # Construct svnlook command 
@@ -31,24 +36,31 @@ def main():
   # Get info about commit
   log_message = command_output(look_cmd % "log").rstrip("\n").rstrip()
   changed = command_output(look_cmd % "changed")
-  author = command_output(look_cmd % "author")
-  prop = command_output(look_cmd % "propget")
   docname = changed.split("/").pop().rstrip("\n").rstrip()
-  author = author.rstrip("\n")
+
   if docname:
+    author = command_output(look_cmd % "author")
+    prop = command_output(look_cmd % "propget")
+    author = author.rstrip("\n")
+    date = command_output(look_cmd % "date")
+    if createdptrn.match(log_message):
       # Create a connection to the database file
       con = sqlite.connect("/tmp/subdms/repo/repodb") #fixme
       cur = con.cursor()
-      f = open("./foo.txt", "a") 
-      f.write(rvn+" "+docname+" "+" "+author+" "+log_message+"\n")
+      f = open("./foo.txt", "a")
+      
+      writestr=[rvn].extend(decons_docname(docname))
+      writestr.extend([author,date,log_message])
+      
+      f.write(writestr+"\n")
       f.close()
       docnamelist=decons_docname(docname)
       # Construct sql command string
-#      db_str="insert into revlist(revnum,filename,author,logtext) values("+rvn+",'"+filename+"','"+author+"','"+log_message+"')"
-#      print db_str
+      #      db_str="insert into revlist(revnum,filename,author,logtext) values("+rvn+",'"+filename+"','"+author+"','"+log_message+"')"
+      #      print db_str
       
       # Excecute sql command
-#      cur.execute(db_str)
+      #      cur.execute(db_str)
 
 if __name__ == "__main__":
   import sys
