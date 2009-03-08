@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Sun Mar  8 22:41:15 2009 on violator
-# update count: 398
+# Last modified Sun Mar  8 22:57:41 2009 on violator
+# update count: 412
 # -*- coding:  utf-8 -*-
 
 import os
@@ -85,7 +85,7 @@ def createdocument(docnamelist, doctitle):
    client.propset(conf.proplist[1], '1', docpath)
    client.propset(conf.proplist[2], conf.statuslist[0], docpath)
    hexprops=string.join(conf.proplisthex[:3])
-   client.checkin(docpath, hexprops+" : commit document properties for: " \
+   client.checkin(docpath, hexprops+" commit document properties for: " \
                   +docname)
    
 def adddocument(docnamelist, doctitle, addfile):
@@ -137,14 +137,17 @@ def release(docnamelist):
    issue_no=str(getissueno)
    docname=__const_docname(docnamelist)
    newissuepath=__const_doctagurl(docnamelist, issue_no)
+
    # Set status of document to released
-   client.propset('status', 'released', __const_docpath(docnamelist))
+   client.propset(conf.proplist[2], conf.statuslist[4], \
+                  __const_docpath(docnamelist))
    checkin(docnamelist, "Set status to released on "+docname)
    
    # Create tag
    server_side_copy(__const_docurl(docnamelist), \
                     __const_doctagurl(docnamelist, issue_no), \
-                    "Release "+docname+", issue "+issue_no)
+                    conf.proplisthex[2]+" Release "+docname+", issue " \
+                    +issue_no)
 
    # Set previous issue to obsolete
    if issueno > 1:
