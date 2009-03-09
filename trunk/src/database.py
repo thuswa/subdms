@@ -1,29 +1,29 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Thu Mar  5 22:46:29 2009 on violator
-# update count: 83
+# Last modified Mon Mar  9 23:59:08 2009 on violator
+# update count: 103
 # -*- coding:  utf-8 -*-
 
 from pysqlite2 import dbapi2 as sqlite
 
 """
-create database. For now a simple sqlite2 database is used.
+Database class. For now a simple sqlite2 database is used.
 """
 
-def createdb(dbpath):
-    # Create a connection to the database file
-    con = sqlite.connect(dbpath)
-    
-    # Get a Cursor object that operates in the context of Connection con:
-    cur = con.cursor()
-
-    # Create schema and test data
-    #cur.execute("create table filelist(fileid INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, filename TEXT)")
-    #cur.execute("create table revlist(revnum INTEGER PRIMARY KEY, id INTEGER, FOREIGN KEY(id) REFERENCES filelist(fileid), logtext TEXT)")
-
-    # Create the simpliest table 
-    cur.execute("create table revlist(revnum INTEGER PRIMARY KEY," \
-                "project,doctype,docno,docext,doctitle,author, logtext TEXT)")
+class sqlitedb:
+    def __init__(self, dbpath):
+        """ Initialize database """
+        # Create a connection to the database file
+        con = sqlite.connect(dbpath)
+        # Get a Cursor object that operates in the context of Connection con:
+        self.cursor= con.cursor()
+        
+    def createdb(self):
+        """ Create database """
+        # Create the simpliest table 
+        self.cursor.execute("create table revlist(revnum INTEGER PRIMARY KEY," \
+                            "project, doctype, docno, docext, doctitle," \
+                            "date, status, author, logtext TEXT)")
 
     #cur.execute("insert into filelist(filename) values ('file1.cpp')")  
     #cur.execute("insert into filelist(filename) values ('file3.cpp')")
