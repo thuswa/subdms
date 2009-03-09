@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Sun Mar  8 23:50:08 2009 on violator
-# update count: 415
+# Last modified Tue Mar 10 00:05:57 2009 on violator
+# update count: 416
 # -*- coding:  utf-8 -*-
 
 import os
@@ -84,7 +84,7 @@ def createdocument(docnamelist, doctitle):
    client.propset(conf.proplist[0], doctitle, docpath)
    client.propset(conf.proplist[1], '1', docpath)
    client.propset(conf.proplist[2], conf.statuslist[0], docpath)
-   client.checkin(docpath, +conf.created+ \
+   client.checkin(docpath, conf.created+ \
                   " commit document properties for: "+docname)
    
 def adddocument(docnamelist, doctitle, addfile):
