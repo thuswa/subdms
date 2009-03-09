@@ -18,12 +18,12 @@ def command_output(cmd):
 
 def main():
   usage = """usage: %prog REPOS TXN
-#
-#Run pre-commit options on a repository transaction."""
+  #
+  #Run pre-commit options on a repository transaction."""
 
   parser = OptionParser(usage=usage)
 
-  createdptrn = re.copile('63726561746564')
+  createdptrn = re.compile('63726561746564')
 
   (opts,(repos, rvn)) = parser.parse_args()
 
@@ -39,20 +39,20 @@ def main():
   docname = changed.split("/").pop().rstrip("\n").rstrip()
 
   if docname:
-    author = command_output(look_cmd % "author")
-    prop = command_output(look_cmd % "propget")
-    author = author.rstrip("\n")
-    date = command_output(look_cmd % "date")
+    author = command_output(look_cmd % "author").rstrip("\n")
+#    prop = command_output(look_cmd % "propget")
+    date = command_output(look_cmd % "date").rstrip("\n")
     if createdptrn.match(log_message):
       # Create a connection to the database file
       con = sqlite.connect("/tmp/subdms/repo/repodb") #fixme
       cur = con.cursor()
       f = open("./foo.txt", "a")
-      
-      writestr=[rvn].extend(decons_docname(docname))
+    
+      writestr=[rvn]
+      writestr.extend(decons_docname(docname))
       writestr.extend([author,date,log_message])
       
-      f.write(writestr+"\n")
+      f.write(string.join(writestr)+"\n")
       f.close()
       docnamelist=decons_docname(docname)
       # Construct sql command string
