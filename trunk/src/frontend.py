@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Tue Mar 10 00:05:57 2009 on violator
-# update count: 416
+# Last modified Tue Mar 10 00:55:23 2009 on violator
+# update count: 421
 # -*- coding:  utf-8 -*-
 
 import os
@@ -189,6 +189,18 @@ def createdocumentlist(project, doctype, docext):
    """
    docno='0001'
    return [project, doctype, docno, docext]
+
+def ischeckedout(docnamelist):
+   """ Return true if docname is checked out. """
+   return None
+
+def reverttohead(docnamelist):
+   """ Revert to head revision undo local changes. """
+   return None
+
+def reverttoprerev(docnamelist):
+   """ Revert to previous revision. """
+   return None
 
 ###############################################################################
 # Helper functions
