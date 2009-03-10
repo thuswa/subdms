@@ -43,7 +43,8 @@ def main():
   if docname:
     # create docname list
     docnamelist = docs.decons_docname(docname)
-    docurl = docs.const_docurl(docnamelist)
+    docurl = docs.const_docinrepopath(docnamelist)
+
     # Get author, date and other properties
     author = command_output(look_cmd % "author").rstrip("\n")
     date = command_output(look_cmd % "date").rstrip("\n")
@@ -58,8 +59,7 @@ def main():
     
       writestr=[rvn]
       writestr.extend(docnamelist)
-      writestr.extend([author,date,log_message])
-      writestr.extend
+      writestr.extend([title, date, status, author, log_message])
       f.write(string.join(writestr)+"\n")
       f.close()
       # Construct sql command string
