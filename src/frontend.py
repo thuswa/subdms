@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Tue Mar 10 00:55:23 2009 on violator
-# update count: 421
+# Last modified Tue Mar 10 17:13:49 2009 on havoc
+# update count: 431
 # -*- coding:  utf-8 -*-
 
 import os
@@ -10,14 +10,15 @@ import shutil
 import string
 import subprocess 
 
-import config
+import lowlib
 
 """
 
 """
 
 client = pysvn.Client()
-conf = config.dmsconfig()
+conf = lowlib.dmsconfig()
+docs = lowlib.docname()
 
 def createrepo():
    """ create repsitory and layout """
@@ -30,8 +31,9 @@ def installhooks():
    """ Install hooks in repository """
    revhook='post-commit'
    revhookpath=os.path.join(conf.hookspath, revhook)
-   
    # Copy hooks to dir in repository and set to executable
+   shutil.copyfile(os.path.abspath('lowlib.py'), \
+                      os.path.join(conf.hookspath, 'lowlib.py')) #fixme
    shutil.copyfile(os.path.abspath(revhook), revhookpath)
    os.chmod(revhookpath,0755)
    
@@ -67,11 +69,11 @@ def createdocument(docnamelist, doctitle):
    doctitle: document title string.
    """
    txtfileurl=os.path.join(conf.tmplurl, conf.tmpltxt.split('/')[1]) #fixme
-   docname=__const_docname(docnamelist)
-   docurl=__const_docurl(docnamelist)
-   docfileurl=__const_docfileurl(docnamelist)
-   checkoutpath=__const_checkoutpath(docnamelist)
-   docpath=__const_docpath(docnamelist)
+   docname=docs.const_docname(docnamelist)
+   docurl=docs.const_docurl(docnamelist)
+   docfileurl=docs.const_docfileurl(docnamelist)
+   checkoutpath=docs.const_checkoutpath(docnamelist)
+   docpath=docs.const_docpath(docnamelist)
    
    # Create document url in repository
    client.mkdir(docurl, "create directory for : "+docname,1)
@@ -95,10 +97,10 @@ def adddocument(docnamelist, doctitle, addfile):
    doctitle: document title string.
    addfile: path to the file to be added.
    """
-   docname=__const_docname(docnamelist)
-   docurl=__const_docurl(docnamelist)
-   checkoutpath=__const_checkoutpath(docnamelist)
-   docpath=__const_docpath(docnamelist)
+   docname=docs.const_docname(docnamelist)
+   docurl=docs.const_docurl(docnamelist)
+   checkoutpath=docs.const_checkoutpath(docnamelist)
+   docpath=docs.const_docpath(docnamelist)
 
    # Create document url in repository and check it out to workspace
    client.mkdir(docurl, "create directory for : "+docname,1)
@@ -116,64 +118,64 @@ def adddocument(docnamelist, doctitle, addfile):
 
 def commit(docnamelist, message):
    """commit changes on file"""
-   client.checkin(__const_docpath(docnamelist, message))
+   client.checkin(docs.const_docpath(docnamelist, message))
 
 def checkin(docnamelist, message):
    """check-in file from workspace"""
    commit(docnamelist, message) 
 
    # Remove file from workspace
-   shutil.rmtree(__const_checkoutpath(docnamelist))
+   shutil.rmtree(docs.const_checkoutpath(docnamelist))
 
 def checkout(docnamelist):
   """check-out file to workspace"""
-  client.checkout(__const_docurl(docnamelist), \
-                     __const_checkoutpath(docnamelist))
+  client.checkout(docs.const_docurl(docnamelist), \
+                     docs.const_checkoutpath(docnamelist))
 #  client.lock( 'file.txt', 'reason for locking' )
 
 def release(docnamelist):
    """Release the document"""
    issue_no=str(getissueno)
-   docname=__const_docname(docnamelist)
-   newissuepath=__const_doctagurl(docnamelist, issue_no)
+   docname=docs.const_docname(docnamelist)
+   newissuepath=docs.const_doctagurl(docnamelist, issue_no)
 
    # Set status of document to released
    client.propset(conf.proplist[2], conf.statuslist[4], \
-                  __const_docpath(docnamelist))
+                  docs.const_docpath(docnamelist))
    checkin(docnamelist, "Set status to released on "+docname)
    
    # Create tag
-   server_side_copy(__const_docurl(docnamelist), \
-                    __const_doctagurl(docnamelist, issue_no), \
+   server_side_copy(docs.const_docurl(docnamelist), \
+                    docs.const_doctagurl(docnamelist, issue_no), \
                     " Release "+docname+", issue "+issue_no)
 
    # Set previous issue to obsolete
    if issueno > 1:
       oldissue=issue_no - 1
-      oldissuepath=__const_doctagurl(docnamelist, oldissue)
-      client.checkout(oldissuepath, __const_checkoutpath(docnamelist))
-      client.propset('status', 'obsolete', __const_docpath(docnamelist))
+      oldissuepath=docs.const_doctagurl(docnamelist, oldissue)
+      client.checkout(oldissuepath, docs.const_checkoutpath(docnamelist))
+      client.propset('status', 'obsolete', docs.const_docpath(docnamelist))
       checkin(docnamelist, "Set status to obsolete on " \
               +docname+" issue "+oldissue)
       
 def newissue(docnamelist):
    """Create new issue of the document"""
    new_issue_no = str(getissueno + 1)
-   client.propset('status', 'preliminary', __const_docurl(docnamelist))
-   client.propset('issue', new_issue_no,  __const_docurl(docnamelist))
+   client.propset('status', 'preliminary', docs.const_docurl(docnamelist))
+   client.propset('issue', new_issue_no,  docs.const_docurl(docnamelist))
    
 def getissueno(docnamelist):
    """ Get document issue number """ 
    return int(client.propget('issue', \
-                             __const_docurl(docnamelist)).values().pop())
+                             docs.const_docurl(docnamelist)).values().pop())
 
 def gettitle(docnamelist):
    """ Get document title """ 
-   return client.propget('title', __const_docurl(docnamelist)).values().pop()
+   return client.propget('title', docs.const_docurl(docnamelist)).values().pop()
 
 def getstatus(docnamelist):
    """ Get document status """ 
-   return client.propget('status', __const_docurl(docnamelist)).values().pop()
+   return client.propget('status', docs.const_docurl(docnamelist)).values().pop()
 
 def server_side_copy(source, target, log_message):
    """ Server side copy in repository URL -> URL """
@@ -202,64 +204,3 @@ def reverttoprerev(docnamelist):
    """ Revert to previous revision. """
    return None
 
-###############################################################################
-# Helper functions
-def __const_checkoutpath(docnamelist):
-   """ Construct the check-out path """
-   return os.path.join(conf.workpath, \
-                          os.path.splitext(__const_docname(docnamelist))[0])
-
-def __const_docname(docnamelist):
-   """ Construct the document file name. """
-   return string.join(docnamelist[:-1],'-')+'.'+docnamelist[-1:].pop()
-
-def __const_docurl(docnamelist):
-   """ Construct the document url. """
-   docurllist=[conf.trunkurl]
-   docurllist.extend(docnamelist[:-1])
-   return string.join(docurllist, '/')
-
-def __const_docfileurl(docnamelist):
-   """ Construct the document file url. """
-   return string.join([__const_docurl(docnamelist), \
-                       __const_docname(docnamelist)], '/')
-
-def __const_doctagurl(docnamelist, issue_no):
-   """ Construct the document tag url. """
-   docurllist=[conf.tagsurl]
-   docurllist.extend(docnamelist[:-1])
-   docurllist.extend(issueno)
-   return string.join(docurllist, '/')
-
-def __const_docpath(docnamelist):
-   """ Construct the path to the checked out document. """
-   return os.path.join(__const_checkoutpath(docnamelist), \
-                       __const_docname(docnamelist))
-
-def __command_output(cmd):
-  """ Capture a command's standard output. """
-  import subprocess
-  return subprocess.Popen(
-      cmd.split(), stdout=subprocess.PIPE).communicate()[0]
-
-def __grem(path, pattern):
-	pattern = re.compile(pattern)
-	for each in os.listdir(path):
-		if pattern.search(each):
-			name = os.path.join(path, each)
-			try: os.remove(name)
-			except:
-				grem(name, '')
-				os.rmdir(name)
-
-def __nukedir(dir):
-    if dir[-1] == os.sep: dir = dir[:-1]
-    files = os.listdir(dir)
-    for file in files:
-        if file == '.' or file == '..': continue
-        path = dir + os.sep + file
-        if os.path.isdir(path):
-            nukedir(path)
-        else:
-            os.unlink(path)
-    os.rmdir(dir)

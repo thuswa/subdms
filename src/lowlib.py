@@ -1,10 +1,14 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Sun Mar  8 23:49:33 2009 on violator
-# update count: 57
+# Last modified Tue Mar 10 17:13:22 2009 on havoc
+# update count: 89
 # -*- coding:  utf-8 -*-
 
 import ConfigParser
+import os
+import string
+
+""" Low-evel classes.  """
 
 class dmsconfig:
     
@@ -27,3 +31,45 @@ class dmsconfig:
         self.created = 'created'.encode("hex")
         self.statuslist = ['preliminary', 'in-review' ,'rejected', 'approved', \
                            'released', 'obsolete'] 
+
+################################################################################
+
+class docname:
+    def __init__(self):    
+        self.conf = dmsconfig()
+
+    def const_checkoutpath(self, docnamelist):
+        """ Construct the check-out path """
+        return os.path.join(self.conf.workpath, \
+                                os.path.splitext(self.const_docname(docnamelist))[0])
+
+    def const_docname(self, docnamelist):
+        """ Construct the document file name. """
+        return string.join(docnamelist[:-1],'-')+'.'+docnamelist[-1:].pop()
+
+    def const_docurl(self, docnamelist):
+        """ Construct the document url. """
+        docurllist=[self.conf.trunkurl]
+        docurllist.extend(docnamelist[:-1])
+        return string.join(docurllist, '/')
+
+    def const_docfileurl(self, docnamelist):
+        """ Construct the document file url. """
+        return string.join([self.const_docurl(docnamelist), \
+                                self.const_docname(docnamelist)], '/')
+
+    def const_doctagurl(self, docnamelist, issue_no):
+        """ Construct the document tag url. """
+        docurllist=[self.conf.tagsurl]
+        docurllist.extend(docnamelist[:-1])
+        docurllist.extend(issueno)
+        return string.join(docurllist, '/')
+
+    def const_docpath(self, docnamelist):
+        """ Construct the path to the checked out document. """
+        return os.path.join(self.const_checkoutpath(docnamelist), \
+                                self.const_docname(docnamelist))
+
+    def decons_docname(self, docname):
+        """ De-construct document file name. """
+        return list(docname.replace(".","-").split("-"))  
