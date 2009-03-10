@@ -60,14 +60,16 @@ def main():
       writestr=[rvn]
       writestr.extend(docnamelist)
       writestr.extend([title, date, status, author, log_message])
-      f.write(string.join(writestr)+"\n")
+      f.write(string.join(writestr, ",")+"\n")
       f.close()
       # Construct sql command string
-      #      db_str="insert into revlist(revnum,filename,author,logtext) values("+rvn+",'"+filename+"','"+author+"','"+log_message+"')"
+      db_str="insert into revlist(revnum, project, doctype, docno, docext, " \
+              "doctitle, date, status, author, logtext)) values(%s)" \
+              % string.join(writestr, ",")
       #      print db_str
       
       # Excecute sql command
-      #      cur.execute(db_str)
+      cur.execute(db_str)
 
 if __name__ == "__main__":
   import sys
