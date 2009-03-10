@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Tue Mar 10 21:57:49 2009 on violator
-# update count: 82
+# Last modified Wed Mar 11 00:25:11 2009 on violator
+# update count: 91
 # -*- coding:  utf-8 -*-
 
 import os
@@ -49,10 +49,14 @@ frontend.createdocument(docnamelist1, doctitle1)
 docnamelist2=['test','list','0001','txt']
 doctitle2='Test list'
 frontend.createdocument(docnamelist2, doctitle2)
+docnamelist3=['test','list','0002','txt']
+doctitle3='Test list2'
+frontend.createdocument(docnamelist3, doctitle3)
 
 # Dump database
 db.dumpdb()
 
+print db.getdocno("test", "list")
 
 
  
