@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Tue Mar 10 17:13:49 2009 on havoc
-# update count: 431
+# Last modified Tue Mar 10 20:08:33 2009 on violator
+# update count: 432
 # -*- coding:  utf-8 -*-
 
 import os
@@ -34,6 +34,8 @@ def installhooks():
    # Copy hooks to dir in repository and set to executable
    shutil.copyfile(os.path.abspath('lowlib.py'), \
                       os.path.join(conf.hookspath, 'lowlib.py')) #fixme
+   shutil.copyfile(os.path.abspath('../subdms.cfg'), \
+                      os.path.join(conf.repopath, 'subdms.cfg')) #fixme
    shutil.copyfile(os.path.abspath(revhook), revhookpath)
    os.chmod(revhookpath,0755)
    
