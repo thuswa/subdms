@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Tue Mar 10 21:58:59 2009 on violator
-# update count: 113
+# Last modified Wed Mar 11 00:24:00 2009 on violator
+# update count: 139
 # -*- coding:  utf-8 -*-
 
 from pysqlite2 import dbapi2 as sqlite
@@ -28,4 +28,18 @@ class sqlitedb:
         """ dump the whole database to standard output. """
         self.cursor.execute("select * from revlist")
         print self.cursor.fetchall()
+
+    def getdocno(self, project, doctype):
+        """ Get document number from this project and type. """
+        # Query database 
+        self.cursor.execute("select max(docno) from revlist " \
+                            "where project=? and doctype=?" \
+                            , (project, doctype))
+        # Get document number
+        docno = self.cursor.fetchone()[0]
+
+        # Check if docname is not None -> return zero 
+        if not docno:
+            docno = '0'
+        return int(docno)
 
