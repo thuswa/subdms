@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Mon Mar  9 23:59:08 2009 on violator
-# update count: 103
+# Last modified Tue Mar 10 21:58:59 2009 on violator
+# update count: 113
 # -*- coding:  utf-8 -*-
 
 from pysqlite2 import dbapi2 as sqlite
@@ -24,16 +24,8 @@ class sqlitedb:
         self.cursor.execute("create table revlist(revnum INTEGER PRIMARY KEY," \
                             "project, doctype, docno, docext, doctitle," \
                             "date, status, author, logtext TEXT)")
-
-    #cur.execute("insert into filelist(filename) values ('file1.cpp')")  
-    #cur.execute("insert into filelist(filename) values ('file3.cpp')")
-    #cur.execute("insert into filelist(filename) values ('file8.cpp')")
-
-#    cur.execute("insert into revlist(revnum,filename,author,logtext) "\
-#                "values (1,'file8.cpp','thuswa','initial commit')")
-
-    #cur.execute("select * from filelist")
-#    cur.execute("select * from revlist")
-
-#    print cur.fetchall()
+    def dumpdb(self):
+        """ dump the whole database to standard output. """
+        self.cursor.execute("select * from revlist")
+        print self.cursor.fetchall()
 
