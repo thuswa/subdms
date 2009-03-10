@@ -6,9 +6,10 @@ from optparse import OptionParser
 import re
 import string
 
-def decons_docname(docname):
-  """ De-construct document file name"""
-  return list(docname.replace(".","-").split("-"))  
+import lowlib
+
+conf = lowlib.dmsconfig()
+docs = lowlib.docname()
 
 def command_output(cmd):
   " Capture a command's standard output. "
@@ -31,6 +32,7 @@ def main():
   look_opt = "--revision"
   svn_look = "/usr/bin/svnlook"
   look_cmd = "%s %s %s %s %s" % (svn_look, "%s", repos, look_opt, rvn)
+  look_cmd2 = "%s %s %s %s %s" % (svn_look, "propget", repos, "%s", "%s")
 #  print look_cmd 
 
   # Get info about commit
@@ -39,22 +41,27 @@ def main():
   docname = changed.split("/").pop().rstrip("\n").rstrip()
 
   if docname:
+    # create docname list
+    docnamelist = docs.decons_docname(docname)
+    docurl = docs.const_docurl(docnamelist)
+    # Get author, date and other properties
     author = command_output(look_cmd % "author").rstrip("\n")
-#    prop = command_output(look_cmd % "propget")
     date = command_output(look_cmd % "date").rstrip("\n")
+    title = command_output(look_cmd2 % ("title", docurl))
+    status = command_output(look_cmd2 % ("status", docurl))
+
     if createdptrn.match(log_message):
       # Create a connection to the database file
-      con = sqlite.connect("/tmp/subdms/repo/repodb") #fixme
+      con = sqlite.connect(conf.dbpath) #fixme
       cur = con.cursor()
       f = open("./foo.txt", "a")
     
       writestr=[rvn]
-      writestr.extend(decons_docname(docname))
+      writestr.extend(docnamelist)
       writestr.extend([author,date,log_message])
-      
+      writestr.extend
       f.write(string.join(writestr)+"\n")
       f.close()
-      docnamelist=decons_docname(docname)
       # Construct sql command string
       #      db_str="insert into revlist(revnum,filename,author,logtext) values("+rvn+",'"+filename+"','"+author+"','"+log_message+"')"
       #      print db_str
