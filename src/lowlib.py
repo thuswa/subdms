@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Tue Mar 10 17:13:22 2009 on havoc
-# update count: 89
+# Last modified Tue Mar 10 20:46:56 2009 on violator
+# update count: 92
 # -*- coding:  utf-8 -*-
 
 import ConfigParser
@@ -58,6 +58,10 @@ class docname:
         return string.join([self.const_docurl(docnamelist), \
                                 self.const_docname(docnamelist)], '/')
 
+    def const_docinrepopath(self, docnamelist):
+        """ Construct the document file path in repository. """
+        return self.const_docfileurl(docnamelist).split(self.conf.repopath)[1]
+ 
     def const_doctagurl(self, docnamelist, issue_no):
         """ Construct the document tag url. """
         docurllist=[self.conf.tagsurl]
