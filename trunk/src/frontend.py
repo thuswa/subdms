@@ -1,15 +1,14 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Tue Mar 10 20:08:33 2009 on violator
-# update count: 432
+# Last modified Wed Mar 11 01:11:48 2009 on violator
+# update count: 448
 # -*- coding:  utf-8 -*-
 
 import os
 import pysvn
 import shutil
-import string
-import subprocess 
 
+import database
 import lowlib
 
 """
@@ -19,44 +18,8 @@ import lowlib
 client = pysvn.Client()
 conf = lowlib.dmsconfig()
 docs = lowlib.docname()
+db = database.sqlitedb(conf.dbpath)
 
-def createrepo():
-   """ create repsitory and layout """
-   subprocess.call(['svnadmin','create',conf.repopath])
-   client.mkdir(conf.trunkurl, "create trunk directory",1)
-   client.mkdir(conf.tagsurl, "create trunk directory",1)
-   client.mkdir(conf.tmplurl, "create templates directory",1)
-
-def installhooks():
-   """ Install hooks in repository """
-   revhook='post-commit'
-   revhookpath=os.path.join(conf.hookspath, revhook)
-   # Copy hooks to dir in repository and set to executable
-   shutil.copyfile(os.path.abspath('lowlib.py'), \
-                      os.path.join(conf.hookspath, 'lowlib.py')) #fixme
-   shutil.copyfile(os.path.abspath('../subdms.cfg'), \
-                      os.path.join(conf.repopath, 'subdms.cfg')) #fixme
-   shutil.copyfile(os.path.abspath(revhook), revhookpath)
-   os.chmod(revhookpath,0755)
-   
-def installtemplates():
-   """ Install templates in repository """
-   tmplpath=os.path.join(conf.workpath,'templates')
-   txtfilepath=os.path.join(tmplpath, conf.tmpltxt.split('/')[1]) #fixme
-   
-   # Check out templates dir
-   client.checkout(conf.tmplurl, tmplpath)
-   
-   # Add templates to dir
-   shutil.copyfile(os.path.abspath(conf.tmpltxt), txtfilepath)
-   client.add(txtfilepath)
-
-   # Commit templates
-   client.checkin(tmplpath, "installing templates")
-   
-   # Remove template dir from workspace
-   shutil.rmtree(tmplpath)
-   
 def createproject(proj):
    """Create a project"""
    for doc in conf.doctypes:
@@ -186,12 +149,12 @@ def server_side_copy(source, target, log_message):
    client.callback_get_log_message = get_log_message
    client.copy(source, target)
 
-def createdocumentlist(project, doctype, docext):
+def createdocnamelist(project, doctype, docext):
    """
-   Create a documentlist - list containing the building blocks of
+   Create docnamelist - list containing the building blocks of
    the document name
    """
-   docno='0001'
+   docno="%04d" % (db.getdocno(project, doctype) + 1)
    return [project, doctype, docno, docext]
 
 def ischeckedout(docnamelist):
