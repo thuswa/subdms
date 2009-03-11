@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Wed Mar 11 13:27:16 2009 on havoc
-# update count: 132
+# Last modified Wed Mar 11 13:39:17 2009 on havoc
+# update count: 133
 
 import sys
 from PyQt4 import QtGui
@@ -55,7 +55,6 @@ class ClientUi(QtGui.QMainWindow):
         self.ui = Ui_New_Project_Dialog()
         self.ui.setupUi(self)
         self.show()
-        ok = self.accept
         self.connect(self.ui.New_Project_Confirm, QtCore.SIGNAL("accepted()"), QtCore.SLOT(frontend.createproject(unicode(self.ui.Project_name.displayText()))))
 #        self.connect(self.ui.New_Project_Confirm.Cancel, QtCore.SIGNAL("rejected()"), QtCore.SLOT(self.ui.close()))
         def accept(self): 
