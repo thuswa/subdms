@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Wed Mar 11 01:11:48 2009 on violator
-# update count: 448
+# Last modified Wed Mar 11 20:39:50 2009 on violator
+# update count: 450
 # -*- coding:  utf-8 -*-
 
 import os
@@ -34,7 +34,7 @@ def createdocument(docnamelist, doctitle):
    doctitle: document title string.
    """
    txtfileurl=os.path.join(conf.tmplurl, conf.tmpltxt.split('/')[1]) #fixme
-   docname=docs.const_docname(docnamelist)
+   docname=docs.const_docfname(docnamelist)
    docurl=docs.const_docurl(docnamelist)
    docfileurl=docs.const_docfileurl(docnamelist)
    checkoutpath=docs.const_checkoutpath(docnamelist)
@@ -62,7 +62,7 @@ def adddocument(docnamelist, doctitle, addfile):
    doctitle: document title string.
    addfile: path to the file to be added.
    """
-   docname=docs.const_docname(docnamelist)
+   docname=docs.const_docfname(docnamelist)
    docurl=docs.const_docurl(docnamelist)
    checkoutpath=docs.const_checkoutpath(docnamelist)
    docpath=docs.const_docpath(docnamelist)
@@ -101,7 +101,7 @@ def checkout(docnamelist):
 def release(docnamelist):
    """Release the document"""
    issue_no=str(getissueno)
-   docname=docs.const_docname(docnamelist)
+   docname=docs.const_docfname(docnamelist)
    newissuepath=docs.const_doctagurl(docnamelist, issue_no)
 
    # Set status of document to released
@@ -169,3 +169,4 @@ def reverttoprerev(docnamelist):
    """ Revert to previous revision. """
    return None
 
+def documentlist(
