@@ -42,7 +42,7 @@ def main():
 
   if docname:
     # create docname list
-    docnamelist = docs.decons_docname(docname)
+    docnamelist = docs.decons_docfname(docname)
     docurl = docs.const_docinrepopath(docnamelist)
 
     # Get author, date and other properties

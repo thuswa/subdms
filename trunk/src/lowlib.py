@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Tue Mar 10 20:46:56 2009 on violator
-# update count: 92
+# Last modified Wed Mar 11 20:41:52 2009 on violator
+# update count: 100
 # -*- coding:  utf-8 -*-
 
 import ConfigParser
@@ -44,8 +44,12 @@ class docname:
                                 os.path.splitext(self.const_docname(docnamelist))[0])
 
     def const_docname(self, docnamelist):
+        """ Construct the document name. """
+        return string.join(docnamelist[:-1],'-')
+
+    def const_docfname(self, docnamelist):
         """ Construct the document file name. """
-        return string.join(docnamelist[:-1],'-')+'.'+docnamelist[-1:].pop()
+        return self.const_docname(docnamelist)+'.'+docnamelist[-1:].pop()
 
     def const_docurl(self, docnamelist):
         """ Construct the document url. """
@@ -56,7 +60,7 @@ class docname:
     def const_docfileurl(self, docnamelist):
         """ Construct the document file url. """
         return string.join([self.const_docurl(docnamelist), \
-                                self.const_docname(docnamelist)], '/')
+                                self.const_docfname(docnamelist)], '/')
 
     def const_docinrepopath(self, docnamelist):
         """ Construct the document file path in repository. """
@@ -72,8 +76,8 @@ class docname:
     def const_docpath(self, docnamelist):
         """ Construct the path to the checked out document. """
         return os.path.join(self.const_checkoutpath(docnamelist), \
-                                self.const_docname(docnamelist))
+                                self.const_docfname(docnamelist))
 
-    def decons_docname(self, docname):
+    def decons_docfname(self, docname):
         """ De-construct document file name. """
         return list(docname.replace(".","-").split("-"))  
