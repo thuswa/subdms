@@ -51,7 +51,7 @@
      <string>New document</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="List_documents_button" >
+   <widget class="QPushButton" name="list_documents_button" >
     <property name="geometry" >
      <rect>
       <x>0</x>
@@ -159,7 +159,7 @@
  </widget>
  <tabstops>
   <tabstop>new_project_button</tabstop>
-  <tabstop>List_documents_button</tabstop>
+  <tabstop>list_documents_button</tabstop>
   <tabstop>documentlist</tabstop>
   <tabstop>new_document_button</tabstop>
  </tabstops>

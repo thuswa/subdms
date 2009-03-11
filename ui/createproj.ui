@@ -1,11 +1,10 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<ui version="4.0">
+<ui version="4.0" >
  <class>New_Project_Dialog</class>
- <widget class="QDialog" name="New_Project_Dialog">
-  <property name="windowModality">
+ <widget class="QDialog" name="New_Project_Dialog" >
+  <property name="windowModality" >
    <enum>Qt::ApplicationModal</enum>
   </property>
-  <property name="geometry">
+  <property name="geometry" >
    <rect>
     <x>0</x>
     <y>0</y>
@@ -13,17 +12,17 @@
     <height>137</height>
    </rect>
   </property>
-  <property name="focusPolicy">
+  <property name="focusPolicy" >
    <enum>Qt::ClickFocus</enum>
   </property>
-  <property name="windowTitle">
+  <property name="windowTitle" >
    <string>Create new project</string>
   </property>
-  <property name="modal">
+  <property name="modal" >
    <bool>true</bool>
   </property>
-  <widget class="QDialogButtonBox" name="New_Project_Confirm">
-   <property name="geometry">
+  <widget class="QDialogButtonBox" name="New_Project_Confirm" >
+   <property name="geometry" >
     <rect>
      <x>10</x>
      <y>100</y>
@@ -31,15 +30,15 @@
      <height>32</height>
     </rect>
    </property>
-   <property name="orientation">
+   <property name="orientation" >
     <enum>Qt::Horizontal</enum>
    </property>
-   <property name="standardButtons">
+   <property name="standardButtons" >
     <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
    </property>
   </widget>
-  <widget class="QLabel" name="label">
-   <property name="geometry">
+  <widget class="QLabel" name="label" >
+   <property name="geometry" >
     <rect>
      <x>10</x>
      <y>40</y>
@@ -47,12 +46,12 @@
      <height>16</height>
     </rect>
    </property>
-   <property name="text">
+   <property name="text" >
     <string>Project name:</string>
    </property>
   </widget>
-  <widget class="QLineEdit" name="Project_name">
-   <property name="geometry">
+  <widget class="QLineEdit" name="Project_name" >
+   <property name="geometry" >
     <rect>
      <x>10</x>
      <y>60</y>
@@ -73,27 +72,11 @@
    <receiver>New_Project_Dialog</receiver>
    <slot>close()</slot>
    <hints>
-    <hint type="sourcelabel">
+    <hint type="sourcelabel" >
      <x>180</x>
      <y>115</y>
     </hint>
-    <hint type="destinationlabel">
-     <x>180</x>
-     <y>68</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>New_Project_Confirm</sender>
-   <signal>accepted()</signal>
-   <receiver>New_Project_Dialog</receiver>
-   <slot>accept()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>180</x>
-     <y>115</y>
-    </hint>
-    <hint type="destinationlabel">
+    <hint type="destinationlabel" >
      <x>180</x>
      <y>68</y>
     </hint>
