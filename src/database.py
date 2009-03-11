@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Wed Mar 11 00:24:00 2009 on violator
-# update count: 139
+# Last modified Wed Mar 11 20:19:38 2009 on violator
+# update count: 147
 # -*- coding:  utf-8 -*-
 
 from pysqlite2 import dbapi2 as sqlite
@@ -24,10 +24,11 @@ class sqlitedb:
         self.cursor.execute("create table revlist(revnum INTEGER PRIMARY KEY," \
                             "project, doctype, docno, docext, doctitle," \
                             "date, status, author, logtext TEXT)")
-    def dumpdb(self):
-        """ dump the whole database to standard output. """
+
+    def getall(self):
+        """ get the whole database. """
         self.cursor.execute("select * from revlist")
-        print self.cursor.fetchall()
+        return self.cursor.fetchall()
 
     def getdocno(self, project, doctype):
         """ Get document number from this project and type. """
