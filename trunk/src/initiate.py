@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Wed Mar 11 01:02:52 2009 on violator
-# update count: 116
+# Last modified Wed Mar 11 23:18:50 2009 on violator
+# update count: 117
 # -*- coding:  utf-8 -*-
 
 import os
@@ -63,7 +63,7 @@ if not os.path.isdir(conf.workpath):
     os.makedirs(conf.workpath)
 
 # create db
-db = database.sqlitedb(conf.dbpath)
+db = database.sqlitedb()
 db.createdb()
 
 # create subversion repository and layout

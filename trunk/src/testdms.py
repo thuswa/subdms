@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Wed Mar 11 19:54:38 2009 on violator
-# update count: 105
+# Last modified Wed Mar 11 23:20:41 2009 on violator
+# update count: 106
 # -*- coding:  utf-8 -*-
 
 import database
@@ -9,7 +9,7 @@ import frontend
 import lowlib
 
 conf = lowlib.dmsconfig()
-db = database.sqlitedb(conf.dbpath)
+db = database.sqlitedb()
 
 # create project layout and add some docs
 frontend.createproject("test")

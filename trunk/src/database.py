@@ -1,20 +1,24 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Wed Mar 11 20:19:38 2009 on violator
-# update count: 147
+# Last modified Wed Mar 11 23:18:02 2009 on violator
+# update count: 151
 # -*- coding:  utf-8 -*-
 
 from pysqlite2 import dbapi2 as sqlite
+
+import lowlib
+
+conf = lowlib.dmsconfig()
 
 """
 Database class. For now a simple sqlite2 database is used.
 """
 
 class sqlitedb:
-    def __init__(self, dbpath):
+    def __init__(self):
         """ Initialize database """
         # Create a connection to the database file
-        con = sqlite.connect(dbpath)
+        con = sqlite.connect(conf.dbpath)
         # Get a Cursor object that operates in the context of Connection con:
         self.cursor= con.cursor()
         
