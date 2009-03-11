@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Wed Mar 11 20:39:50 2009 on violator
-# update count: 450
+# Last modified Wed Mar 11 20:57:57 2009 on violator
+# update count: 455
 # -*- coding:  utf-8 -*-
 
 import os
@@ -169,4 +169,3 @@ def reverttoprerev(docnamelist):
    """ Revert to previous revision. """
    return None
 
-def documentlist(
