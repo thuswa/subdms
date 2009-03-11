@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Wed Mar 11 20:57:57 2009 on violator
-# update count: 455
+# Last modified Wed Mar 11 23:18:17 2009 on violator
+# update count: 456
 # -*- coding:  utf-8 -*-
 
 import os
@@ -18,7 +18,7 @@ import lowlib
 client = pysvn.Client()
 conf = lowlib.dmsconfig()
 docs = lowlib.docname()
-db = database.sqlitedb(conf.dbpath)
+db = database.sqlitedb()
 
 def createproject(proj):
    """Create a project"""
