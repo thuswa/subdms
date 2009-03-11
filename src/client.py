@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Thu Mar  5 19:37:51 2009 on havoc
-# update count: 118
+# Last modified Wed Mar 11 13:27:16 2009 on havoc
+# update count: 132
 
 import sys
 from PyQt4 import QtGui
@@ -43,6 +43,10 @@ class ClientUi(QtGui.QMainWindow):
         QtGui.QWidget.__init__(self, parent)
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
+        # Set column width on list object
+        self.ui.documentlist.setColumnWidth(0, 110)
+        self.ui.documentlist.setColumnWidth(1, 400)
+        self.ui.documentlist.setColumnWidth(2, 110)
         self.connect(self.ui.new_project_button, QtCore.SIGNAL('clicked()'), \
                      self.projectDialog)
 
