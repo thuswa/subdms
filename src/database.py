@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Wed Mar 11 23:18:02 2009 on violator
-# update count: 151
+# Last modified Thu Mar 12 14:13:27 2009 on havoc
+# update count: 158
 # -*- coding:  utf-8 -*-
 
 from pysqlite2 import dbapi2 as sqlite
@@ -29,9 +29,17 @@ class sqlitedb:
                             "project, doctype, docno, docext, doctitle," \
                             "date, status, author, logtext TEXT)")
 
-    def getall(self):
-        """ get the whole database. """
+        self.cursor.execute("create table projlist(projname TEXT PRIMARY KEY," \
+                            "doctypes)")
+
+    def getalldocs(self):
+        """ Get list of all documents from database. """
         self.cursor.execute("select * from revlist")
+        return self.cursor.fetchall()
+
+    def getallprojs(self):
+        """ Get list of all projects from database. """
+        self.cursor.execute("select * from projlist")
         return self.cursor.fetchall()
 
     def getdocno(self, project, doctype):
