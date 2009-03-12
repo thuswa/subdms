@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Wed Mar 11 23:18:17 2009 on violator
-# update count: 456
+# Last modified Thu Mar 12 13:40:17 2009 on havoc
+# update count: 458
 # -*- coding:  utf-8 -*-
 
 import os
@@ -24,7 +24,7 @@ def createproject(proj):
    """Create a project"""
    for doc in conf.doctypes:
       client.mkdir(os.path.join(conf.trunkurl, proj, doc), \
-                   "create directory for project: "+proj,1)
+                   conf.newproj+" create directory for project: "+proj,1)
 
 def createdocument(docnamelist, doctitle):
    """
@@ -51,7 +51,7 @@ def createdocument(docnamelist, doctitle):
    client.propset(conf.proplist[0], doctitle, docpath)
    client.propset(conf.proplist[1], '1', docpath)
    client.propset(conf.proplist[2], conf.statuslist[0], docpath)
-   client.checkin(docpath, conf.created+ \
+   client.checkin(docpath, conf.newdoc+ \
                   " commit document properties for: "+docname)
    
 def adddocument(docnamelist, doctitle, addfile):
