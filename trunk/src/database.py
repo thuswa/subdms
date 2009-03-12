@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Thu Mar 12 14:13:27 2009 on havoc
-# update count: 158
+# Last modified Thu Mar 12 22:14:25 2009 on violator
+# update count: 169
 # -*- coding:  utf-8 -*-
 
 from pysqlite2 import dbapi2 as sqlite
@@ -33,14 +33,25 @@ class sqlitedb:
                             "doctypes)")
 
     def getalldocs(self):
-        """ Get list of all documents from database. """
+        """ Get complete documents table from database. """
         self.cursor.execute("select * from revlist")
         return self.cursor.fetchall()
 
     def getallprojs(self):
-        """ Get list of all projects from database. """
+        """ Get complete projects table from database. """
         self.cursor.execute("select * from projlist")
         return self.cursor.fetchall()
+
+    def getprojs(self):
+        """ Get list of all projects from database. """
+        self.cursor.execute("select projname from projlist")
+        return self.cursor.fetchall()
+
+    def getdoctypes(self, project):
+        """ Get doctypes list from a project from database. """
+        self.cursor.execute("select doctypes from projlist " \
+                            "where projname=?", (project, ))
+        return self.cursor.fetchone()[0].split(",")
 
     def getdocno(self, project, doctype):
         """ Get document number from this project and type. """
