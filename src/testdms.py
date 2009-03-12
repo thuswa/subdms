@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Wed Mar 11 23:20:41 2009 on violator
-# update count: 106
+# Last modified Thu Mar 12 14:14:33 2009 on havoc
+# update count: 108
 # -*- coding:  utf-8 -*-
 
 import database
@@ -25,6 +25,7 @@ doctitle3='Test list2'
 frontend.createdocument(docnamelist3, doctitle3)
 
 # Dump database
-print db.getall()
+print db.getalldocs()
+print db.getallprojs()
 
 print db.getdocno("test", "list")
