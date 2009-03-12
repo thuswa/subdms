@@ -23,10 +23,12 @@ def main():
   #Run pre-commit options on a repository transaction."""
 
   parser = OptionParser(usage=usage)
-
-  createdptrn = re.compile('63726561746564')
-
+ 
   (opts,(repos, rvn)) = parser.parse_args()
+
+  # Search patterns for action selection
+  newdocptrn = re.compile(conf.newdoc)
+  newprojptrn = re.compile(conf.newproj)
 
   # Construct svnlook command 
   look_opt = "--revision"
@@ -39,7 +41,7 @@ def main():
   log_message = command_output(look_cmd % "log").rstrip("\n").rstrip()
   changed = command_output(look_cmd % "changed")
   docname = changed.split("/").pop().rstrip("\n").rstrip()
-
+  
   if docname:
     # create docname list
     docnamelist = docs.decons_docfname(docname)
@@ -51,7 +53,7 @@ def main():
     title = command_output(look_cmd2 % ("title", docurl))
     status = command_output(look_cmd2 % ("status", docurl))
 
-    if createdptrn.match(log_message):
+    if newdocptrn.match(log_message):
       # Create a connection to the database file
       con = sqlite.connect(conf.dbpath) #fixme
       cur = con.cursor()

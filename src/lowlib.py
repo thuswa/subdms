@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Wed Mar 11 20:41:52 2009 on violator
-# update count: 100
+# Last modified Thu Mar 12 13:39:23 2009 on havoc
+# update count: 103
 # -*- coding:  utf-8 -*-
 
 import ConfigParser
@@ -28,7 +28,8 @@ class dmsconfig:
         self.doctypes = list(conf.get("Document", "type").split())
         self.tmpltxt = conf.get("Template", "txt")
         self.proplist = ['title', 'issue', 'status']
-        self.created = 'created'.encode("hex")
+        self.newdoc = 'newdocument'.encode("hex")
+        self.newproj = 'newproject'.encode("hex")
         self.statuslist = ['preliminary', 'in-review' ,'rejected', 'approved', \
                            'released', 'obsolete'] 
 
