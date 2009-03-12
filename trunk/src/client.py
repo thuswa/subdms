@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Thu Mar 12 23:13:42 2009 on violator
-# update count: 284
+# Last modified Thu Mar 12 23:51:06 2009 on violator
+# update count: 287
 # -*- coding:  utf-8 -*-
 
 import sys
@@ -39,6 +39,10 @@ class ClientUi(QtGui.QMainWindow):
                      self.showdocdialog)
         self.connect(self.ui.list_documents_button, \
                      QtCore.SIGNAL('clicked()'), self.setdocumentlist)
+        self.connect(self.ui.edit_document_button, \
+                     QtCore.SIGNAL('clicked()'), self.setdocumentlist)
+        self.connect(self.ui.checkin_document_button, \
+                     QtCore.SIGNAL('clicked()'), self.setdocumentlist)     
 
     def showdocdialog(self):
         self.docdialog.setprojlist()
@@ -54,7 +58,7 @@ class ClientUi(QtGui.QMainWindow):
             self.ui.documentlist.setItem(n, 0, docname)
             self.ui.documentlist.setItem(n, 1, title)
             self.ui.documentlist.setItem(n, 2, status)
-            n += 1
+            n += 1        
 
 class projectDialog(QtGui.QDialog):
     def __init__(self, parent=None):
