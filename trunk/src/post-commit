@@ -41,7 +41,21 @@ def main():
   log_message = command_output(look_cmd % "log").rstrip("\n").rstrip()
   changed = command_output(look_cmd % "changed")
   docname = changed.split("/").pop().rstrip("\n").rstrip()
-  
+
+  if newprojptrn.match(log_message):
+    # Create a connection to the database file
+    con = sqlite.connect(conf.dbpath) #fixme
+    cur = con.cursor()
+
+    projname = log_message.split(": ")[-1]
+    # Construct sql command string    
+    db_str="insert into projlist(projname, doctypes) values(\"%s\", \"%s\")" \
+            % (projname, string.join(conf.doctypes,","))
+      
+    # Excecute sql command
+    cur.execute(db_str)
+    con.commit()
+   
   if docname:
     # create docname list
     docnamelist = docs.decons_docfname(docname)
