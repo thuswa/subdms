@@ -5,8 +5,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>836</width>
-    <height>632</height>
+    <width>835</width>
+    <height>600</height>
    </rect>
   </property>
   <property name="minimumSize" >
@@ -144,18 +144,56 @@
      </property>
     </column>
    </widget>
+   <widget class="QPushButton" name="edit_document_button" >
+    <property name="geometry" >
+     <rect>
+      <x>0</x>
+      <y>150</y>
+      <width>114</width>
+      <height>28</height>
+     </rect>
+    </property>
+    <property name="text" >
+     <string>Edit</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="checkin_document_button" >
+    <property name="geometry" >
+     <rect>
+      <x>0</x>
+      <y>190</y>
+      <width>114</width>
+      <height>28</height>
+     </rect>
+    </property>
+    <property name="text" >
+     <string>Check-in</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar" >
    <property name="geometry" >
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>836</width>
+     <width>835</width>
      <height>27</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menuFile" >
+    <property name="title" >
+     <string>File</string>
+    </property>
+    <addaction name="actionExit" />
+   </widget>
+   <addaction name="menuFile" />
   </widget>
   <widget class="QStatusBar" name="statusbar" />
+  <action name="actionExit" >
+   <property name="text" >
+    <string>Exit</string>
+   </property>
+  </action>
  </widget>
  <tabstops>
   <tabstop>new_project_button</tabstop>
