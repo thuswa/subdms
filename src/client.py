@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Thu Mar 12 23:02:53 2009 on violator
-# update count: 283
+# Last modified Thu Mar 12 23:13:42 2009 on violator
+# update count: 284
 # -*- coding:  utf-8 -*-
 
 import sys
@@ -28,8 +28,8 @@ class ClientUi(QtGui.QMainWindow):
         self.docdialog = documentDialog()
         
         # Set column width on list object
-        self.ui.documentlist.setColumnWidth(0, 120)
-        self.ui.documentlist.setColumnWidth(1, 400)
+        self.ui.documentlist.setColumnWidth(0, 140)
+        self.ui.documentlist.setColumnWidth(1, 380)
         self.ui.documentlist.setColumnWidth(2, 100)
 
         # Connect buttons 
