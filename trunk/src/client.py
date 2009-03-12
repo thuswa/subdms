@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Thu Mar 12 14:14:04 2009 on havoc
-# update count: 222
+# Last modified Thu Mar 12 23:02:53 2009 on violator
+# update count: 283
 # -*- coding:  utf-8 -*-
 
 import sys
@@ -36,10 +36,15 @@ class ClientUi(QtGui.QMainWindow):
         self.connect(self.ui.new_project_button, QtCore.SIGNAL('clicked()'), \
                      self.projdialog.show)
         self.connect(self.ui.new_document_button, QtCore.SIGNAL('clicked()'), \
-                     self.docdialog.show)
+                     self.showdocdialog)
         self.connect(self.ui.list_documents_button, \
                      QtCore.SIGNAL('clicked()'), self.setdocumentlist)
 
+    def showdocdialog(self):
+        self.docdialog.setprojlist()
+        self.docdialog.setdoctypelist(self.docdialog.selectedproject())
+        self.docdialog.show()
+    
     def setdocumentlist(self):
         n = 0
         for doc in db.getalldocs():
@@ -63,19 +68,41 @@ class projectDialog(QtGui.QDialog):
         frontend.createproject(unicode(self.ui.Project_name.text()))
         self.close()
 
-
 class documentDialog(QtGui.QDialog):
     def __init__(self, parent=None):
         QtGui.QDialog.__init__(self, parent)
         self.ui = Ui_New_Document_Dialog()
         self.ui.setupUi(self)
-        self.connect(self.ui.New_Document_Confirm, \ 
+        self.connect(self.ui.Select_Project_Box, \
+                     QtCore.SIGNAL("activated(project)"),
+                     self.setdoctypelist)
+
+        self.connect(self.ui.New_Document_Confirm, \
                      QtCore.SIGNAL("accepted()"), self.okaction)
+
+    def selectedproject(self):
+        return unicode(self.ui.Select_Project_Box.currentText())
+
+    def selecteddoctype(self):
+        return unicode(self.ui.Select_Type_Box.currentText())
+    
+    def setprojlist(self):
+        self.ui.Select_Project_Box.clear()
+        for proj in db.getprojs():
+            self.ui.Select_Project_Box.addItem(proj[0])
+
+    def setdoctypelist(self, project):
+        self.ui.Select_Type_Box.clear()
+        for doctype in db.getdoctypes(project):
+            self.ui.Select_Type_Box.addItem(doctype)
         
     def okaction(self):
-        title = unicode(self.ui.Document_title.text())
-        
-        frontend.createdocument()
+        doctitle = unicode(self.ui.document_title.text())
+        project = self.selectedproject()
+        doctype = self.selecteddoctype()
+        docext = "txt"
+        docnamelist = frontend.createdocnamelist(project, doctype, docext)
+        frontend.createdocument(docnamelist, doctitle)
         self.close()
 
 
