@@ -1,10 +1,10 @@
 #!/bin/bash
 # $Id$
-# Last modified Fri Mar 13 20:26:46 2009 on violator
-# Update count: 104
+# Last modified Sat Mar 14 00:00:24 2009 on violator
+# Update count: 105
 #
 # Created 2009-03-04, Albert Thuswaldner
 
-pyuic4 ../subdms/ui/createdocument.ui > ../subdms/lib/createdocumentui.py
-pyuic4 ../subdms/ui/createproj.ui > ../subdms/lib/createprojui.py
-pyuic4 ../subdms/ui/mainwindow.ui > ../subdms/lib/mainwindow.py
+pyuic4 ../ui/createdocument.ui > ../subdms/createdocumentui.py
+pyuic4 ../ui/createproj.ui > ../subdms/createprojui.py
+pyuic4 ../ui/mainwindow.ui > ../subdms/mainwindow.py
