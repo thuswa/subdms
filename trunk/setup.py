@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Fri Mar 13 23:19:56 2009 on violator
-# update count: 68
+# Last modified Fri Mar 13 23:41:10 2009 on violator
+# update count: 69
 
 from distutils.core import setup
 
@@ -13,7 +13,7 @@ CLASSIFIERS = [
     'Operating System :: POSIX',
     'Programming Language :: Python'
     'Topic :: Desktop Environment :: Qt',
-    'Topic :: Business/Office :: Document Management',
+    'Topic :: Office/Business :: Document Management',
 ]
 
 setup(name='subdms',
