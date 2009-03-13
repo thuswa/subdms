@@ -1,14 +1,14 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Thu Mar 12 13:39:23 2009 on havoc
-# update count: 103
+# Last modified Fri Mar 13 13:38:15 2009 on havoc
+# update count: 106
 # -*- coding:  utf-8 -*-
 
 import ConfigParser
 import os
 import string
 
-""" Low-evel classes.  """
+""" Low-level classes.  """
 
 class dmsconfig:
     
@@ -82,3 +82,5 @@ class docname:
     def decons_docfname(self, docname):
         """ De-construct document file name. """
         return list(docname.replace(".","-").split("-"))  
+
+
