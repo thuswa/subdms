@@ -1,10 +1,9 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Thu Mar 12 23:51:06 2009 on violator
-# update count: 287
+# Last modified Fri Mar 13 22:22:33 2009 on violator
+# update count: 289
 # -*- coding:  utf-8 -*-
 
-import sys
 from PyQt4 import QtGui
 from PyQt4 import QtCore
 
@@ -109,9 +108,3 @@ class documentDialog(QtGui.QDialog):
         frontend.createdocument(docnamelist, doctitle)
         self.close()
 
-
-if __name__ == "__main__":
-    app = QtGui.QApplication(sys.argv)
-    clientapp = ClientUi()
-    clientapp.show()
-    sys.exit(app.exec_())
