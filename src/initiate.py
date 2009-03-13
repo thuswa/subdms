@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Wed Mar 11 23:18:50 2009 on violator
-# update count: 117
+# Last modified Fri Mar 13 12:17:25 2009 on havoc
+# update count: 124
 # -*- coding:  utf-8 -*-
 
 import os
@@ -10,7 +10,7 @@ import shutil
 import string
 import subprocess 
 
-import config
+import lowlib
 import database
 
 
@@ -55,7 +55,7 @@ class repository:
         # Remove template dir from workspace
         shutil.rmtree(tmplpath)
 
-conf = config.dmsconfig()
+conf = lowlib.dmsconfig()
 repo = repository()
 
 # create workspace directory
