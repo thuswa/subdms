@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Fri Mar 13 22:22:33 2009 on violator
-# update count: 289
+# Last modified Sat Mar 14 00:36:55 2009 on violator
+# update count: 291
 # -*- coding:  utf-8 -*-
 
 from PyQt4 import QtGui
@@ -9,13 +9,13 @@ from PyQt4 import QtCore
 
 import database
 import frontend
-import lowlib
+import lowlevel
 
 from createdocumentui import Ui_New_Document_Dialog
 from createprojui import Ui_New_Project_Dialog
 from mainwindow import Ui_MainWindow
 
-docs = lowlib.docname()
+docs = lowlevel.docname()
 db = database.sqlitedb()
 
 class ClientUi(QtGui.QMainWindow):

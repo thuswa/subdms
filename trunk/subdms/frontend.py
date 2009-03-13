@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Thu Mar 12 13:40:17 2009 on havoc
-# update count: 458
+# Last modified Sat Mar 14 00:37:49 2009 on violator
+# update count: 460
 # -*- coding:  utf-8 -*-
 
 import os
@@ -9,15 +9,15 @@ import pysvn
 import shutil
 
 import database
-import lowlib
+import lowlevel
 
 """
 
 """
 
 client = pysvn.Client()
-conf = lowlib.dmsconfig()
-docs = lowlib.docname()
+conf = lowlevel.dmsconfig()
+docs = lowlevel.docname()
 db = database.sqlitedb()
 
 def createproject(proj):

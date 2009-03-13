@@ -6,10 +6,10 @@ from optparse import OptionParser
 import re
 import string
 
-import lowlib
+from subdms import lowlevel
 
-conf = lowlib.dmsconfig()
-docs = lowlib.docname()
+conf = lowlevel.dmsconfig()
+docs = lowlevel.docname()
 
 def command_output(cmd):
   " Capture a command's standard output. "

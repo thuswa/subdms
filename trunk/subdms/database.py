@@ -1,14 +1,14 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Thu Mar 12 22:14:25 2009 on violator
-# update count: 169
+# Last modified Sat Mar 14 00:37:09 2009 on violator
+# update count: 170
 # -*- coding:  utf-8 -*-
 
 from pysqlite2 import dbapi2 as sqlite
 
-import lowlib
+import lowlevel
 
-conf = lowlib.dmsconfig()
+conf = lowlevel.dmsconfig()
 
 """
 Database class. For now a simple sqlite2 database is used.
