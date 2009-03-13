@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Sat Mar 14 00:03:03 2009 on violator
-# update count: 70
+# Last modified Sat Mar 14 00:43:37 2009 on violator
+# update count: 74
 
 from distutils.core import setup
 
@@ -28,7 +28,7 @@ setup(name='subdms',
       url='http://subdms.googlecode.com',
       packages=['subdms'],
 #      package_data = {'' : '' },
-#      scripts = ['subdms']
+      scripts = ['subdms/subdms', 'subdms/subdms-server'],
       platforms='any',
       requires=['pysvn', 'pyqt4', 'pysqlite3', 'svn']
       )
