@@ -1,8 +1,8 @@
 # $Id$
-# Last modified Fri Mar 13 22:10:17 2009 on violator
-# update count: 6
+# Last modified Fri Mar 13 22:14:27 2009 on violator
+# update count: 7
 
 include README INSTALL subdms.cfg 
 include setup.py 
 prune test
-recursive-include lib  *.py
+recursive-include subdms/lib  *.py
