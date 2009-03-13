@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Sat Mar 14 00:28:41 2009 on violator
-# update count: 134
+# Last modified Sat Mar 14 00:46:07 2009 on violator
+# update count: 135
 # -*- coding:  utf-8 -*-
 
 import os
@@ -29,10 +29,6 @@ class repository:
         revhook='post-commit'
         revhookpath=os.path.join(self.conf.hookspath, revhook)
         # Copy hooks to dir in repository and set to executable
-        shutil.copyfile(os.path.abspath('lowlib.py'), \
-                        os.path.join(self.conf.hookspath, 'lowlib.py')) #fixme
-        shutil.copyfile(os.path.abspath('../subdms.cfg'), \
-                        os.path.join(self.conf.repopath, 'subdms.cfg')) #fixme
         shutil.copyfile(os.path.abspath(revhook), revhookpath)
         os.chmod(revhookpath,0755)
         
