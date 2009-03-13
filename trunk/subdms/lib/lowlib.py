@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Fri Mar 13 13:38:15 2009 on havoc
-# update count: 106
+# Last modified Fri Mar 13 22:21:20 2009 on violator
+# update count: 107
 # -*- coding:  utf-8 -*-
 
 import ConfigParser
@@ -15,7 +15,7 @@ class dmsconfig:
     def __init__(self):
         """ set built-in and user defined configs """
         conf = ConfigParser.ConfigParser()
-        conf.read("../subdms.cfg")
+        conf.read("../../subdms.cfg")
         
         self.repopath = conf.get("Path", "repository")
         self.hookspath = self.repopath + "/hooks" 
