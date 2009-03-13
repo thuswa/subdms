@@ -1,15 +1,15 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Wed Mar 11 19:42:30 2009 on violator
-# update count: 94
+# Last modified Sat Mar 14 00:39:29 2009 on violator
+# update count: 95
 # -*- coding:  utf-8 -*-
 
 from svn import fs, repos, core
 
-import lowlib
+import lowlevel
 
-conf = lowlib.dmsconfig()
-docs = lowlib.docname()
+conf = lowlevel.dmsconfig()
+docs = lowlevel.docname()
 
 def propset(docnamelist, propname, propvalue):
     """
