@@ -1,13 +1,13 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Fri Mar 13 22:19:22 2009 on violator
-# update count: 292
+# Last modified Sat Mar 14 00:17:59 2009 on violator
+# update count: 293
 # -*- coding:  utf-8 -*-
 
 import sys
 from PyQt4 import QtGui
 
-import client
+import subdms.client
 
 if __name__ == "__main__":
     app = QtGui.QApplication(sys.argv)
