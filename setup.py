@@ -1,9 +1,21 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Sat Mar 14 00:43:37 2009 on violator
-# update count: 74
+# Last modified Sat Mar 14 00:57:31 2009 on violator
+# update count: 75
 
 from distutils.core import setup
+
+
+#args = sys.argv[:]
+#
+#for arg in args:
+#	print arg
+#	if string.find(arg, '--with-wsfc=') == 0:
+#		WSFC_HOME = string.split(arg, '=')[1]
+#		sys.argv.remove(arg)
+#	elif string.find(arg, 'install') == 0:
+#		INSTALL_OP = True
+#
 
 CLASSIFIERS = [
     'Development Status :: 1 - Alpha',
