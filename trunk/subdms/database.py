@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Sat Mar 14 23:00:26 2009 on violator
-# update count: 182
+# Last modified Sat Mar 14 23:15:35 2009 on violator
+# update count: 183
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -67,7 +67,7 @@ class sqlitedb:
         # Construct sql command string
         db_str="insert into projlist(projname, doctypes) " \
                 "values(\"%s\", \"%s\")" \
-                % (projname, doctypes,","))
+                % (projname, doctypes,",")
         # Excecute sql command
         cur.execute(db_str)
         con.commit()
