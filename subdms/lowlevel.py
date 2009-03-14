@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Sat Mar 14 23:12:28 2009 on violator
-# update count: 110
+# Last modified Sun Mar 15 00:55:53 2009 on violator
+# update count: 111
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -31,7 +31,7 @@ class dmsconfig:
     def __init__(self):
         """ set built-in and user defined configs """
         conf = ConfigParser.ConfigParser()
-        conf.read("/etc/subdms.cfg")
+        conf.read("/etc/subdms/subdms.cfg")
         
         self.repopath = conf.get("Path", "repository")
         self.hookspath = self.repopath + "/hooks" 

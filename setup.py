@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Sat Mar 14 22:24:01 2009 on violator
-# update count: 77
+# Last modified Sun Mar 15 00:55:25 2009 on violator
+# update count: 94
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -22,17 +22,9 @@
 
 from distutils.core import setup
 
-
-#args = sys.argv[:]
-#
-#for arg in args:
-#	print arg
-#	if string.find(arg, '--with-wsfc=') == 0:
-#		WSFC_HOME = string.split(arg, '=')[1]
-#		sys.argv.remove(arg)
-#	elif string.find(arg, 'install') == 0:
-#		INSTALL_OP = True
-#
+import shutil
+import string
+import sys
 
 CLASSIFIERS = [
     'Development Status :: 1 - Alpha',
@@ -56,7 +48,8 @@ setup(name='subdms',
       """,
       url='http://subdms.googlecode.com',
       packages=['subdms'],
-#      package_data = {'' : '' },
+      package_data = {'subdms' : ['templates/*'] },
+      data_files = [('/etc/subdms', ['subdms.cfg'])],
       scripts = ['subdms/subdms', 'subdms/subdms-server'],
       platforms='any',
       requires=['pysvn', 'pyqt4', 'pysqlite3', 'svn']
