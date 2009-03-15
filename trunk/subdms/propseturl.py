@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Sat Mar 14 22:20:28 2009 on violator
-# update count: 97
+# Last modified Sun Mar 15 20:04:22 2009 on violator
+# update count: 98
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -24,7 +24,7 @@ from svn import fs, repos, core
 
 import lowlevel
 
-conf = lowlevel.dmsconfig()
+conf = lowlevel.config()
 docs = lowlevel.docname()
 
 def propset(docnamelist, propname, propvalue):

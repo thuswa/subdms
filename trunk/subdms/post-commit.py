@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Sat Mar 14 22:55:44 2009 on violator
-# update count: 105
+# Last modified Sun Mar 15 20:03:23 2009 on violator
+# update count: 112
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -28,8 +28,9 @@ import string
 from subdms import lowlevel
 from subdms import database
 
-conf = lowlevel.dmsconfig()
+conf = lowlevel.config()
 docs = lowlevel.docname()
+db = database.sqlitedb()
 
 def command_output(cmd):
   " Capture a command's standard output. "
@@ -66,7 +67,7 @@ def main():
     projname = log_message.split(": ")[-1]
 
     # Write data to db
-    writeprojlist(self, projname, conf.doctypes)
+    db.writeprojlist(projname, conf.doctypes)
      
   if docname:
     # create docname list
@@ -85,7 +86,7 @@ def main():
       writestr.extend(docnamelist)
       writestr.extend([title, date, status, author, log_message])
       # Write data to db
-      database.writerevlist(rvn, writestr)
+      db.writerevlist(rvn, writestr)
 
 if __name__ == "__main__":
   import sys
