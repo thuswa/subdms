@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Sat Mar 14 22:18:00 2009 on violator
-# update count: 462
+# Last modified Sun Mar 15 20:22:49 2009 on violator
+# update count: 464
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -32,7 +32,7 @@ import lowlevel
 """
 
 client = pysvn.Client()
-conf = lowlevel.dmsconfig()
+conf = lowlevel.config()
 docs = lowlevel.docname()
 db = database.sqlitedb()
 
@@ -49,7 +49,7 @@ def createdocument(docnamelist, doctitle):
    docnamelist: list containing the building blocks of the document name
    doctitle: document title string.
    """
-   txtfileurl=os.path.join(conf.tmplurl, conf.tmpltxt.split('/')[1]) #fixme
+   txtfileurl=os.path.join(conf.tmplurl, conf.tmpltxt) #fixme
    docname=docs.const_docfname(docnamelist)
    docurl=docs.const_docurl(docnamelist)
    docfileurl=docs.const_docfileurl(docnamelist)

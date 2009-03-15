@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Sat Mar 14 23:15:35 2009 on violator
-# update count: 183
+# Last modified Sun Mar 15 20:17:08 2009 on violator
+# update count: 193
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -21,10 +21,9 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from pysqlite2 import dbapi2 as sqlite
+import string
 
 import lowlevel
-
-conf = lowlevel.dmsconfig()
 
 """
 Database class. For now a simple sqlite2 database is used.
@@ -33,10 +32,11 @@ Database class. For now a simple sqlite2 database is used.
 class sqlitedb:
     def __init__(self):
         """ Initialize database """
+        self.conf = lowlevel.config()
         # Create a connection to the database file
-        con = sqlite.connect(conf.dbpath)
+        self.con = sqlite.connect(self.conf.dbpath)
         # Get a Cursor object that operates in the context of Connection con:
-        self.cursor= con.cursor()
+        self.cursor= self.con.cursor()
         
     def createdb(self):
         """ Create database """
@@ -56,8 +56,8 @@ class sqlitedb:
                 "values(\"%s\", \"%s\")" \
                 % (rvn, string.join(writestr, "\",\""))
         # Excecute sql command
-        cur.execute(db_str)
-        con.commit()
+        self.cursor.execute(db_str)
+        self.con.commit()
 
         self.cursor.execute("select * from revlist")
         return self.cursor.fetchall()
@@ -67,10 +67,10 @@ class sqlitedb:
         # Construct sql command string
         db_str="insert into projlist(projname, doctypes) " \
                 "values(\"%s\", \"%s\")" \
-                % (projname, doctypes,",")
+                % (projname, string.join(doctypes,","))
         # Excecute sql command
-        cur.execute(db_str)
-        con.commit()
+        self.cursor.execute(db_str)
+        self.con.commit()
 
     def getalldocs(self):
         """ Get complete documents table from database. """

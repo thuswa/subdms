@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Sun Mar 15 00:55:53 2009 on violator
-# update count: 111
+# Last modified Sun Mar 15 20:06:06 2009 on violator
+# update count: 121
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -26,7 +26,7 @@ import string
 
 """ Low-level classes.  """
 
-class dmsconfig:
+class config:
     
     def __init__(self):
         """ set built-in and user defined configs """
@@ -34,7 +34,7 @@ class dmsconfig:
         conf.read("/etc/subdms/subdms.cfg")
         
         self.repopath = conf.get("Path", "repository")
-        self.hookspath = self.repopath + "/hooks" 
+        self.hookspath = os.path.join(self.repopath,"hooks") 
         self.repourl = "file://" + self.repopath
         self.trunkurl = self.repourl + "/trunk"
         self.tagsurl = self.repourl + "/tags"
@@ -48,12 +48,14 @@ class dmsconfig:
         self.newproj = 'newproject'.encode("hex")
         self.statuslist = ['preliminary', 'in-review' ,'rejected', 'approved', \
                            'released', 'obsolete'] 
-
+        self.pkgpath = os.path.dirname(os.path.realpath(__file__))
+        self.tmplpath = os.path.join(self.pkgpath, "templates")
+        
 ################################################################################
 
 class docname:
     def __init__(self):    
-        self.conf = dmsconfig()
+        self.conf = config()
 
     def const_checkoutpath(self, docnamelist):
         """ Construct the check-out path """

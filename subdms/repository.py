@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Sat Mar 14 22:21:27 2009 on violator
-# update count: 137
+# Last modified Sun Mar 15 20:05:44 2009 on violator
+# update count: 158
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -45,26 +45,27 @@ class repository:
         revhook='post-commit'
         revhookpath=os.path.join(self.conf.hookspath, revhook)
         # Copy hooks to dir in repository and set to executable
-        shutil.copyfile(os.path.abspath(revhook), revhookpath)
+        shutil.copyfile(os.path.join(self.conf.pkgpath, revhook+'.py'), \
+                        revhookpath) #fixme
         os.chmod(revhookpath,0755)
         
     def installtemplates(self):
         """ Install templates in repository """
-        tmplpath=os.path.join(self.conf.workpath,'templates')
-        txtfilepath=os.path.join(tmplpath, self.conf.tmpltxt.split('/')[1])
-        #fixme
+        tmpldir=os.path.join(self.conf.workpath,'templates')
+        txtfiledir=os.path.join(tmpldir, self.conf.tmpltxt)
+        txtfilepath=os.path.join(self.conf.tmplpath, self.conf.tmpltxt)
         
         # Check out templates dir
-        self.client.checkout(self.conf.tmplurl, tmplpath)
+        self.client.checkout(self.conf.tmplurl, tmpldir)
         
         # Add templates to dir
-        shutil.copyfile(os.path.abspath(self.conf.tmpltxt), txtfilepath)
-        self.client.add(txtfilepath)
+        shutil.copyfile(txtfilepath, txtfiledir)
+        self.client.add(txtfiledir)
 
         # Commit templates
-        self.client.checkin(tmplpath, "installing templates")
+        self.client.checkin(tmpldir, "installing templates")
    
         # Remove template dir from workspace
-        shutil.rmtree(tmplpath)
+        shutil.rmtree(tmpldir)
 
 
