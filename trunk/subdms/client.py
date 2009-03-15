@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Sat Mar 14 22:17:14 2009 on violator
-# update count: 294
+# Last modified Sun Mar 15 21:00:41 2009 on violator
+# update count: 308
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -24,7 +24,7 @@ from PyQt4 import QtGui
 from PyQt4 import QtCore
 
 import database
-import frontend
+import frontend 
 import lowlevel
 
 from createdocumentui import Ui_New_Document_Dialog
@@ -77,6 +77,7 @@ class ClientUi(QtGui.QMainWindow):
 
 class projectDialog(QtGui.QDialog):
     def __init__(self, parent=None):
+        self.proj = frontend.project()
         QtGui.QDialog.__init__(self, parent)
         self.ui = Ui_New_Project_Dialog()
         self.ui.setupUi(self)
@@ -84,11 +85,12 @@ class projectDialog(QtGui.QDialog):
                      self.okaction)
 
     def okaction(self):
-        frontend.createproject(unicode(self.ui.Project_name.text()))
+        self.proj.createproject(unicode(self.ui.Project_name.text()))
         self.close()
 
 class documentDialog(QtGui.QDialog):
     def __init__(self, parent=None):
+        self.doc = frontend.document()
         QtGui.QDialog.__init__(self, parent)
         self.ui = Ui_New_Document_Dialog()
         self.ui.setupUi(self)
@@ -120,7 +122,7 @@ class documentDialog(QtGui.QDialog):
         project = self.selectedproject()
         doctype = self.selecteddoctype()
         docext = "txt"
-        docnamelist = frontend.createdocnamelist(project, doctype, docext)
-        frontend.createdocument(docnamelist, doctitle)
+        docnamelist = self.doc.createdocnamelist(project, doctype, docext)
+        self.doc.createdocument(docnamelist, doctitle)
         self.close()
 
