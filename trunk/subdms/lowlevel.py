@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Sun Mar 15 20:06:06 2009 on violator
-# update count: 121
+# Last modified Sun Mar 15 23:46:13 2009 on violator
+# update count: 122
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -97,7 +97,7 @@ class docname:
         return os.path.join(self.const_checkoutpath(docnamelist), \
                                 self.const_docfname(docnamelist))
 
-    def decons_docfname(self, docname):
+    def deconst_docfname(self, docname):
         """ De-construct document file name. """
         return list(docname.replace(".","-").split("-"))  
 

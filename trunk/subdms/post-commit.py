@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Sun Mar 15 20:03:23 2009 on violator
-# update count: 112
+# Last modified Sun Mar 15 23:48:07 2009 on violator
+# update count: 113
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -71,7 +71,7 @@ def main():
      
   if docname:
     # create docname list
-    docnamelist = docs.decons_docfname(docname)
+    docnamelist = docs.deconst_docfname(docname)
     docurl = docs.const_docinrepopath(docnamelist)
 
     # Get author, date and other properties

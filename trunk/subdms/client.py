@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Sun Mar 15 21:00:41 2009 on violator
-# update count: 308
+# Last modified Sun Mar 15 23:56:30 2009 on violator
+# update count: 344
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -36,6 +36,7 @@ db = database.sqlitedb()
 
 class ClientUi(QtGui.QMainWindow):
     def __init__(self, parent=None):
+        self.doc = frontend.document()
         QtGui.QWidget.__init__(self, parent)
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
@@ -57,14 +58,16 @@ class ClientUi(QtGui.QMainWindow):
         self.connect(self.ui.edit_document_button, \
                      QtCore.SIGNAL('clicked()'), self.setdocumentlist)
         self.connect(self.ui.checkin_document_button, \
-                     QtCore.SIGNAL('clicked()'), self.setdocumentlist)     
+                     QtCore.SIGNAL('clicked()'), self.getselecteddoc)     
 
     def showdocdialog(self):
+        """ Show create document dialog """
         self.docdialog.setprojlist()
         self.docdialog.setdoctypelist(self.docdialog.selectedproject())
         self.docdialog.show()
     
     def setdocumentlist(self):
+        """ List the existing documents """
         n = 0
         for doc in db.getalldocs():
             docname = QtGui.QTableWidgetItem(docs.const_docname(list(doc[1:5])))
@@ -74,6 +77,22 @@ class ClientUi(QtGui.QMainWindow):
             self.ui.documentlist.setItem(n, 1, title)
             self.ui.documentlist.setItem(n, 2, status)
             n += 1        
+
+    def getselecteddoc(self):
+        """ Get the document selected in list """
+        row = self.ui.documentlist.currentRow()
+        docitem = self.ui.documentlist.item(row, 0)
+        if docitem:
+            return docs.deconst_docfname(unicode(docitem.text()))
+        else:
+            return None
+
+    def checkindoc():
+        """ Check-in document action """
+        docnamelist = self.getselecteddoc()
+        if docnamelist:
+            self.doc.checkin(docnamelist, "checking in: " \
+                             +docs.const_docname(docnamelist))
 
 class projectDialog(QtGui.QDialog):
     def __init__(self, parent=None):
