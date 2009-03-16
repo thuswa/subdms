@@ -1,8 +1,8 @@
 # $Id$
-# Last modified Sun Mar 15 19:59:28 2009 on violator
-# update count: 9
+# Last modified Mon Mar 16 22:48:55 2009 on violator
+# update count: 14
 
 include README INSTALL subdms.cfg 
 include setup.py 
-prune test
 recursive-include subdms/ *.py
+recursive-include subdms/templates *
