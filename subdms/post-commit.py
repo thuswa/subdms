@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Sun Mar 15 23:48:07 2009 on violator
-# update count: 113
+# Last modified Mon Mar 16 21:18:56 2009 on violator
+# update count: 119
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -28,15 +28,10 @@ import string
 from subdms import lowlevel
 from subdms import database
 
+cmd = lowlevel.command()
 conf = lowlevel.config()
 docs = lowlevel.docname()
 db = database.sqlitedb()
-
-def command_output(cmd):
-  " Capture a command's standard output. "
-  import subprocess
-  return subprocess.Popen(
-      cmd.split(), stdout=subprocess.PIPE).communicate()[0]
 
 def main():
   usage = """usage: %prog REPOS TXN
@@ -58,8 +53,8 @@ def main():
   look_cmd2 = "%s %s %s %s %s" % (svn_look, "propget", repos, "%s", "%s")
 
   # Get info about commit
-  log_message = command_output(look_cmd % "log").rstrip("\n").rstrip()
-  changed = command_output(look_cmd % "changed")
+  log_message = cmd.command_output(look_cmd % "log").rstrip("\n").rstrip()
+  changed = cmd.command_output(look_cmd % "changed")
   docname = changed.split("/").pop().rstrip("\n").rstrip()
 
   if newprojptrn.match(log_message):
@@ -75,10 +70,10 @@ def main():
     docurl = docs.const_docinrepopath(docnamelist)
 
     # Get author, date and other properties
-    author = command_output(look_cmd % "author").rstrip("\n")
-    date = command_output(look_cmd % "date").rstrip("\n")
-    title = command_output(look_cmd2 % ("title", docurl))
-    status = command_output(look_cmd2 % ("status", docurl))
+    author = cmd.command_output(look_cmd % "author").rstrip("\n")
+    date = cmd.command_output(look_cmd % "date").rstrip("\n")
+    title = cmd.command_output(look_cmd2 % ("title", docurl))
+    status = cmd.command_output(look_cmd2 % ("status", docurl))
 
     if newdocptrn.match(log_message):
       # Create write string

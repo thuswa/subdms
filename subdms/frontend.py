@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Mon Mar 16 14:20:24 2009 on havoc
-# update count: 510
+# Last modified Mon Mar 16 22:29:45 2009 on violator
+# update count: 516
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -30,6 +30,7 @@ import lowlevel
 """ Frontend classes """
 
 client = pysvn.Client()
+cmd = lowlevel.command()
 conf = lowlevel.config()
 docs = lowlevel.docname()
 db = database.sqlitedb()
@@ -140,6 +141,12 @@ class document:
                         docs.const_docpath(docnamelist))
          checkin(docnamelist, "Set status to obsolete on " \
                  +docname+" issue "+oldissue)
+
+   def editdocument(self, docnamelist):
+      """ Edit the document. """
+      if not self.ischeckedout(docnamelist):
+         self.checkout(docnamelist)
+      cmd.launch_editor(docs.const_docpath(docnamelist))   
       
    def newissue(self, docnamelist):
       """Create new issue of the document"""
@@ -172,7 +179,10 @@ class document:
 
    def ischeckedout(self, docnamelist):
       """ Return true if docname is checked out. """
-      return None
+      if os.path.exists(docs.const_docpath(docnamelist)):
+         return True
+      else:
+         return False
 
    def reverttohead(self, docnamelist):
       """ Revert to head revision undo local changes. """

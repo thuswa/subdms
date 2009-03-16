@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Sun Mar 15 23:46:13 2009 on violator
-# update count: 122
+# Last modified Mon Mar 16 22:26:11 2009 on violator
+# update count: 140
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -23,11 +23,11 @@
 import ConfigParser
 import os
 import string
+import subprocess
 
 """ Low-level classes.  """
 
-class config:
-    
+class config:    
     def __init__(self):
         """ set built-in and user defined configs """
         conf = ConfigParser.ConfigParser()
@@ -43,6 +43,7 @@ class config:
         self.dbpath = conf.get("Path", "database")
         self.doctypes = list(conf.get("Document", "type").split())
         self.tmpltxt = conf.get("Template", "txt")
+        self.txteditor = conf.get("Editor", "txt")
         self.proplist = ['title', 'issue', 'status']
         self.newdoc = 'newdocument'.encode("hex")
         self.newproj = 'newproject'.encode("hex")
@@ -101,4 +102,17 @@ class docname:
         """ De-construct document file name. """
         return list(docname.replace(".","-").split("-"))  
 
+################################################################################
 
+class command:
+    def __init__(self):
+        self.conf = config()
+        
+    def command_output(self, cmd):
+        " Capture a command's standard output. "
+        return subprocess.Popen(
+            cmd.split(), stdout=subprocess.PIPE).communicate()[0]
+
+    def launch_editor(self, docpath):
+        " Launch appropriate editor. "
+        os.system("%s %s" % (self.conf.txteditor, docpath))
