@@ -1,6 +1,6 @@
 $Id$
-Last modified Mon Mar 16 13:13:44 2009 on havoc
-update count: 14
+Last modified Mon Mar 16 16:40:49 2009 on havoc
+update count: 16
 
 How to install 
 ==============
@@ -22,4 +22,4 @@ Requires:
           pysqlite:   http://oss.itsystementwicklung.de/trac/pysqlite/	
 	  Subversion: http://subversion.tigris.org/
 
-All of the required software should be available through your distruibution. 
+All of the required software should be available through your distribution. 
