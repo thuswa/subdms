@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Mon Mar 16 14:18:34 2009 on havoc
-# update count: 347
+# Last modified Mon Mar 16 22:23:27 2009 on violator
+# update count: 353
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -56,7 +56,7 @@ class ClientUi(QtGui.QMainWindow):
         self.connect(self.ui.list_documents_button, \
                      QtCore.SIGNAL('clicked()'), self.setdocumentlist)
         self.connect(self.ui.edit_document_button, \
-                     QtCore.SIGNAL('clicked()'), self.setdocumentlist)
+                     QtCore.SIGNAL('clicked()'), self.editdoc)
         self.connect(self.ui.checkin_document_button, \
                      QtCore.SIGNAL('clicked()'), self.checkindoc)     
 
@@ -93,7 +93,11 @@ class ClientUi(QtGui.QMainWindow):
         if docnamelist:
             self.doc.checkin(docnamelist, "checking in: " \
                              +docs.const_docname(docnamelist))
-
+    def editdoc(self):
+        """ Edit document action """
+        docnamelist = self.getselecteddoc()
+        self.doc.editdocument(docnamelist)
+        
 class projectDialog(QtGui.QDialog):
     def __init__(self, parent=None):
         self.proj = frontend.project()
