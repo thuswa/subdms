@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Sun Mar 15 23:56:30 2009 on violator
-# update count: 344
+# Last modified Mon Mar 16 14:18:34 2009 on havoc
+# update count: 347
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -58,7 +58,7 @@ class ClientUi(QtGui.QMainWindow):
         self.connect(self.ui.edit_document_button, \
                      QtCore.SIGNAL('clicked()'), self.setdocumentlist)
         self.connect(self.ui.checkin_document_button, \
-                     QtCore.SIGNAL('clicked()'), self.getselecteddoc)     
+                     QtCore.SIGNAL('clicked()'), self.checkindoc)     
 
     def showdocdialog(self):
         """ Show create document dialog """
@@ -83,11 +83,11 @@ class ClientUi(QtGui.QMainWindow):
         row = self.ui.documentlist.currentRow()
         docitem = self.ui.documentlist.item(row, 0)
         if docitem:
-            return docs.deconst_docfname(unicode(docitem.text()))
+            return docs.deconst_docfname(unicode(docitem.text())+'.txt') #fixme
         else:
             return None
 
-    def checkindoc():
+    def checkindoc(self):
         """ Check-in document action """
         docnamelist = self.getselecteddoc()
         if docnamelist:
