@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Sun Mar 15 20:05:44 2009 on violator
-# update count: 158
+# Last modified Mon Mar 16 13:00:32 2009 on havoc
+# update count: 167
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -39,6 +39,7 @@ class repository:
         self.client.mkdir(self.conf.trunkurl, "create trunk directory",1)
         self.client.mkdir(self.conf.tagsurl, "create trunk directory",1)
         self.client.mkdir(self.conf.tmplurl, "create templates directory",1)
+        print "Create repository: "+self.conf.repopath
 
     def installhooks(self):
         """ Install hooks in repository """
@@ -48,6 +49,8 @@ class repository:
         shutil.copyfile(os.path.join(self.conf.pkgpath, revhook+'.py'), \
                         revhookpath) #fixme
         os.chmod(revhookpath,0755)
+        print "Install hook: "+revhook+" ->  "+self.conf.hookspath
+
         
     def installtemplates(self):
         """ Install templates in repository """
@@ -64,6 +67,7 @@ class repository:
 
         # Commit templates
         self.client.checkin(tmpldir, "installing templates")
+        print "Install template: "+self.conf.tmpltxt+" -> "+self.conf.tmplurl 
    
         # Remove template dir from workspace
         shutil.rmtree(tmpldir)
