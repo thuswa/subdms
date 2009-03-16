@@ -1,6 +1,6 @@
 $Id$
-Last modified Mon Mar 16 14:10:56 2009 on havoc
-update count: 5
+Last modified Mon Mar 16 16:40:29 2009 on havoc
+update count: 6
 
 Subdms - Subversion Based Document Management System
 ####################################################
@@ -9,7 +9,7 @@ Goals
 -----
 The goal with this project is to create a fullflenged DMS based on subversion 
 to handle the most common Office document file formats, 
-primaraly Open Document Format (ODF).
+primarily Open Document Format (ODF).
  
 How to use
 ----------
