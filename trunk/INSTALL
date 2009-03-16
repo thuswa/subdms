@@ -1,6 +1,6 @@
 $Id$
-Last modified Sat Mar 14 00:06:45 2009 on violator
-update count: 9
+Last modified Mon Mar 16 13:13:44 2009 on havoc
+update count: 14
 
 How to install 
 ==============
@@ -16,3 +16,10 @@ modules (/usr/local/lib/python2.5/site-packages/) in their Python installation.
 
 
 Requires: 
+	  python:     http://www.python.org 	  
+	  pysvn:      http://pysvn.tigris.org
+	  pyQt4:      http://www.riverbankcomputing.com/software/pyqt/
+          pysqlite:   http://oss.itsystementwicklung.de/trac/pysqlite/	
+	  Subversion: http://subversion.tigris.org/
+
+All of the required software should be available through your distruibution. 

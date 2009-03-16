@@ -1,3 +1,30 @@
 $Id$
-Last modified Thu Feb 19 23:25:54 2009 on violator
-update count: 2
+Last modified Mon Mar 16 14:10:56 2009 on havoc
+update count: 5
+
+Subdms - Subversion Based Document Management System
+####################################################
+
+Goals
+-----
+The goal with this project is to create a fullflenged DMS based on subversion 
+to handle the most common Office document file formats, 
+primaraly Open Document Format (ODF).
+ 
+How to use
+----------
+1. Install the subdms package, see INSTALL file for details.
+
+2. Initiate the server-side of subdms by running the following command in the 
+   terminal:
+ 
+   > subdms-server
+   
+   This will setup the workspace directory, the database and the repository.
+   Have a look in the config file etc/subdms/subdms.cfg to see where the stuff
+   gets installed.
+
+3. Run the client by typing:
+   
+   > subdms
+   
