@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Sun Mar 15 21:14:35 2009 on violator
-# update count: 505
+# Last modified Mon Mar 16 14:20:24 2009 on havoc
+# update count: 510
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -99,11 +99,11 @@ class document:
 
    def commit(self, docnamelist, message):
       """commit changes on file"""
-      client.checkin(docs.const_docpath(docnamelist, message))
+      client.checkin(docs.const_docpath(docnamelist), message)
 
    def checkin(self, docnamelist, message):
       """check-in file from workspace"""
-      commit(docnamelist, message) 
+      self.commit(docnamelist, message) 
       
       # Remove file from workspace
       shutil.rmtree(docs.const_checkoutpath(docnamelist))
