@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Sun Mar 15 20:17:08 2009 on violator
-# update count: 193
+# Last modified Mon Mar 16 12:52:59 2009 on havoc
+# update count: 194
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -47,6 +47,7 @@ class sqlitedb:
 
         self.cursor.execute("create table projlist(projname TEXT PRIMARY KEY," \
                             "doctypes)")
+        print "Create database: "+self.conf.dbpath
 
     def writerevlist(self,rvn, writestr):
         """ Write to documents table in database. """
