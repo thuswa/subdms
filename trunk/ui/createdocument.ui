@@ -15,6 +15,9 @@
   <property name="windowTitle" >
    <string>Dialog</string>
   </property>
+  <property name="modal" >
+   <bool>true</bool>
+  </property>
   <widget class="QDialogButtonBox" name="New_Document_Confirm" >
    <property name="geometry" >
     <rect>
