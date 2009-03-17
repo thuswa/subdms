@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Sun Mar 15 00:55:25 2009 on violator
-# update count: 94
+# Last modified Tue Mar 17 12:47:44 2009 on havoc
+# update count: 95
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -27,7 +27,7 @@ import string
 import sys
 
 CLASSIFIERS = [
-    'Development Status :: 1 - Alpha',
+    'Development Status :: 3 - Alpha',
     'Intended Audience :: End Users/Desktop',
     'Intended Audience :: System Administrators',
     'License :: OSI Approved :: GNU General Public License (GPL)',
