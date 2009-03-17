@@ -1,0 +1,25 @@
+$Id$
+Last modified Mon Mar 16 16:40:49 2009 on havoc
+update count: 16
+
+How to install 
+==============
+
+1. Download subdms-<version>.tar.gz 
+2. Unpack it. 
+3. From the subdms-<version> directory run:
+
+>python setup.py install
+
+This will copy the package to the appropriate directory for third-party
+modules (/usr/local/lib/python2.5/site-packages/) in their Python installation.
+
+
+Requires: 
+	  python:     http://www.python.org 	  
+	  pysvn:      http://pysvn.tigris.org
+	  pyQt4:      http://www.riverbankcomputing.com/software/pyqt/
+          pysqlite:   http://oss.itsystementwicklung.de/trac/pysqlite/	
+	  Subversion: http://subversion.tigris.org/
+
+All of the required software should be available through your distribution. 

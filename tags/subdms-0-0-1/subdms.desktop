@@ -1,0 +1,10 @@
+[Desktop Entry]
+Encoding=UTF-8
+Icon=/usr/share/pyspread/icons/pyspread.png
+Name=subdms
+Comment=A Subversion based document managment system
+Exec=/usr/bin/subdms
+Terminal=false
+Type=Application
+Categories=Document;Office
+StartupNotify=false

@@ -1,0 +1,54 @@
+#!/usr/bin/env python
+# $Id$
+# Last modified Mon Mar 16 13:02:28 2009 on havoc
+# update count: 147
+# -*- coding:  utf-8 -*-
+#
+# subdms - A document management system based on subversion.
+# Copyright (C) 2009  Albert Thuswaldner
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+import os
+import pysvn
+import shutil
+import string
+import subprocess 
+
+from subdms import lowlevel, database, repository
+
+conf = lowlevel.config()
+repo = repository.repository()
+
+print "Initialize subdms server-side"
+print "-----------------------------"
+
+# create workspace directory
+if not os.path.isdir(conf.workpath):
+    os.makedirs(conf.workpath)
+    print "Create workspace: "+ conf.workpath
+
+# create db
+db = database.sqlitedb()
+db.createdb()
+
+# create subversion repository and layout
+repo.createrepo()
+
+# install templates
+repo.installtemplates()
+
+# install hooks
+repo.installhooks()
+
