@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Tue Mar 17 12:47:44 2009 on havoc
-# update count: 95
+# Last modified Tue Mar 17 12:48:51 2009 on havoc
+# update count: 97
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -32,9 +32,9 @@ CLASSIFIERS = [
     'Intended Audience :: System Administrators',
     'License :: OSI Approved :: GNU General Public License (GPL)',
     'Operating System :: POSIX',
-    'Programming Language :: Python'
+    'Programming Language :: Python',
     'Topic :: Desktop Environment :: Qt',
-    'Topic :: Office/Business :: Document Management',
+    'Topic :: Office/Business :: Document Management'
 ]
 
 setup(name='subdms',
