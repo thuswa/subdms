@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Mon Mar 16 22:23:27 2009 on violator
-# update count: 353
+# Last modified Tue Mar 17 23:14:43 2009 on violator
+# update count: 363
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -108,8 +108,13 @@ class projectDialog(QtGui.QDialog):
                      self.okaction)
 
     def okaction(self):
-        self.proj.createproject(unicode(self.ui.Project_name.text()))
-        self.close()
+        proj = unicode(self.ui.Project_name.text())
+        if db.projexists(proj):
+            QtGui.QMessageBox.critical(None, "Error", \
+                                       "Project "+proj+" already exists")
+        else:
+            self.proj.createproject(proj)
+            self.close()
 
 class documentDialog(QtGui.QDialog):
     def __init__(self, parent=None):
