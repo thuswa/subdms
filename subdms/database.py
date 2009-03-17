@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Mon Mar 16 12:52:59 2009 on havoc
-# update count: 194
+# Last modified Tue Mar 17 22:33:27 2009 on violator
+# update count: 198
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -87,6 +87,15 @@ class sqlitedb:
         """ Get list of all projects from database. """
         self.cursor.execute("select projname from projlist")
         return self.cursor.fetchall()
+
+    def projexists(self, project):
+        """ Check if project exists in database. """
+        self.cursor.execute("select * from projlist "
+                            "where projname=?", (project, ))
+        if self.cursor.fetchall():
+            return True
+        else:
+            return False
 
     def getdoctypes(self, project):
         """ Get doctypes list from a project from database. """
