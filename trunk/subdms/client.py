@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Tue Mar 17 23:35:40 2009 on violator
-# update count: 374
+# Last modified Fri Mar 20 00:11:41 2009 on violator
+# update count: 388
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -27,6 +27,7 @@ import database
 import frontend 
 import lowlevel
 
+from aboutui import Ui_AboutDialog
 from createdocumentui import Ui_New_Document_Dialog
 from createprojui import Ui_New_Project_Dialog
 from mainwindow import Ui_MainWindow
@@ -40,6 +41,7 @@ class ClientUi(QtGui.QMainWindow):
         QtGui.QWidget.__init__(self, parent)
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
+        self.aboutdialog = aboutDialog()
         self.projdialog = projectDialog()
         self.docdialog = documentDialog()
         
@@ -60,6 +62,14 @@ class ClientUi(QtGui.QMainWindow):
         self.connect(self.ui.checkin_document_button, \
                      QtCore.SIGNAL('clicked()'), self.checkindoc)     
 
+        # Connect menubar entries
+        self.connect(self.ui.actionAbout, QtCore.SIGNAL("activated()"), \
+                     self.showaboutdialog)
+
+    def showaboutdialog(self):
+        """ Show about dialog """
+        self.aboutdialog.show()
+        
     def showdocdialog(self):
         """ Show create document dialog """
         self.docdialog.setprojlist()
@@ -100,6 +110,12 @@ class ClientUi(QtGui.QMainWindow):
         docnamelist = self.getselecteddoc()
         self.ui.statusbar.showMessage("Launching editor", 1000)
         self.doc.editdocument(docnamelist)
+
+
+class aboutDialog(QtGui.QDialog):
+    def __init__(self, parent=None):
+        QtGui.QDialog.__init__(self, parent)
+        self.ui = Ui_AboutDialog()
 
 class projectDialog(QtGui.QDialog):
     def __init__(self, parent=None):
