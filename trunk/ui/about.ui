@@ -31,7 +31,7 @@
    </size>
   </property>
   <property name="windowTitle" >
-   <string>About Subdownloader</string>
+   <string>About Subdms</string>
   </property>
   <property name="autoFillBackground" >
    <bool>false</bool>
@@ -127,7 +127,7 @@ p, li { white-space: pre-wrap; }
       <enum>Qt::WheelFocus</enum>
      </property>
      <property name="currentIndex" >
-      <number>2</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="tab" >
       <attribute name="title" >
@@ -154,7 +154,7 @@ p, li { white-space: pre-wrap; }
 &lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'DejaVu Sans';">&lt;a href="http://code.google.com/p/subdms/issues/list">&lt;span style=" text-decoration: underline; color:#0057ae;">http://code.google.com/p/subdms/issues/list&lt;/span>&lt;/a>&lt;/p>
 &lt;p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'DejaVu Sans'; text-decoration: underline; color:#0057ae;">&lt;/p>
 &lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'DejaVu Sans'; text-decoration: underline;">&lt;span style=" text-decoration:none;">Donate:&lt;/span>&lt;/p>
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'DejaVu Sans';">&lt;a href="https://www.paypal.com/uk/cgi-bin/webscr?cmd=_flow&amp;SESSION=omGxWAjrXZEN_Go9PwH6WDSlQex-xiZyCngyYeHlCKpDW5Lim7QUk7vWGAe&amp;dispatch=5885d80a13c0db1fa798f5a5f5ae42e779d4b5655493f6179ce75df482f0dee1">&lt;span style=" text-decoration: underline; color:#0057ae;">My paypal account&lt;/span>&lt;/a>&lt;/p>&lt;/body>&lt;/html></string>
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'DejaVu Sans';">&lt;a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&amp;business=8GTZENY9YH8YC&amp;lc=GB&amp;item_name=Albert%20Thuswaldner&amp;item_number=subdms&amp;currency_code=EUR&amp;bn=PP%2dDonationsBF%3abtn_donateCC_LG_global%2egif%3aNonHosted">&lt;span style=" text-decoration: underline; color:#0057ae;">My paypal account&lt;/span>&lt;/a>&lt;/p>&lt;/body>&lt;/html></string>
          </property>
          <property name="openExternalLinks" >
           <bool>true</bool>
