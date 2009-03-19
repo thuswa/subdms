@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Fri Mar 20 00:11:41 2009 on violator
-# update count: 388
+# Last modified Fri Mar 20 00:22:52 2009 on violator
+# update count: 391
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -116,7 +116,8 @@ class aboutDialog(QtGui.QDialog):
     def __init__(self, parent=None):
         QtGui.QDialog.__init__(self, parent)
         self.ui = Ui_AboutDialog()
-
+        self.ui.setupUi(self)
+        
 class projectDialog(QtGui.QDialog):
     def __init__(self, parent=None):
         self.proj = frontend.project()
