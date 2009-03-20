@@ -201,7 +201,24 @@
     </property>
     <addaction name="actionAbout" />
    </widget>
+   <widget class="QMenu" name="menuCreate" >
+    <property name="title" >
+     <string>Create</string>
+    </property>
+    <addaction name="actionNew_Project" />
+    <addaction name="actionNew_Document" />
+   </widget>
+   <widget class="QMenu" name="menuTools" >
+    <property name="title" >
+     <string>Tools</string>
+    </property>
+    <addaction name="actionEdit_document" />
+    <addaction name="actionCheck_in_document" />
+    <addaction name="actionList_documents" />
+   </widget>
    <addaction name="menuFile" />
+   <addaction name="menuCreate" />
+   <addaction name="menuTools" />
    <addaction name="menuHelp" />
   </widget>
   <widget class="QStatusBar" name="statusbar" />
@@ -213,6 +230,31 @@
   <action name="actionAbout" >
    <property name="text" >
     <string>About Subdms</string>
+   </property>
+  </action>
+  <action name="actionNew_Document" >
+   <property name="text" >
+    <string>New Document</string>
+   </property>
+  </action>
+  <action name="actionNew_Project" >
+   <property name="text" >
+    <string>New Project</string>
+   </property>
+  </action>
+  <action name="actionEdit_document" >
+   <property name="text" >
+    <string>Edit document</string>
+   </property>
+  </action>
+  <action name="actionCheck_in_document" >
+   <property name="text" >
+    <string>Check-in document</string>
+   </property>
+  </action>
+  <action name="actionList_documents" >
+   <property name="text" >
+    <string>List documents</string>
    </property>
   </action>
  </widget>
