@@ -207,6 +207,7 @@
     </property>
     <addaction name="actionNew_Project" />
     <addaction name="actionNew_Document" />
+    <addaction name="actionNew_Issue" />
    </widget>
    <widget class="QMenu" name="menuTools" >
     <property name="title" >
@@ -214,6 +215,8 @@
     </property>
     <addaction name="actionEdit_document" />
     <addaction name="actionCheck_in_document" />
+    <addaction name="actionRelease_document" />
+    <addaction name="separator" />
     <addaction name="actionList_documents" />
    </widget>
    <addaction name="menuFile" />
@@ -255,6 +258,16 @@
   <action name="actionList_documents" >
    <property name="text" >
     <string>List documents</string>
+   </property>
+  </action>
+  <action name="actionRelease_document" >
+   <property name="text" >
+    <string>Release document</string>
+   </property>
+  </action>
+  <action name="actionNew_Issue" >
+   <property name="text" >
+    <string>New Issue</string>
    </property>
   </action>
  </widget>
