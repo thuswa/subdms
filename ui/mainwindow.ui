@@ -215,6 +215,7 @@
     </property>
     <addaction name="actionEdit_document" />
     <addaction name="actionCheck_in_document" />
+    <addaction name="actionCommit_Change" />
     <addaction name="actionRelease_document" />
     <addaction name="separator" />
     <addaction name="actionList_documents" />
@@ -268,6 +269,11 @@
   <action name="actionNew_Issue" >
    <property name="text" >
     <string>New Issue</string>
+   </property>
+  </action>
+  <action name="actionCommit_Change" >
+   <property name="text" >
+    <string>Commit Change</string>
    </property>
   </action>
  </widget>
