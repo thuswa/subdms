@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Fri Mar 20 00:22:52 2009 on violator
-# update count: 391
+# Last modified Sat Mar 21 00:22:28 2009 on violator
+# update count: 399
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -63,6 +63,8 @@ class ClientUi(QtGui.QMainWindow):
                      QtCore.SIGNAL('clicked()'), self.checkindoc)     
 
         # Connect menubar entries
+        self.connect(self.ui.actionRelease_Document, \
+                     QtCore.SIGNAL("activated()"), self.relasedoc)
         self.connect(self.ui.actionAbout, QtCore.SIGNAL("activated()"), \
                      self.showaboutdialog)
 
@@ -106,11 +108,18 @@ class ClientUi(QtGui.QMainWindow):
             self.ui.statusbar.showMessage("Checking in "+docname, 1000)
 
     def editdoc(self):
-        """ Edit document action """
+        """ Edit document action. """
         docnamelist = self.getselecteddoc()
         self.ui.statusbar.showMessage("Launching editor", 1000)
         self.doc.editdocument(docnamelist)
 
+    def commitdoc(self):     
+        """ Commit changes on document """
+        return None
+
+    def relasedoc(self):     
+        """ Relase the document action. """
+        return None
 
 class aboutDialog(QtGui.QDialog):
     def __init__(self, parent=None):
