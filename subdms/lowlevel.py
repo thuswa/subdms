@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Mon Mar 16 22:26:11 2009 on violator
-# update count: 140
+# Last modified Sat Mar 21 21:51:38 2009 on violator
+# update count: 141
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -115,4 +115,4 @@ class command:
 
     def launch_editor(self, docpath):
         " Launch appropriate editor. "
-        os.system("%s %s" % (self.conf.txteditor, docpath))
+        os.system("%s %s &" % (self.conf.txteditor, docpath))
