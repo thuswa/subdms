@@ -19,57 +19,12 @@
    <string>Subdms - Document Managment </string>
   </property>
   <widget class="QWidget" name="centralwidget" >
-   <widget class="QPushButton" name="new_project_button" >
-    <property name="geometry" >
-     <rect>
-      <x>0</x>
-      <y>30</y>
-      <width>114</width>
-      <height>28</height>
-     </rect>
-    </property>
-    <property name="toolTip" >
-     <string>Create a new project</string>
-    </property>
-    <property name="text" >
-     <string>New project</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="new_document_button" >
-    <property name="geometry" >
-     <rect>
-      <x>0</x>
-      <y>70</y>
-      <width>114</width>
-      <height>28</height>
-     </rect>
-    </property>
-    <property name="toolTip" >
-     <string>Create a new document</string>
-    </property>
-    <property name="text" >
-     <string>New document</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="list_documents_button" >
-    <property name="geometry" >
-     <rect>
-      <x>0</x>
-      <y>110</y>
-      <width>114</width>
-      <height>28</height>
-     </rect>
-    </property>
-    <property name="text" >
-     <string>List documents</string>
-    </property>
-   </widget>
    <widget class="QTableWidget" name="documentlist" >
     <property name="geometry" >
      <rect>
-      <x>120</x>
+      <x>0</x>
       <y>0</y>
-      <width>681</width>
+      <width>801</width>
       <height>551</height>
      </rect>
     </property>
@@ -97,6 +52,9 @@
     <property name="rowCount" >
      <number>40</number>
     </property>
+    <property name="columnCount" >
+     <number>4</number>
+    </property>
     <row/>
     <row/>
     <row/>
@@ -137,6 +95,11 @@
     <row/>
     <row/>
     <row/>
+    <column>
+     <property name="text" >
+      <string>     </string>
+     </property>
+    </column>
     <column>
      <property name="text" >
       <string>Document No</string>
@@ -144,40 +107,14 @@
     </column>
     <column>
      <property name="text" >
-      <string>Document title</string>
+      <string>Document Title</string>
      </property>
     </column>
     <column>
      <property name="text" >
-      <string>status</string>
+      <string>Status</string>
      </property>
     </column>
-   </widget>
-   <widget class="QPushButton" name="edit_document_button" >
-    <property name="geometry" >
-     <rect>
-      <x>0</x>
-      <y>150</y>
-      <width>114</width>
-      <height>28</height>
-     </rect>
-    </property>
-    <property name="text" >
-     <string>Edit</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="checkin_document_button" >
-    <property name="geometry" >
-     <rect>
-      <x>0</x>
-      <y>190</y>
-      <width>114</width>
-      <height>28</height>
-     </rect>
-    </property>
-    <property name="text" >
-     <string>Check-in</string>
-    </property>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar" >
@@ -213,12 +150,12 @@
     <property name="title" >
      <string>Tools</string>
     </property>
-    <addaction name="actionEdit_document" />
-    <addaction name="actionCheck_in_document" />
-    <addaction name="actionCommit_Change" />
-    <addaction name="actionRelease_document" />
+    <addaction name="actionEdit_Document" />
+    <addaction name="actionCheck_in_Document" />
+    <addaction name="actionCommit_Changes" />
+    <addaction name="actionRelease_Document" />
     <addaction name="separator" />
-    <addaction name="actionList_documents" />
+    <addaction name="actionList_Documents" />
    </widget>
    <addaction name="menuFile" />
    <addaction name="menuCreate" />
@@ -246,24 +183,24 @@
     <string>New Project</string>
    </property>
   </action>
-  <action name="actionEdit_document" >
+  <action name="actionEdit_Document" >
    <property name="text" >
-    <string>Edit document</string>
+    <string>Edit Document</string>
    </property>
   </action>
-  <action name="actionCheck_in_document" >
+  <action name="actionCheck_in_Document" >
    <property name="text" >
-    <string>Check-in document</string>
+    <string>Check-in Document</string>
    </property>
   </action>
-  <action name="actionList_documents" >
+  <action name="actionList_Documents" >
    <property name="text" >
-    <string>List documents</string>
+    <string>List Documents</string>
    </property>
   </action>
-  <action name="actionRelease_document" >
+  <action name="actionRelease_Document" >
    <property name="text" >
-    <string>Release document</string>
+    <string>Release Document</string>
    </property>
   </action>
   <action name="actionNew_Issue" >
@@ -271,17 +208,14 @@
     <string>New Issue</string>
    </property>
   </action>
-  <action name="actionCommit_Change" >
+  <action name="actionCommit_Changes" >
    <property name="text" >
-    <string>Commit Change</string>
+    <string>Commit Changes</string>
    </property>
   </action>
  </widget>
  <tabstops>
-  <tabstop>new_project_button</tabstop>
-  <tabstop>list_documents_button</tabstop>
   <tabstop>documentlist</tabstop>
-  <tabstop>new_document_button</tabstop>
  </tabstops>
  <resources/>
  <connections>

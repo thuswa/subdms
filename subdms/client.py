@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Sat Mar 21 00:22:28 2009 on violator
-# update count: 399
+# Last modified Sat Mar 21 21:22:30 2009 on violator
+# update count: 431
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -46,25 +46,31 @@ class ClientUi(QtGui.QMainWindow):
         self.docdialog = documentDialog()
         
         # Set column width on list object
-        self.ui.documentlist.setColumnWidth(0, 140)
-        self.ui.documentlist.setColumnWidth(1, 380)
-        self.ui.documentlist.setColumnWidth(2, 100)
-
-        # Connect buttons 
-        self.connect(self.ui.new_project_button, QtCore.SIGNAL('clicked()'), \
-                     self.projdialog.show)
-        self.connect(self.ui.new_document_button, QtCore.SIGNAL('clicked()'), \
-                     self.showdocdialog)
-        self.connect(self.ui.list_documents_button, \
-                     QtCore.SIGNAL('clicked()'), self.setdocumentlist)
-        self.connect(self.ui.edit_document_button, \
-                     QtCore.SIGNAL('clicked()'), self.editdoc)
-        self.connect(self.ui.checkin_document_button, \
-                     QtCore.SIGNAL('clicked()'), self.checkindoc)     
+        self.ui.documentlist.setColumnWidth(0, 40)
+        self.ui.documentlist.setColumnWidth(1, 140)
+        self.ui.documentlist.setColumnWidth(2, 380)
+        self.ui.documentlist.setColumnWidth(3, 100)
 
         # Connect menubar entries
+        # Create menu
+        self.connect(self.ui.actionNew_Project, QtCore.SIGNAL("activated()"), \
+                     self.projdialog.show)
+        self.connect(self.ui.actionNew_Document, QtCore.SIGNAL("activated()"), \
+                     self.showdocdialog)
+        self.connect(self.ui.actionNew_Issue, QtCore.SIGNAL("activated()"), \
+                     self.newissue)        
+        # Tools menu
+        self.connect(self.ui.actionEdit_Document, \
+                     QtCore.SIGNAL("activated()"), self.editdoc)
+        self.connect(self.ui.actionCheck_in_Document, \
+                     QtCore.SIGNAL("activated()"), self.checkindoc)
+        self.connect(self.ui.actionCommit_Changes, \
+                     QtCore.SIGNAL("activated()"), self.commitdoc)        
         self.connect(self.ui.actionRelease_Document, \
                      QtCore.SIGNAL("activated()"), self.relasedoc)
+        self.connect(self.ui.actionList_Documents, \
+                     QtCore.SIGNAL("activated()"), self.setdocumentlist)
+        # Help menu
         self.connect(self.ui.actionAbout, QtCore.SIGNAL("activated()"), \
                      self.showaboutdialog)
 
@@ -85,15 +91,15 @@ class ClientUi(QtGui.QMainWindow):
             docname = QtGui.QTableWidgetItem(docs.const_docname(list(doc[1:5])))
             title = QtGui.QTableWidgetItem(doc[5])
             status = QtGui.QTableWidgetItem(doc[7])
-            self.ui.documentlist.setItem(n, 0, docname)
-            self.ui.documentlist.setItem(n, 1, title)
-            self.ui.documentlist.setItem(n, 2, status)
+            self.ui.documentlist.setItem(n, 1, docname)
+            self.ui.documentlist.setItem(n, 2, title)
+            self.ui.documentlist.setItem(n, 3, status)
             n += 1        
 
     def getselecteddoc(self):
         """ Get the document selected in list """
         row = self.ui.documentlist.currentRow()
-        docitem = self.ui.documentlist.item(row, 0)
+        docitem = self.ui.documentlist.item(row, 1)
         if docitem:
             return docs.deconst_docfname(unicode(docitem.text())+'.txt') #fixme
         else:
@@ -120,6 +126,11 @@ class ClientUi(QtGui.QMainWindow):
     def relasedoc(self):     
         """ Relase the document action. """
         return None
+
+    def newissue(self):     
+        """ Create a new issue """
+        return None
+
 
 class aboutDialog(QtGui.QDialog):
     def __init__(self, parent=None):
