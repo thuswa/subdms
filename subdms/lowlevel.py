@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Sat Mar 21 21:51:38 2009 on violator
-# update count: 141
+# Last modified Sun Mar 22 00:25:25 2009 on violator
+# update count: 147
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -90,8 +90,13 @@ class docname:
         """ Construct the document tag url. """
         docurllist=[self.conf.tagsurl]
         docurllist.extend(docnamelist[:-1])
-        docurllist.extend(issueno)
+        docurllist.extend(issue_no)
         return string.join(docurllist, '/')
+
+    def const_doctagfileurl(self, docnamelist, issue_no):
+        """ Construct the document tag file url. """
+        return string.join([self.const_doctagurl(docnamelist, issue_no), \
+                                self.const_docfname(docnamelist)], '/')
 
     def const_docpath(self, docnamelist):
         """ Construct the path to the checked out document. """
