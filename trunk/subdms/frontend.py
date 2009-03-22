@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Mon Mar 16 22:29:45 2009 on violator
-# update count: 516
+# Last modified Sun Mar 22 01:04:31 2009 on violator
+# update count: 559
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -101,13 +101,15 @@ class document:
    def commit(self, docnamelist, message):
       """commit changes on file"""
       client.checkin(docs.const_docpath(docnamelist), message)
-
-   def checkin(self, docnamelist, message):
-      """check-in file from workspace"""
-      self.commit(docnamelist, message) 
       
+   def checkin(self, docnamelist):
+      """check-in file from workspace"""
+      docname = docs.const_docname(docnamelist)
+      message = "Checking in: "+docname
+      self.commit(docnamelist, message) 
       # Remove file from workspace
       shutil.rmtree(docs.const_checkoutpath(docnamelist))
+      return message
       
    def checkout(self, docnamelist):
       """check-out file to workspace"""
@@ -117,30 +119,35 @@ class document:
 
    def release(self, docnamelist):
       """Release the document"""
-      issue_no=str(getissueno)
-      docname=docs.const_docfname(docnamelist)
-      newissuepath=docs.const_doctagurl(docnamelist, issue_no)
-                     
+      current_issue = self.getissueno(docnamelist)
+      issue_no = str(current_issue)
+      docname = docs.const_docname(docnamelist)
+      doctagurl = docs.const_doctagurl(docnamelist, issue_no)
+      newissuepath = docs.const_doctagurl(docnamelist, issue_no)
+      message = " Release "+docname+", issue "+issue_no
+
       # Set status of document to released
       client.propset(conf.proplist[2], conf.statuslist[4], \
                      docs.const_docpath(docnamelist))
-      checkin(docnamelist, "Set status to released on "+docname)
-   
+      self.commit(docnamelist,"Set status to released on "+docname)
+      # Create tag url in repository
+      client.mkdir(doctagurl, "create tag directory for : "+docname,1)
       # Create tag
-      self.server_side_copy(docs.const_docurl(docnamelist), \
-                       docs.const_doctagurl(docnamelist, issue_no), \
-                       " Release "+docname+", issue "+issue_no)
-
+      self.server_side_copy(docs.const_docfileurl(docnamelist), \
+                            docs.const_doctagfileurl(docnamelist, issue_no), \
+                            message)
+      
       # Set previous issue to obsolete
-      if issueno > 1:
-         oldissue=issue_no - 1
-         oldissuepath=docs.const_doctagurl(docnamelist, oldissue)
+      if current_issue > 1:
+         old_issue = str(current_issue - 1)
+         oldissuepath = docs.const_doctagurl(docnamelist, old_issue)
          client.checkout(oldissuepath, \
                          docs.const_checkoutpath(docnamelist))
          client.propset('status', 'obsolete', \
                         docs.const_docpath(docnamelist))
-         checkin(docnamelist, "Set status to obsolete on " \
-                 +docname+" issue "+oldissue)
+         self.commit(docnamelist, "Set status to obsolete on " \
+                     +docname+" issue "+old_issue)
+      return message
 
    def editdocument(self, docnamelist):
       """ Edit the document. """
@@ -150,7 +157,7 @@ class document:
       
    def newissue(self, docnamelist):
       """Create new issue of the document"""
-      new_issue_no = str(getissueno + 1)
+      new_issue_no = str(self.getissueno(docnamelist) + 1)
       client.propset('status', 'preliminary', docs.const_docurl(docnamelist))
       client.propset('issue', new_issue_no,  docs.const_docurl(docnamelist))
    
