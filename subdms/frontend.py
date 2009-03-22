@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Sun Mar 22 01:13:30 2009 on violator
-# update count: 561
+# Last modified Sun Mar 22 22:15:22 2009 on violator
+# update count: 575
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -101,7 +101,7 @@ class document:
    def commit(self, docnamelist, message):
       """commit changes on file"""
       client.checkin(docs.const_docpath(docnamelist), message)
-      
+
    def checkin(self, docnamelist):
       """check-in file from workspace"""
       docname = docs.const_docname(docnamelist)
@@ -199,6 +199,20 @@ class document:
       """ Revert to previous revision. """
       return None
 
+   def getstate(docnamelist):
+      """ Get state of document. """
+      if self.ischeckedout(docnamelist):
+         return_state = 'I'
+      else:
+         docpath = docs.const_docpath(docnamelist)
+         state = client.status(docpath)
+         return_state = 'O'
+         if state.text_status == pysvn.wc_status_kind.modified:
+            return_state = 'M'
+         if state.text_status == pysvn.wc_status_kind.conflicted:
+            return_state = 'C'
+      return return_state
+   
    def server_side_copy(self, source, target, log_message):
       """ Server side copy in repository URL -> URL """
       def get_log_message():
