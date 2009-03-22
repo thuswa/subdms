@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Sat Mar 21 21:22:30 2009 on violator
-# update count: 431
+# Last modified Sat Mar 21 22:01:51 2009 on violator
+# update count: 444
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -67,7 +67,7 @@ class ClientUi(QtGui.QMainWindow):
         self.connect(self.ui.actionCommit_Changes, \
                      QtCore.SIGNAL("activated()"), self.commitdoc)        
         self.connect(self.ui.actionRelease_Document, \
-                     QtCore.SIGNAL("activated()"), self.relasedoc)
+                     QtCore.SIGNAL("activated()"), self.releasedoc)
         self.connect(self.ui.actionList_Documents, \
                      QtCore.SIGNAL("activated()"), self.setdocumentlist)
         # Help menu
@@ -109,9 +109,8 @@ class ClientUi(QtGui.QMainWindow):
         """ Check-in document action """
         docnamelist = self.getselecteddoc()
         if docnamelist:
-            docname = docs.const_docname(docnamelist)
-            self.doc.checkin(docnamelist, "checking in: "+docname)
-            self.ui.statusbar.showMessage("Checking in "+docname, 1000)
+            message = self.doc.checkin(docnamelist)
+            self.ui.statusbar.showMessage(message, 1000)
 
     def editdoc(self):
         """ Edit document action. """
@@ -123,14 +122,16 @@ class ClientUi(QtGui.QMainWindow):
         """ Commit changes on document """
         return None
 
-    def relasedoc(self):     
-        """ Relase the document action. """
-        return None
+    def releasedoc(self):     
+        """ Release the document action. """
+        docnamelist = self.getselecteddoc()
+        if docnamelist:
+            message = self.doc.release(docnamelist)
+            self.ui.statusbar.showMessage(message, 1000)
 
     def newissue(self):     
         """ Create a new issue """
         return None
-
 
 class aboutDialog(QtGui.QDialog):
     def __init__(self, parent=None):
