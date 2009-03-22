@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Sun Mar 22 22:15:22 2009 on violator
-# update count: 575
+# Last modified Sun Mar 22 22:38:20 2009 on violator
+# update count: 580
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -199,18 +199,18 @@ class document:
       """ Revert to previous revision. """
       return None
 
-   def getstate(docnamelist):
-      """ Get state of document. """
+   def getstate(self, docnamelist):
+      """ Get document state. """
       if self.ischeckedout(docnamelist):
-         return_state = 'I'
-      else:
          docpath = docs.const_docpath(docnamelist)
-         state = client.status(docpath)
+         state = client.status(docpath)[0]
          return_state = 'O'
          if state.text_status == pysvn.wc_status_kind.modified:
             return_state = 'M'
          if state.text_status == pysvn.wc_status_kind.conflicted:
             return_state = 'C'
+      else:
+         return_state = 'I'
       return return_state
    
    def server_side_copy(self, source, target, log_message):
