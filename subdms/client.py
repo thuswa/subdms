@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Sun Mar 22 23:07:27 2009 on violator
-# update count: 459
+# Last modified Sun Mar 22 23:19:39 2009 on violator
+# update count: 461
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -138,7 +138,10 @@ class ClientUi(QtGui.QMainWindow):
 
     def newissue(self):     
         """ Create a new issue """
-        return None
+        docnamelist = self.getselecteddoc()
+        if docnamelist:
+            message = self.doc.newissue(docnamelist)
+            self.ui.statusbar.showMessage(message, 1000)
 
 class aboutDialog(QtGui.QDialog):
     def __init__(self, parent=None):
