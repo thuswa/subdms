@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Sat Mar 21 22:01:51 2009 on violator
-# update count: 444
+# Last modified Sun Mar 22 22:20:07 2009 on violator
+# update count: 451
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -120,8 +120,12 @@ class ClientUi(QtGui.QMainWindow):
 
     def commitdoc(self):     
         """ Commit changes on document """
-        return None
-
+        docnamelist = self.getselecteddoc()
+        text, ok = QtGui.QInputDialog.getText(self, \
+                            'Commit changes', 'Enter commit message:')
+        if ok:
+            self.doc.commit(docnamelist, unicode(text))
+            
     def releasedoc(self):     
         """ Release the document action. """
         docnamelist = self.getselecteddoc()
