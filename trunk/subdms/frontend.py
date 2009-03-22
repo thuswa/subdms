@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Sun Mar 22 01:04:31 2009 on violator
-# update count: 559
+# Last modified Sun Mar 22 01:13:30 2009 on violator
+# update count: 561
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -135,7 +135,7 @@ class document:
       # Create tag
       self.server_side_copy(docs.const_docfileurl(docnamelist), \
                             docs.const_doctagfileurl(docnamelist, issue_no), \
-                            message)
+                            conf.release+" "+message)
       
       # Set previous issue to obsolete
       if current_issue > 1:

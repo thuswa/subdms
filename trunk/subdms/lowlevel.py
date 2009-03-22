@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Sun Mar 22 00:25:25 2009 on violator
-# update count: 147
+# Last modified Sun Mar 22 01:08:07 2009 on violator
+# update count: 148
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -47,6 +47,7 @@ class config:
         self.proplist = ['title', 'issue', 'status']
         self.newdoc = 'newdocument'.encode("hex")
         self.newproj = 'newproject'.encode("hex")
+        self.release = 'release'.encode("hex")
         self.statuslist = ['preliminary', 'in-review' ,'rejected', 'approved', \
                            'released', 'obsolete'] 
         self.pkgpath = os.path.dirname(os.path.realpath(__file__))
