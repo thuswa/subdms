@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Sun Mar 22 22:38:20 2009 on violator
-# update count: 580
+# Last modified Sun Mar 22 23:05:45 2009 on violator
+# update count: 583
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -204,13 +204,13 @@ class document:
       if self.ischeckedout(docnamelist):
          docpath = docs.const_docpath(docnamelist)
          state = client.status(docpath)[0]
-         return_state = 'O'
+         return_state = ['O', 'Checked Out']
          if state.text_status == pysvn.wc_status_kind.modified:
-            return_state = 'M'
+            return_state = ['M', 'Modified']
          if state.text_status == pysvn.wc_status_kind.conflicted:
-            return_state = 'C'
+            return_state = ['C', 'Conflict'] 
       else:
-         return_state = 'I'
+         return_state = ['I', 'Checked In']
       return return_state
    
    def server_side_copy(self, source, target, log_message):
