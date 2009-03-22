@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Sun Mar 22 23:05:45 2009 on violator
-# update count: 583
+# Last modified Sun Mar 22 23:24:08 2009 on violator
+# update count: 601
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -158,9 +158,18 @@ class document:
    def newissue(self, docnamelist):
       """Create new issue of the document"""
       new_issue_no = str(self.getissueno(docnamelist) + 1)
-      client.propset('status', 'preliminary', docs.const_docurl(docnamelist))
-      client.propset('issue', new_issue_no,  docs.const_docurl(docnamelist))
-   
+      checkedout = self.ischeckedout(docnamelist)
+      docname = docs.const_docname(docnamelist)
+      message = " Created "+docname+", issue "+new_issue_no
+      if not checkedout:
+         self.checkout(docnamelist)         
+      client.propset('status', 'preliminary', docs.const_docpath(docnamelist))
+      client.propset('issue', new_issue_no,  docs.const_docpath(docnamelist))
+      self.commit(docnamelist, message)
+      if not checkedout:
+         self.checkin(docnamelist)
+      return message   
+         
    def getissueno(self, docnamelist):
       """ Get document issue number """ 
       return int(client.propget('issue', \
