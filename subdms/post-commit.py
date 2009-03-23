@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Mon Mar 16 21:18:56 2009 on violator
-# update count: 119
+# Last modified Mon Mar 23 19:29:28 2009 on violator
+# update count: 121
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -72,6 +72,7 @@ def main():
     # Get author, date and other properties
     author = cmd.command_output(look_cmd % "author").rstrip("\n")
     date = cmd.command_output(look_cmd % "date").rstrip("\n")
+    issue = cmd.command_output(look_cmd2 % ("issue", docurl))
     title = cmd.command_output(look_cmd2 % ("title", docurl))
     status = cmd.command_output(look_cmd2 % ("status", docurl))
 
@@ -79,7 +80,7 @@ def main():
       # Create write string
       writestr=[]
       writestr.extend(docnamelist)
-      writestr.extend([title, date, status, author, log_message])
+      writestr.extend([title, date, issue, status, author, log_message])
       # Write data to db
       db.writerevlist(rvn, writestr)
 

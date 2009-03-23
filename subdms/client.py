@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Mon Mar 23 13:40:16 2009 on violator
-# update count: 465
+# Last modified Mon Mar 23 19:33:26 2009 on violator
+# update count: 466
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -95,11 +95,13 @@ class ClientUi(QtGui.QMainWindow):
             docname = QtGui.QTableWidgetItem(docs.const_docname(docnamelist))
             title = QtGui.QTableWidgetItem(doc[5])
             doctype = QtGui.QTableWidgetItem(doc[4])
-            status = QtGui.QTableWidgetItem(doc[7])
+            issue =  QtGui.QTableWidgetItem(doc[7])
+            status = QtGui.QTableWidgetItem(doc[8])
             self.ui.documentlist.setItem(n, 0, state)
             self.ui.documentlist.setItem(n, 1, docname)
             self.ui.documentlist.setItem(n, 2, title)
             self.ui.documentlist.setItem(n, 3, doctype)
+            self.ui.documentlist.setItem(n, 4, issue)
             self.ui.documentlist.setItem(n, 5, status)
             n += 1        
 
