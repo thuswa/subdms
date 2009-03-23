@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Sun Mar 22 23:19:39 2009 on violator
-# update count: 461
+# Last modified Mon Mar 23 13:40:16 2009 on violator
+# update count: 465
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -47,9 +47,11 @@ class ClientUi(QtGui.QMainWindow):
         
         # Set column width on list object
         self.ui.documentlist.setColumnWidth(0, 40)
-        self.ui.documentlist.setColumnWidth(1, 140)
-        self.ui.documentlist.setColumnWidth(2, 380)
-        self.ui.documentlist.setColumnWidth(3, 100)
+        self.ui.documentlist.setColumnWidth(1, 200)
+        self.ui.documentlist.setColumnWidth(2, 420)
+        self.ui.documentlist.setColumnWidth(3, 60)
+        self.ui.documentlist.setColumnWidth(4, 60)
+        self.ui.documentlist.setColumnWidth(5, 100)
 
         # Connect menubar entries
         # Create menu
@@ -92,11 +94,13 @@ class ClientUi(QtGui.QMainWindow):
             state = QtGui.QTableWidgetItem(self.doc.getstate(docnamelist)[0])
             docname = QtGui.QTableWidgetItem(docs.const_docname(docnamelist))
             title = QtGui.QTableWidgetItem(doc[5])
+            doctype = QtGui.QTableWidgetItem(doc[4])
             status = QtGui.QTableWidgetItem(doc[7])
             self.ui.documentlist.setItem(n, 0, state)
             self.ui.documentlist.setItem(n, 1, docname)
             self.ui.documentlist.setItem(n, 2, title)
-            self.ui.documentlist.setItem(n, 3, status)
+            self.ui.documentlist.setItem(n, 3, doctype)
+            self.ui.documentlist.setItem(n, 5, status)
             n += 1        
 
     def getselecteddoc(self):
