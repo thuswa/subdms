@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Mon Mar 23 20:40:39 2009 on violator
-# update count: 201
+# Last modified Fri Mar 27 23:17:39 2009 on violator
+# update count: 207
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -42,8 +42,8 @@ class sqlitedb:
         """ Create database """
         # Create the simpliest table 
         self.cursor.execute("create table revlist(revnum INTEGER PRIMARY KEY," \
-                            "project, doctype, docno, docext, doctitle," \
-                            "date, issue, status, author, logtext TEXT)")
+                            "project, doctype, docno, issue, docext, " \
+                            "doctitle, date, status, author, logtext TEXT)")
 
         self.cursor.execute("create table projlist(projname TEXT PRIMARY KEY," \
                             "doctypes)")
@@ -52,8 +52,8 @@ class sqlitedb:
     def writerevlist(self,rvn, writestr):
         """ Write to documents table in database. """
         # Construct sql command string
-        db_str="insert into revlist(revnum, project, doctype, docno, docext, " \
-                "doctitle, date, issue, status, author, logtext) " \
+        db_str="insert into revlist(revnum, project, doctype, docno, issue, " \
+                "docext, doctitle, date, status, author, logtext) " \
                 "values(\"%s\", \"%s\")" \
                 % (rvn, string.join(writestr, "\",\""))
         # Excecute sql command

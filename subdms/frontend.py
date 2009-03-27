@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Sun Mar 22 23:24:08 2009 on violator
-# update count: 601
+# Last modified Fri Mar 27 23:09:34 2009 on violator
+# update count: 669
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -66,8 +66,8 @@ class document:
       
       # Set document title and commit document
       client.propset(conf.proplist[0], doctitle, docpath)
-      client.propset(conf.proplist[1], '1', docpath)
-      client.propset(conf.proplist[2], conf.statuslist[0], docpath)
+      client.propset(conf.proplist[1], conf.statuslist[0], docpath)
+      client.propset(conf.proplist[2], string.join(conf.svnkeywords), docpath) 
       client.checkin(docpath, conf.newdoc+ \
                      " commit document properties for: "+docname)
    
@@ -94,7 +94,6 @@ class document:
 
       # Set document title and commit document
       client.propset('title', doctitle, docpath)
-      client.propset('issue', '1', docpath)
       client.propset('status', 'preliminary', docpath)
       client.checkin(docpath, "Add document: "+docname)
 
@@ -119,34 +118,25 @@ class document:
 
    def release(self, docnamelist):
       """Release the document"""
-      current_issue = self.getissueno(docnamelist)
-      issue_no = str(current_issue)
+      current_issue = self.getissueno(documentlist)
       docname = docs.const_docname(docnamelist)
-      doctagurl = docs.const_doctagurl(docnamelist, issue_no)
-      newissuepath = docs.const_doctagurl(docnamelist, issue_no)
-      message = " Release "+docname+", issue "+issue_no
+      message = "Release "+docname
 
       # Set status of document to released
-      client.propset(conf.proplist[2], conf.statuslist[4], \
+      client.propset(conf.proplist[1], conf.statuslist[4], \
                      docs.const_docpath(docnamelist))
-      self.commit(docnamelist,"Set status to released on "+docname)
-      # Create tag url in repository
-      client.mkdir(doctagurl, "create tag directory for : "+docname,1)
-      # Create tag
-      self.server_side_copy(docs.const_docfileurl(docnamelist), \
-                            docs.const_doctagfileurl(docnamelist, issue_no), \
-                            conf.release+" "+message)
+      self.commit(docnamelist,conf.release+" "+message)
       
       # Set previous issue to obsolete
       if current_issue > 1:
          old_issue = str(current_issue - 1)
-         oldissuepath = docs.const_doctagurl(docnamelist, old_issue)
-         client.checkout(oldissuepath, \
-                         docs.const_checkoutpath(docnamelist))
-         client.propset('status', 'obsolete', \
-                        docs.const_docpath(docnamelist))
-         self.commit(docnamelist, "Set status to obsolete on " \
-                     +docname+" issue "+old_issue)
+         old_docnamelist = self.setissueno(docnamelist, old_issue)
+         old_docname = docs.const_docname(old_docnamelist)
+         old_docpath = docs.const_docpath(old_docnamelist)
+         client.checkout(old_docpath, \
+                         docs.const_checkoutpath(old_docnamelist))
+         client.propset(conf.proplist[1], conf.statuslist[5], old_docpath)
+         self.commit(docnamelist, "Set status to obsolete on "+old_docname)
       return message
 
    def editdocument(self, docnamelist):
@@ -157,23 +147,40 @@ class document:
       
    def newissue(self, docnamelist):
       """Create new issue of the document"""
-      new_issue_no = str(self.getissueno(docnamelist) + 1)
-      checkedout = self.ischeckedout(docnamelist)
-      docname = docs.const_docname(docnamelist)
-      message = " Created "+docname+", issue "+new_issue_no
-      if not checkedout:
-         self.checkout(docnamelist)         
-      client.propset('status', 'preliminary', docs.const_docpath(docnamelist))
-      client.propset('issue', new_issue_no,  docs.const_docpath(docnamelist))
-      self.commit(docnamelist, message)
-      if not checkedout:
-         self.checkin(docnamelist)
+      new_issue = str(self.getissueno(docnamelist) + 1)
+      docnamelist = self.setissueno(docnamelist, new_issue)
+      docname = docs.const_docname(new_docnamelist)
+      docurl = docs.const_docfileurl(new_docnamelist)
+      docpath = docs.const_docpath(new_docnamelist)
+      checkoutpath=docs.const_checkoutpath(new_docnamelist)
+      message = " Created "+new_docname
+
+      # Create document url in repository
+      client.mkdir(docurl, "create directory for : "+docname,1)
+
+
+      # Create document from template
+      self.server_side_copy(docs.const_docfileurl(docnamelist), \
+                            docurl, message)
+      client.checkout(docurl, checkoutpath)
+      
+      # Set document title and commit document
+      #client.propset(conf.proplist[0], doctitle, docpath)
+      client.propset(conf.proplist[1], conf.statuslist[0], docpath)
+      client.propset(conf.proplist[2], string.join(conf.svnkeywords), docpath) 
+      client.checkin(docpath, conf.newdoc+ \
+                     " commit document properties for: "+docname)
       return message   
          
    def getissueno(self, docnamelist):
       """ Get document issue number """ 
-      return int(client.propget('issue', \
-                                docs.const_docurl(docnamelist)).values().pop())
+      return int(docnamelist[3])
+
+   def setissueno(self, docnamelist, issue_no):
+      """ Set document issue number """ 
+      old_docnamelist[3] = issue_no
+      return docnamelist
+
 
    def gettitle(self, docnamelist):
       """ Get document title """ 
