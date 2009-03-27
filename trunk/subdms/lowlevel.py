@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Sun Mar 22 01:08:07 2009 on violator
-# update count: 148
+# Last modified Fri Mar 27 13:06:07 2009 on violator
+# update count: 157
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -37,14 +37,16 @@ class config:
         self.hookspath = os.path.join(self.repopath,"hooks") 
         self.repourl = "file://" + self.repopath
         self.trunkurl = self.repourl + "/trunk"
-        self.tagsurl = self.repourl + "/tags"
         self.tmplurl = self.repourl + "/templates"
         self.workpath = conf.get("Path", "workspace")
         self.dbpath = conf.get("Path", "database")
         self.doctypes = list(conf.get("Document", "type").split())
         self.tmpltxt = conf.get("Template", "txt")
         self.txteditor = conf.get("Editor", "txt")
-        self.proplist = ['title', 'issue', 'status']
+        self.proplist = ['title', 'status', 'svn:keywords']
+        self.svnkeywords=["LastChangedDate", "LastChangedRevision", "Id", \
+                          "Author" ]
+        self.statchg = 'statuschange'.encode("hex")
         self.newdoc = 'newdocument'.encode("hex")
         self.newproj = 'newproject'.encode("hex")
         self.release = 'release'.encode("hex")
@@ -62,7 +64,7 @@ class docname:
     def const_checkoutpath(self, docnamelist):
         """ Construct the check-out path """
         return os.path.join(self.conf.workpath, \
-                                os.path.splitext(self.const_docname(docnamelist))[0])
+                        os.path.splitext(self.const_docname(docnamelist))[0])
 
     def const_docname(self, docnamelist):
         """ Construct the document name. """
@@ -87,18 +89,6 @@ class docname:
         """ Construct the document file path in repository. """
         return self.const_docfileurl(docnamelist).split(self.conf.repopath)[1]
  
-    def const_doctagurl(self, docnamelist, issue_no):
-        """ Construct the document tag url. """
-        docurllist=[self.conf.tagsurl]
-        docurllist.extend(docnamelist[:-1])
-        docurllist.extend(issue_no)
-        return string.join(docurllist, '/')
-
-    def const_doctagfileurl(self, docnamelist, issue_no):
-        """ Construct the document tag file url. """
-        return string.join([self.const_doctagurl(docnamelist, issue_no), \
-                                self.const_docfname(docnamelist)], '/')
-
     def const_docpath(self, docnamelist):
         """ Construct the path to the checked out document. """
         return os.path.join(self.const_checkoutpath(docnamelist), \
