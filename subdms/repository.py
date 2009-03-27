@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Mon Mar 16 13:00:32 2009 on havoc
-# update count: 167
+# Last modified Fri Mar 27 23:24:08 2009 on violator
+# update count: 168
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -37,7 +37,6 @@ class repository:
         """ create repsitory and layout """
         subprocess.call(['svnadmin','create', self.conf.repopath])
         self.client.mkdir(self.conf.trunkurl, "create trunk directory",1)
-        self.client.mkdir(self.conf.tagsurl, "create trunk directory",1)
         self.client.mkdir(self.conf.tmplurl, "create templates directory",1)
         print "Create repository: "+self.conf.repopath
 
