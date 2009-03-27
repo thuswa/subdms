@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Fri Mar 27 23:18:49 2009 on violator
-# update count: 127
+# Last modified Sat Mar 28 00:00:33 2009 on violator
+# update count: 128
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -84,9 +84,9 @@ def main():
       # Write data to db
       db.writerevlist(rvn, writestr)
 
-    if statchgptrn.match(log_message):
+      #    if statchgptrn.match(log_message):
       # Create write string
-      writestr=[]
+      #writestr=[]
     
 if __name__ == "__main__":
   import sys
