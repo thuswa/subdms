@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Mon Mar 23 19:33:26 2009 on violator
-# update count: 466
+# Last modified Fri Mar 27 23:04:32 2009 on violator
+# update count: 479
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -109,8 +109,12 @@ class ClientUi(QtGui.QMainWindow):
         """ Get the document selected in list """
         row = self.ui.documentlist.currentRow()
         docitem = self.ui.documentlist.item(row, 1)
+        typeitem = self.ui.documentlist.item(row, 3)
+        issueitem = self.ui.documentlist.item(row, 4)
         if docitem:
-            return docs.deconst_docfname(unicode(docitem.text())+'.txt') #fixme
+            return docs.deconst_docfname(unicode(docitem.text())+'-'+ \
+                                         unicode(issueitem.text())+'.'+ \
+                                         unicode(typeitem.text()))
         else:
             return None
 
