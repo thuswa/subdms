@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Fri Mar 27 23:09:34 2009 on violator
-# update count: 669
+# Last modified Sat Mar 28 00:08:27 2009 on violator
+# update count: 674
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -67,7 +67,7 @@ class document:
       # Set document title and commit document
       client.propset(conf.proplist[0], doctitle, docpath)
       client.propset(conf.proplist[1], conf.statuslist[0], docpath)
-      client.propset(conf.proplist[2], string.join(conf.svnkeywords), docpath) 
+      client.propset(conf.proplist[2], conf.svnkeywords, docpath) 
       client.checkin(docpath, conf.newdoc+ \
                      " commit document properties for: "+docname)
    
@@ -167,7 +167,7 @@ class document:
       # Set document title and commit document
       #client.propset(conf.proplist[0], doctitle, docpath)
       client.propset(conf.proplist[1], conf.statuslist[0], docpath)
-      client.propset(conf.proplist[2], string.join(conf.svnkeywords), docpath) 
+      client.propset(conf.proplist[2], conf.svnkeywords, docpath) 
       client.checkin(docpath, conf.newdoc+ \
                      " commit document properties for: "+docname)
       return message   
@@ -192,13 +192,13 @@ class document:
       return client.propget('status', \
                             docs.const_docurl(docnamelist)).values().pop()
 
-   def createdocnamelist(self, project, doctype, docext):
+   def createdocnamelist(self, project, doctype, issue, docext):
       """
       Create docnamelist - list containing the building blocks of
       the document name
       """
       docno="%04d" % (db.getdocno(project, doctype) + 1)
-      return [project, doctype, docno, docext]
+      return [project, doctype, docno, issue, docext]
 
    def ischeckedout(self, docnamelist):
       """ Return true if docname is checked out. """

@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Fri Mar 27 23:04:32 2009 on violator
-# update count: 479
+# Last modified Sat Mar 28 00:10:51 2009 on violator
+# update count: 484
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -90,12 +90,12 @@ class ClientUi(QtGui.QMainWindow):
         """ List the existing documents """
         n = 0
         for doc in db.getalldocs():
-            docnamelist = list(doc[1:5])
+            docnamelist = list(doc[1:6])
             state = QtGui.QTableWidgetItem(self.doc.getstate(docnamelist)[0])
             docname = QtGui.QTableWidgetItem(docs.const_docname(docnamelist))
-            title = QtGui.QTableWidgetItem(doc[5])
-            doctype = QtGui.QTableWidgetItem(doc[4])
-            issue =  QtGui.QTableWidgetItem(doc[7])
+            title = QtGui.QTableWidgetItem(doc[6])
+            doctype = QtGui.QTableWidgetItem(doc[5])
+            issue =  QtGui.QTableWidgetItem(doc[4])
             status = QtGui.QTableWidgetItem(doc[8])
             self.ui.documentlist.setItem(n, 0, state)
             self.ui.documentlist.setItem(n, 1, docname)
@@ -210,8 +210,10 @@ class documentDialog(QtGui.QDialog):
         doctitle = unicode(self.ui.document_title.text())
         project = self.selectedproject()
         doctype = self.selecteddoctype()
+        issue = "1"
         docext = "txt"
-        docnamelist = self.doc.createdocnamelist(project, doctype, docext)
+        docnamelist = self.doc.createdocnamelist(project, doctype, issue, \
+                                                 docext)
         self.doc.createdocument(docnamelist, doctitle)
         self.close()
 

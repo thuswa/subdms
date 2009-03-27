@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Fri Mar 27 13:06:07 2009 on violator
-# update count: 157
+# Last modified Fri Mar 27 23:48:52 2009 on violator
+# update count: 161
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -42,10 +42,13 @@ class config:
         self.dbpath = conf.get("Path", "database")
         self.doctypes = list(conf.get("Document", "type").split())
         self.tmpltxt = conf.get("Template", "txt")
+        self.tmpltex = conf.get("Template", "tex")
         self.txteditor = conf.get("Editor", "txt")
+        self.texeditor = conf.get("Editor", "tex")
         self.proplist = ['title', 'status', 'svn:keywords']
-        self.svnkeywords=["LastChangedDate", "LastChangedRevision", "Id", \
-                          "Author" ]
+        self.svnkeywords=string.join(["LastChangedDate", \
+                                      "LastChangedRevision", "Id", \
+                                      "Author"])
         self.statchg = 'statuschange'.encode("hex")
         self.newdoc = 'newdocument'.encode("hex")
         self.newproj = 'newproject'.encode("hex")

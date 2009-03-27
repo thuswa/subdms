@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Fri Mar 27 23:24:08 2009 on violator
-# update count: 168
+# Last modified Fri Mar 27 23:42:11 2009 on violator
+# update count: 173
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -55,19 +55,24 @@ class repository:
         """ Install templates in repository """
         tmpldir=os.path.join(self.conf.workpath,'templates')
         txtfiledir=os.path.join(tmpldir, self.conf.tmpltxt)
+        texfiledir=os.path.join(tmpldir, self.conf.tmpltex)
         txtfilepath=os.path.join(self.conf.tmplpath, self.conf.tmpltxt)
+        texfilepath=os.path.join(self.conf.tmplpath, self.conf.tmpltex)
         
         # Check out templates dir
         self.client.checkout(self.conf.tmplurl, tmpldir)
         
         # Add templates to dir
         shutil.copyfile(txtfilepath, txtfiledir)
+        shutil.copyfile(texfilepath, texfiledir)
         self.client.add(txtfiledir)
+        self.client.add(texfiledir)
 
         # Commit templates
         self.client.checkin(tmpldir, "installing templates")
         print "Install template: "+self.conf.tmpltxt+" -> "+self.conf.tmplurl 
-   
+        print "Install template: "+self.conf.tmpltex+" -> "+self.conf.tmplurl 
+
         # Remove template dir from workspace
         shutil.rmtree(tmpldir)
 
