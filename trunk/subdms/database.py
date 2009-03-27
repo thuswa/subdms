@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Mon Mar 23 19:29:06 2009 on violator
-# update count: 200
+# Last modified Mon Mar 23 20:40:39 2009 on violator
+# update count: 201
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -59,9 +59,6 @@ class sqlitedb:
         # Excecute sql command
         self.cursor.execute(db_str)
         self.con.commit()
-
-        self.cursor.execute("select * from revlist")
-        return self.cursor.fetchall()
 
     def writeprojlist(self, projname, doctypes):
         """ Write to project table in database. """
