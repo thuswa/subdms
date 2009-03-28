@@ -97,12 +97,12 @@
     <row/>
     <column>
      <property name="text" >
-      <string>      </string>
+      <string>     </string>
      </property>
     </column>
     <column>
      <property name="text" >
-      <string>Document No</string>
+      <string>Document Id</string>
      </property>
     </column>
     <column>

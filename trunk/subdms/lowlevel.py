@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Fri Mar 27 23:48:52 2009 on violator
-# update count: 161
+# Last modified Sat Mar 28 20:22:54 2009 on violator
+# update count: 163
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -72,6 +72,10 @@ class docname:
     def const_docname(self, docnamelist):
         """ Construct the document name. """
         return string.join(docnamelist[:-1],'-')
+
+    def const_docid(self, docnamelist):
+        """ Construct the document name. """
+        return string.join(docnamelist[:-2],'-')
 
     def const_docfname(self, docnamelist):
         """ Construct the document file name. """
