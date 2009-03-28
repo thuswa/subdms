@@ -1,14 +1,11 @@
 #!/usr/bin/python
 # $Id$
-# Last modified Sat Mar 28 20:15:06 2009 on violator
-# update count: 39
-" Example Subversion pre-commit hook. "
+# Last modified Sat Mar 28 20:42:49 2009 on violator
+# update count: 44
 
-def command_output(cmd):
-    " Capture a command's standard output. "
-    import subprocess
-    return subprocess.Popen(
-        cmd.split(), stdout=subprocess.PIPE).communicate()[0]
+import lowlevel
+
+""" pre-commit hook to restrict commits. """
 
 #def files_changed(look_cmd):
 # """ List the files added or updated by this transaction.
@@ -56,6 +53,7 @@ def main():
     # errors += 1
     # return errors
     #
+    
 if __name__ == "__main__":
     import sys
     sys.exit(main())
