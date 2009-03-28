@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Sat Mar 28 00:08:27 2009 on violator
-# update count: 674
+# Last modified Sat Mar 28 22:18:48 2009 on violator
+# update count: 680
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -40,7 +40,7 @@ class project:
       """Create a project"""
       for doc in conf.doctypes:
          client.mkdir(os.path.join(conf.trunkurl, projname, doc), \
-                      conf.newproj+" create directory for project: "+projname,1)
+                      conf.newproj+"Create directory for project: "+projname,1)
 
 class document:
    def createdocument(self, docnamelist, doctitle):
@@ -69,7 +69,7 @@ class document:
       client.propset(conf.proplist[1], conf.statuslist[0], docpath)
       client.propset(conf.proplist[2], conf.svnkeywords, docpath) 
       client.checkin(docpath, conf.newdoc+ \
-                     " commit document properties for: "+docname)
+                     "Commit document properties for: "+docname)
    
    def adddocument(self, docnamelist, doctitle, addfile):
       """    
@@ -125,7 +125,7 @@ class document:
       # Set status of document to released
       client.propset(conf.proplist[1], conf.statuslist[4], \
                      docs.const_docpath(docnamelist))
-      self.commit(docnamelist,conf.release+" "+message)
+      self.commit(docnamelist, conf.release+message)
       
       # Set previous issue to obsolete
       if current_issue > 1:
@@ -136,7 +136,8 @@ class document:
          client.checkout(old_docpath, \
                          docs.const_checkoutpath(old_docnamelist))
          client.propset(conf.proplist[1], conf.statuslist[5], old_docpath)
-         self.commit(docnamelist, "Set status to obsolete on "+old_docname)
+         self.commit(docnamelist, conf.obsolete+"Set status to obsolete on "\
+                     +old_docname)
       return message
 
    def editdocument(self, docnamelist):
@@ -169,7 +170,7 @@ class document:
       client.propset(conf.proplist[1], conf.statuslist[0], docpath)
       client.propset(conf.proplist[2], conf.svnkeywords, docpath) 
       client.checkin(docpath, conf.newdoc+ \
-                     " commit document properties for: "+docname)
+                     "Commit document properties for: "+docname)
       return message   
          
    def getissueno(self, docnamelist):
