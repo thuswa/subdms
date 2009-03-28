@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Fri Mar 27 23:42:11 2009 on violator
-# update count: 173
+# Last modified Sat Mar 28 23:29:53 2009 on violator
+# update count: 174
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -67,7 +67,9 @@ class repository:
         shutil.copyfile(texfilepath, texfiledir)
         self.client.add(txtfiledir)
         self.client.add(texfiledir)
-
+        client.propset(conf.proplist[2], conf.svnkeywords, txtfiledir)
+        client.propset(conf.proplist[2], conf.svnkeywords, texfiledir)
+        
         # Commit templates
         self.client.checkin(tmpldir, "installing templates")
         print "Install template: "+self.conf.tmpltxt+" -> "+self.conf.tmplurl 
