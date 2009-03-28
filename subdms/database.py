@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Sat Mar 28 21:33:31 2009 on violator
-# update count: 208
+# Last modified Sat Mar 28 22:42:00 2009 on violator
+# update count: 211
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -72,12 +72,10 @@ class sqlitedb:
 
     def statuschg(self, docnamelist, status):
         """ Update document status """
-        # Construct sql command string
-        db_str="update revlist set status=?" \
+        self.cursor.execute("update revlist set status=? " \
                 "where project=? and doctype=? and docno=? and issue=?", \
-                (status, string.join(docnamelist,","), )
-        # Excecute sql command
-        self.cursor.execute(db_str)
+                (status, docnamelist[0], docnamelist[1], docnamelist[2], \
+                 docnamelist[3], ))
         self.con.commit()
         
     def getalldocs(self):

@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Sat Mar 28 00:00:33 2009 on violator
-# update count: 128
+# Last modified Sat Mar 28 21:35:32 2009 on violator
+# update count: 134
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -46,6 +46,8 @@ def main():
   newdocptrn = re.compile(conf.newdoc)
   newprojptrn = re.compile(conf.newproj)
   statchgptrn = re.compile(conf.statchg)
+  relptrn = re.compile(conf.release)
+  obsptrn = re.compile(conf.obsolete)
   
   # Construct svnlook command 
   look_opt = "--revision"
@@ -80,13 +82,13 @@ def main():
       # Create write string
       writestr=[]
       writestr.extend(docnamelist)
-      writestr.extend([title, date, status, author, log_message])
+      writestr.extend([title, date, status, author, \
+                       newdocptrn.sub("",log_message)])
       # Write data to db
       db.writerevlist(rvn, writestr)
 
-      #    if statchgptrn.match(log_message):
-      # Create write string
-      #writestr=[]
+    if relptrn.match(log_message) or obsptrn.match(log_message):
+      db.statuschg(docnamelist, status)
     
 if __name__ == "__main__":
   import sys

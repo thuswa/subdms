@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Sat Mar 28 22:18:48 2009 on violator
-# update count: 680
+# Last modified Sat Mar 28 22:29:27 2009 on violator
+# update count: 682
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -118,7 +118,7 @@ class document:
 
    def release(self, docnamelist):
       """Release the document"""
-      current_issue = self.getissueno(documentlist)
+      current_issue = self.getissueno(docnamelist)
       docname = docs.const_docname(docnamelist)
       message = "Release "+docname
 
@@ -159,7 +159,6 @@ class document:
       # Create document url in repository
       client.mkdir(docurl, "create directory for : "+docname,1)
 
-
       # Create document from template
       self.server_side_copy(docs.const_docfileurl(docnamelist), \
                             docurl, message)
@@ -179,9 +178,8 @@ class document:
 
    def setissueno(self, docnamelist, issue_no):
       """ Set document issue number """ 
-      old_docnamelist[3] = issue_no
+      docnamelist[3] = issue_no
       return docnamelist
-
 
    def gettitle(self, docnamelist):
       """ Get document title """ 
