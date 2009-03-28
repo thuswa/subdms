@@ -1,14 +1,14 @@
 #!/usr/bin/python
 # $Id$
-# Last modified Sat Mar 28 00:22:25 2009 on violator
-# update count: 38
+# Last modified Sat Mar 28 20:15:06 2009 on violator
+# update count: 39
 " Example Subversion pre-commit hook. "
 
 def command_output(cmd):
-" Capture a command's standard output. "
-import subprocess
-return subprocess.Popen(
-cmd.split(), stdout=subprocess.PIPE).communicate()[0]
+    " Capture a command's standard output. "
+    import subprocess
+    return subprocess.Popen(
+        cmd.split(), stdout=subprocess.PIPE).communicate()[0]
 
 #def files_changed(look_cmd):
 # """ List the files added or updated by this transaction.
@@ -32,31 +32,31 @@ cmd.split(), stdout=subprocess.PIPE).communicate()[0]
 # "%s %s" % (look_cmd % "cat", filename))
 #
 def main():
-usage = """usage: %prog REPOS TXN
-#
-#Run pre-commit options on a repository transaction."""
-from optparse import OptionParser
-parser = OptionParser(usage=usage)
-parser.add_option("-r", "--revision",
-help="Test mode. TXN actually refers to a revision.",
-action="store_true", default=False)
-# errors = 0
-# try:
-(opts, (repos, txn_or_rvn)) = parser.parse_args()
-look_opt = ("--transaction", "--revision")[opts.revision]
-look_cmd = "/usr/bin/svnlook %s %s %s %s > /home/thuswa/svnproj/log.txt" % ("%s", repos, look_opt, txn_or_rvn)
+    usage = """usage: %prog REPOS TXN
+    #
+    #Run pre-commit options on a repository transaction."""
+    from optparse import OptionParser
+    parser = OptionParser(usage=usage)
+    parser.add_option("-r", "--revision",
+                      help="Test mode. TXN actually refers to a revision.",
+                      action="store_true", default=False)
+    # errors = 0
+    # try:
+    (opts, (repos, txn_or_rvn)) = parser.parse_args()
+    look_opt = ("--transaction", "--revision")[opts.revision]
+    look_cmd = "/usr/bin/svnlook %s %s %s %s > /home/thuswa/svnproj/log.txt" % ("%s", repos, look_opt, txn_or_rvn)
 ## files_changed(look_cmd)
-# print txn_or_rvnome/thuswa/svnproj/l
-# print look_cmd
-# command_output(look_cmd % "log > /home/thuswa/svnproj/log.txt")
-# except:
-print look_cmd
-command_output(look_cmd % "log")
-# parser.print_help()
-# errors += 1
-# return errors
-#
+    # print txn_or_rvnome/thuswa/svnproj/l
+    # print look_cmd
+    # command_output(look_cmd % "log > /home/thuswa/svnproj/log.txt")
+    # except:
+    print look_cmd
+    command_output(look_cmd % "log")
+    # parser.print_help()
+    # errors += 1
+    # return errors
+    #
 if __name__ == "__main__":
-import sys
-sys.exit(main())
+    import sys
+    sys.exit(main())
 
