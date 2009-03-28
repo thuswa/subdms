@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Sat Mar 28 22:29:27 2009 on violator
-# update count: 682
+# Last modified Sat Mar 28 23:31:42 2009 on violator
+# update count: 704
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -67,7 +67,7 @@ class document:
       # Set document title and commit document
       client.propset(conf.proplist[0], doctitle, docpath)
       client.propset(conf.proplist[1], conf.statuslist[0], docpath)
-      client.propset(conf.proplist[2], conf.svnkeywords, docpath) 
+      #client.propset(conf.proplist[2], conf.svnkeywords, docpath) 
       client.checkin(docpath, conf.newdoc+ \
                      "Commit document properties for: "+docname)
    
@@ -149,25 +149,24 @@ class document:
    def newissue(self, docnamelist):
       """Create new issue of the document"""
       new_issue = str(self.getissueno(docnamelist) + 1)
-      docnamelist = self.setissueno(docnamelist, new_issue)
+      new_docnamelist = self.setissueno(docnamelist, new_issue)
       docname = docs.const_docname(new_docnamelist)
-      docurl = docs.const_docfileurl(new_docnamelist)
+      docurl=docs.const_docurl(new_docnamelist)
+      docfileurl=docs.const_docfileurl(new_docnamelist)
       docpath = docs.const_docpath(new_docnamelist)
       checkoutpath=docs.const_checkoutpath(new_docnamelist)
-      message = " Created "+new_docname
+      message = " Created "+docname
 
       # Create document url in repository
       client.mkdir(docurl, "create directory for : "+docname,1)
 
-      # Create document from template
+      # Copy issue to new issue
       self.server_side_copy(docs.const_docfileurl(docnamelist), \
-                            docurl, message)
+                            docfileurl, message)
       client.checkout(docurl, checkoutpath)
       
       # Set document title and commit document
-      #client.propset(conf.proplist[0], doctitle, docpath)
       client.propset(conf.proplist[1], conf.statuslist[0], docpath)
-      client.propset(conf.proplist[2], conf.svnkeywords, docpath) 
       client.checkin(docpath, conf.newdoc+ \
                      "Commit document properties for: "+docname)
       return message   
@@ -178,8 +177,9 @@ class document:
 
    def setissueno(self, docnamelist, issue_no):
       """ Set document issue number """ 
-      docnamelist[3] = issue_no
-      return docnamelist
+      returnlist = docnamelist[:3]
+      returnlist.extend([issue_no, docnamelist[4]])
+      return returnlist
 
    def gettitle(self, docnamelist):
       """ Get document title """ 
