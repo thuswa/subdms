@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Sat Mar 28 23:31:42 2009 on violator
-# update count: 704
+# Last modified Sun Mar 29 00:01:11 2009 on violator
+# update count: 713
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -122,10 +122,16 @@ class document:
       docname = docs.const_docname(docnamelist)
       message = "Release "+docname
 
+      if not self.ischeckedout(docnamelist):
+         self.checkout(docnamelist)
+
       # Set status of document to released
       client.propset(conf.proplist[1], conf.statuslist[4], \
                      docs.const_docpath(docnamelist))
       self.commit(docnamelist, conf.release+message)
+
+      # Remove file from workspace
+      shutil.rmtree(docs.const_checkoutpath(docnamelist))
       
       # Set previous issue to obsolete
       if current_issue > 1:
@@ -133,11 +139,14 @@ class document:
          old_docnamelist = self.setissueno(docnamelist, old_issue)
          old_docname = docs.const_docname(old_docnamelist)
          old_docpath = docs.const_docpath(old_docnamelist)
-         client.checkout(old_docpath, \
+         old_docurl = docs.const_docurl(old_docnamelist)
+         client.checkout(old_docurl, \
                          docs.const_checkoutpath(old_docnamelist))
          client.propset(conf.proplist[1], conf.statuslist[5], old_docpath)
-         self.commit(docnamelist, conf.obsolete+"Set status to obsolete on "\
-                     +old_docname)
+         self.commit(old_docnamelist, \
+                      conf.obsolete+"Set status to obsolete on "+old_docname)
+         # Remove file from workspace
+         shutil.rmtree(docs.const_checkoutpath(old_docnamelist))
       return message
 
    def editdocument(self, docnamelist):
