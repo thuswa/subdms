@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Sun Mar 29 19:38:29 2009 on violator
-# update count: 230
+# Last modified Sun Mar 29 19:43:16 2009 on violator
+# update count: 235
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -144,3 +144,9 @@ class sqlitedb:
                     "where project=? and doctype=? and docno=? and issue=?", \
                             (project, doctype, docno, issue, ))
         return self.cursor.fetchone()[0]
+
+    def gettemplates(self, filetype):
+        """ Get templates of one file type from database. """
+        self.cursor.execute("select tmplname from tmpllist " \
+                            "where filetype=?", (filetype, ))
+        return self.cursor.fetchall()
