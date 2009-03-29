@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Sat Mar 28 23:36:11 2009 on violator
-# update count: 177
+# Last modified Sun Mar 29 21:14:25 2009 on violator
+# update count: 186
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -73,7 +73,10 @@ class repository:
                             texfiledir)
         
         # Commit templates
-        self.client.checkin(tmpldir, "installing templates")
+        self.client.checkin(txtfiledir, self.conf.tmpl+\
+                            "installing default txt template")
+        self.client.checkin(texfiledir, self.conf.tmpl+\
+                            "installing default tex template")
         print "Install template: "+self.conf.tmpltxt+" -> "+self.conf.tmplurl 
         print "Install template: "+self.conf.tmpltex+" -> "+self.conf.tmplurl 
 
