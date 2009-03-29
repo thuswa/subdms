@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Sun Mar 29 12:50:24 2009 on violator
-# update count: 166
+# Last modified Sun Mar 29 18:56:52 2009 on violator
+# update count: 168
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -50,6 +50,7 @@ class config:
         self.svnkeywords=string.join(["LastChangedDate", \
                                       "LastChangedRevision", "Id", \
                                       "Author"])
+        self.tmpl = 'template'.encode("hex")
         self.statchg = 'statuschange'.encode("hex")
         self.newdoc = 'newdocument'.encode("hex")
         self.newproj = 'newproject'.encode("hex")
