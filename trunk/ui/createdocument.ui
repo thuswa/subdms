@@ -21,7 +21,7 @@
   <widget class="QDialogButtonBox" name="New_Document_Confirm" >
    <property name="geometry" >
     <rect>
-     <x>60</x>
+     <x>80</x>
      <y>290</y>
      <width>211</width>
      <height>41</height>
