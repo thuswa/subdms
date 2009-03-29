@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Sun Mar 29 20:20:10 2009 on violator
-# update count: 239
+# Last modified Sun Mar 29 21:40:29 2009 on violator
+# update count: 244
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -48,8 +48,8 @@ class sqlitedb:
         self.cursor.execute("create table projlist(projname TEXT PRIMARY KEY," \
                             "doctypes)")
 
-        self.cursor.execute("create table tmpllist(tmplname TEXT PRIMARY KEY," \
-                            "filetype, logtext TEXT)")
+        self.cursor.execute("create table tmpllist(rvn INTEGER PRIMARY KEY,"\
+                            "tmplname, filetype, logtext TEXT)")
 
         print "Create database: "+self.conf.dbpath
 
@@ -74,12 +74,12 @@ class sqlitedb:
         self.cursor.execute(db_str)
         self.con.commit()
 
-    def writetmpllist(self, tmplname, filetype, logtext):
+    def writetmpllist(self, rvn, tmplname, filetype, logtext):
         """ Write to template table in database. """
         # Construct sql command string
-        db_str="insert into tmpllist(tmplname, filetype, logtext) " \
-                "values(\"%s\", \"%s\", \"%s\")" \
-                % (tmplname, filetype, logtext)
+        db_str="insert into tmpllist(rvn, tmplname, filetype, logtext) " \
+                "values(\"%s\", \"%s\", \"%s\", \"%s\")" \
+                % (rvn, tmplname, filetype, logtext)
         # Excecute sql command
         self.cursor.execute(db_str)
         self.con.commit()

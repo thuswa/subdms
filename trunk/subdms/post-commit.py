@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Sat Mar 28 21:35:32 2009 on violator
-# update count: 134
+# Last modified Sun Mar 29 21:46:00 2009 on violator
+# update count: 142
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -43,6 +43,7 @@ def main():
   (opts,(repos, rvn)) = parser.parse_args()
 
   # Search patterns for action selection
+  tmplptrn = re.compile(conf.tmpl)
   newdocptrn = re.compile(conf.newdoc)
   newprojptrn = re.compile(conf.newproj)
   statchgptrn = re.compile(conf.statchg)
@@ -75,8 +76,13 @@ def main():
     # Get author, date and other properties
     author = cmd.command_output(look_cmd % "author").rstrip("\n")
     date = cmd.command_output(look_cmd % "date").rstrip("\n")
-    title = cmd.command_output(look_cmd2 % ("title", docurl))
-    status = cmd.command_output(look_cmd2 % ("status", docurl))
+
+    if tmplptrn.match(log_message):
+      tmplname, filetype = docname.split(".")
+      db.writetmpllist(rvn, tmplname, filetype, tmplptrn.sub("",log_message))
+    else:
+      title = cmd.command_output(look_cmd2 % ("title", docurl))
+      status = cmd.command_output(look_cmd2 % ("status", docurl))
 
     if newdocptrn.match(log_message):
       # Create write string
@@ -89,7 +95,8 @@ def main():
 
     if relptrn.match(log_message) or obsptrn.match(log_message):
       db.statuschg(docnamelist, status)
-    
+
+        
 if __name__ == "__main__":
   import sys
   sys.exit(main())
