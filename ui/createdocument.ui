@@ -8,12 +8,12 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>240</width>
-    <height>216</height>
+    <width>294</width>
+    <height>329</height>
    </rect>
   </property>
   <property name="windowTitle" >
-   <string>Dialog</string>
+   <string>Create Document</string>
   </property>
   <property name="modal" >
    <bool>true</bool>
@@ -21,8 +21,8 @@
   <widget class="QDialogButtonBox" name="New_Document_Confirm" >
    <property name="geometry" >
     <rect>
-     <x>20</x>
-     <y>170</y>
+     <x>60</x>
+     <y>290</y>
      <width>211</width>
      <height>41</height>
     </rect>
@@ -34,25 +34,12 @@
     <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
    </property>
   </widget>
-  <widget class="QLabel" name="label" >
-   <property name="geometry" >
-    <rect>
-     <x>10</x>
-     <y>10</y>
-     <width>141</width>
-     <height>16</height>
-    </rect>
-   </property>
-   <property name="text" >
-    <string>Create Document:</string>
-   </property>
-  </widget>
   <widget class="QComboBox" name="Select_Project_Box" >
    <property name="geometry" >
     <rect>
-     <x>10</x>
-     <y>40</y>
-     <width>221</width>
+     <x>100</x>
+     <y>10</y>
+     <width>191</width>
      <height>31</height>
     </rect>
    </property>
@@ -60,9 +47,9 @@
   <widget class="QComboBox" name="Select_Type_Box" >
    <property name="geometry" >
     <rect>
-     <x>10</x>
-     <y>80</y>
-     <width>221</width>
+     <x>100</x>
+     <y>50</y>
+     <width>191</width>
      <height>31</height>
     </rect>
    </property>
@@ -71,8 +58,8 @@
    <property name="geometry" >
     <rect>
      <x>10</x>
-     <y>140</y>
-     <width>221</width>
+     <y>120</y>
+     <width>281</width>
      <height>31</height>
     </rect>
    </property>
@@ -81,13 +68,185 @@
    <property name="geometry" >
     <rect>
      <x>10</x>
-     <y>120</y>
+     <y>100</y>
      <width>111</width>
      <height>16</height>
     </rect>
    </property>
    <property name="text" >
     <string>Document title:</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_3" >
+   <property name="geometry" >
+    <rect>
+     <x>10</x>
+     <y>20</y>
+     <width>64</width>
+     <height>19</height>
+    </rect>
+   </property>
+   <property name="text" >
+    <string>Project:</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_4" >
+   <property name="geometry" >
+    <rect>
+     <x>10</x>
+     <y>60</y>
+     <width>64</width>
+     <height>19</height>
+    </rect>
+   </property>
+   <property name="text" >
+    <string>Doctype:</string>
+   </property>
+  </widget>
+  <widget class="QTabWidget" name="Create_From_Tab" >
+   <property name="geometry" >
+    <rect>
+     <x>0</x>
+     <y>180</y>
+     <width>291</width>
+     <height>111</height>
+    </rect>
+   </property>
+   <property name="currentIndex" >
+    <number>0</number>
+   </property>
+   <widget class="QWidget" name="Template" >
+    <attribute name="title" >
+     <string>Template</string>
+    </attribute>
+    <widget class="QLabel" name="label_6" >
+     <property name="geometry" >
+      <rect>
+       <x>10</x>
+       <y>10</y>
+       <width>64</width>
+       <height>19</height>
+      </rect>
+     </property>
+     <property name="text" >
+      <string>File type:</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_7" >
+     <property name="geometry" >
+      <rect>
+       <x>90</x>
+       <y>10</y>
+       <width>121</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text" >
+      <string>Template Name:</string>
+     </property>
+    </widget>
+    <widget class="QComboBox" name="File_Type" >
+     <property name="geometry" >
+      <rect>
+       <x>10</x>
+       <y>30</y>
+       <width>71</width>
+       <height>31</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QComboBox" name="Template_Name" >
+     <property name="geometry" >
+      <rect>
+       <x>90</x>
+       <y>30</y>
+       <width>181</width>
+       <height>31</height>
+      </rect>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QWidget" name="File" >
+    <attribute name="title" >
+     <string>File</string>
+    </attribute>
+    <widget class="QLabel" name="label_8" >
+     <property name="geometry" >
+      <rect>
+       <x>10</x>
+       <y>30</y>
+       <width>81</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="text" >
+      <string>Select File:</string>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QWidget" name="Document" >
+    <attribute name="title" >
+     <string>Document</string>
+    </attribute>
+    <widget class="QLabel" name="label" >
+     <property name="geometry" >
+      <rect>
+       <x>10</x>
+       <y>10</y>
+       <width>101</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="text" >
+      <string>Document Id:</string>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="Document_Id" >
+     <property name="geometry" >
+      <rect>
+       <x>10</x>
+       <y>30</y>
+       <width>171</width>
+       <height>31</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_5" >
+     <property name="geometry" >
+      <rect>
+       <x>190</x>
+       <y>10</y>
+       <width>51</width>
+       <height>19</height>
+      </rect>
+     </property>
+     <property name="text" >
+      <string>Issue:</string>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="lineEdit" >
+     <property name="geometry" >
+      <rect>
+       <x>190</x>
+       <y>30</y>
+       <width>71</width>
+       <height>31</height>
+      </rect>
+     </property>
+    </widget>
+   </widget>
+  </widget>
+  <widget class="QLabel" name="label_9" >
+   <property name="geometry" >
+    <rect>
+     <x>10</x>
+     <y>160</y>
+     <width>101</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="text" >
+    <string>Create From:</string>
    </property>
   </widget>
  </widget>
