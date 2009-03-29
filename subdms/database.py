@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Sun Mar 29 19:26:06 2009 on violator
-# update count: 221
+# Last modified Sun Mar 29 19:38:29 2009 on violator
+# update count: 230
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -49,7 +49,7 @@ class sqlitedb:
                             "doctypes)")
 
         self.cursor.execute("create table tmpllist(tmplname TEXT PRIMARY KEY," \
-                            "Filetype)")
+                            "filetype, logtext TEXT)")
 
         print "Create database: "+self.conf.dbpath
 
@@ -70,6 +70,16 @@ class sqlitedb:
         db_str="insert into projlist(projname, doctypes) " \
                 "values(\"%s\", \"%s\")" \
                 % (projname, string.join(doctypes,","))
+        # Excecute sql command
+        self.cursor.execute(db_str)
+        self.con.commit()
+
+    def writetmpllist(self, tmplname, filetype, logtext):
+        """ Write to template table in database. """
+        # Construct sql command string
+        db_str="insert into tmpllist(tmplname, filetype, logtext) " \
+                "values(\"%s\", \"%s\", \"%s\")" \
+                % (tmplname, filetype, logtext))
         # Excecute sql command
         self.cursor.execute(db_str)
         self.con.commit()
