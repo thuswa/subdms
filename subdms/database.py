@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Sun Mar 29 12:53:59 2009 on violator
-# update count: 214
+# Last modified Sun Mar 29 19:26:06 2009 on violator
+# update count: 221
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -126,3 +126,11 @@ class sqlitedb:
             docno = '0'
         return int(docno)
 
+    def getdocext(self, documentid, issue):
+        """ Get document file type. """
+        # Query database
+        project, doctype, docno = documentid.split("-")
+        self.cursor.execute("select docext from revlist " \
+                    "where project=? and doctype=? and docno=? and issue=?", \
+                            (project, doctype, docno, issue, ))
+        return self.cursor.fetchone()[0]
