@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Sun Mar 29 19:43:16 2009 on violator
-# update count: 235
+# Last modified Sun Mar 29 20:20:10 2009 on violator
+# update count: 239
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -79,7 +79,7 @@ class sqlitedb:
         # Construct sql command string
         db_str="insert into tmpllist(tmplname, filetype, logtext) " \
                 "values(\"%s\", \"%s\", \"%s\")" \
-                % (tmplname, filetype, logtext))
+                % (tmplname, filetype, logtext)
         # Excecute sql command
         self.cursor.execute(db_str)
         self.con.commit()
@@ -100,6 +100,11 @@ class sqlitedb:
     def getallprojs(self):
         """ Get complete projects table from database. """
         self.cursor.execute("select * from projlist")
+        return self.cursor.fetchall()
+
+    def getalltmpls(self):
+        """ Get complete templates table from database. """
+        self.cursor.execute("select * from tmpllist")
         return self.cursor.fetchall()
 
     def getprojs(self):
