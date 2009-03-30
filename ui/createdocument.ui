@@ -145,7 +145,7 @@
       <string>Template Name:</string>
      </property>
     </widget>
-    <widget class="QComboBox" name="File_Type" >
+    <widget class="QComboBox" name="File_Type_Box" >
      <property name="geometry" >
       <rect>
        <x>10</x>
@@ -155,7 +155,7 @@
       </rect>
      </property>
     </widget>
-    <widget class="QComboBox" name="Template_Name" >
+    <widget class="QComboBox" name="Template_Name_Box" >
      <property name="geometry" >
       <rect>
        <x>90</x>
@@ -201,7 +201,7 @@
       <string>Document Id:</string>
      </property>
     </widget>
-    <widget class="QLineEdit" name="Document_Id" >
+    <widget class="QLineEdit" name="document_Id" >
      <property name="geometry" >
       <rect>
        <x>10</x>
@@ -224,7 +224,7 @@
       <string>Issue:</string>
      </property>
     </widget>
-    <widget class="QLineEdit" name="lineEdit" >
+    <widget class="QLineEdit" name="issue" >
      <property name="geometry" >
       <rect>
        <x>190</x>
