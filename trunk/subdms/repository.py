@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Sun Mar 29 21:14:25 2009 on violator
-# update count: 186
+# Last modified Tue Mar 31 11:53:50 2009 on violator
+# update count: 187
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -50,7 +50,6 @@ class repository:
         os.chmod(revhookpath,0755)
         print "Install hook: "+revhook+" ->  "+self.conf.hookspath
 
-        
     def installtemplates(self):
         """ Install templates in repository """
         tmpldir=os.path.join(self.conf.workpath,'templates')
