@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Wed Apr  1 00:28:17 2009 on violator
-# update count: 322
+# Last modified Wed Apr  1 00:33:59 2009 on violator
+# update count: 327
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -23,7 +23,7 @@
 import os
 
 import database
-import lowlevel
+import frontend
 
 """
 Command line interface class. 
@@ -32,8 +32,7 @@ Command line interface class.
 class cli:
     def __init__(self):
         """ Initialize database """
-        self.conf = lowlevel.config()
-        self.db = database.sqlite()
+        self.db = database.sqlitedb()
         self.doc = frontend.document()
         
     def parseargs(self, args):
@@ -61,12 +60,12 @@ class cli:
 
             # Get project and check if it exists
             project = args[3]
-            if not db.projexists(project):
+            if not self.db.projexists(project):
                 raise DMSError, "Project "+project+" does not exist."
 
             # Get doctype and check if it exists
             doctype = args[4]
-            if not doctype in db.getdoctypes(self, project)
+            if not doctype in self.db.getdoctypes(project):
                 raise DMSError, "Doctype "+doctype+" does not exist for "\
                       "project "+project
 
