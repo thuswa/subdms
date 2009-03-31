@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Sat Mar 28 20:23:16 2009 on violator
-# update count: 486
+# Last modified Tue Mar 31 22:26:55 2009 on violator
+# update count: 656
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -34,6 +34,8 @@ from mainwindow import Ui_MainWindow
 
 docs = lowlevel.docname()
 db = database.sqlitedb()
+
+################################################################################
 
 class ClientUi(QtGui.QMainWindow):
     def __init__(self, parent=None):
@@ -81,10 +83,18 @@ class ClientUi(QtGui.QMainWindow):
         self.aboutdialog.show()
         
     def showdocdialog(self):
-        """ Show create document dialog """
-        self.docdialog.setprojlist()
-        self.docdialog.setdoctypelist(self.docdialog.selectedproject())
-        self.docdialog.show()
+        """ Show create document """        
+        # Check if at least one project exist
+        if not db.getallprojs():
+            QtGui.QMessageBox.critical(None, "Error","No projects exist. "\
+                                       "Use the \"New Project\" dialog to "\
+                                       "create one.")
+        else:
+            self.docdialog.setprojlist()
+            self.docdialog.setfiletypelist()
+            self.docdialog.setdoctypelist(self.docdialog.selectedproject())
+            self.docdialog.settmplnamelist(self.docdialog.selectedfiletype())
+            self.docdialog.show()
     
     def setdocumentlist(self):
         """ List the existing documents """
@@ -123,12 +133,12 @@ class ClientUi(QtGui.QMainWindow):
         docnamelist = self.getselecteddoc()
         if docnamelist:
             message = self.doc.checkin(docnamelist)
-            self.ui.statusbar.showMessage(message, 1000)
+            self.ui.statusbar.showMessage(message, 1500)
 
     def editdoc(self):
         """ Edit document action. """
         docnamelist = self.getselecteddoc()
-        self.ui.statusbar.showMessage("Launching editor", 1000)
+        self.ui.statusbar.showMessage("Launching editor", 1500)
         self.doc.editdocument(docnamelist)
 
     def commitdoc(self):     
@@ -144,21 +154,25 @@ class ClientUi(QtGui.QMainWindow):
         docnamelist = self.getselecteddoc()
         if docnamelist:
             message = self.doc.release(docnamelist)
-            self.ui.statusbar.showMessage(message, 1000)
+            self.ui.statusbar.showMessage(message, 1500)
 
     def newissue(self):     
         """ Create a new issue """
         docnamelist = self.getselecteddoc()
         if docnamelist:
             message = self.doc.newissue(docnamelist)
-            self.ui.statusbar.showMessage(message, 1000)
+            self.ui.statusbar.showMessage(message, 1500)
 
+################################################################################
+            
 class aboutDialog(QtGui.QDialog):
     def __init__(self, parent=None):
         QtGui.QDialog.__init__(self, parent)
         self.ui = Ui_AboutDialog()
         self.ui.setupUi(self)
-        
+
+################################################################################
+
 class projectDialog(QtGui.QDialog):
     def __init__(self, parent=None):
         self.proj = frontend.project()
@@ -177,25 +191,45 @@ class projectDialog(QtGui.QDialog):
             self.proj.createproject(proj)
             self.close()
 
+################################################################################
+            
 class documentDialog(QtGui.QDialog):
     def __init__(self, parent=None):
         self.doc = frontend.document()
+        self.conf = lowlevel.config()
+        self.addfile = addFileDialog()
         QtGui.QDialog.__init__(self, parent)
         self.ui = Ui_New_Document_Dialog()
         self.ui.setupUi(self)
+
+        # Connect comboboxes and buttons
         self.connect(self.ui.Select_Project_Box, \
                      QtCore.SIGNAL("activated(project)"),
                      self.setdoctypelist)
+        self.connect(self.ui.File_Type_Box, \
+                     QtCore.SIGNAL("activated(filetype)"),
+                     self.settmplnamelist)
+
+        self.connect(self.ui.Open_File_Dialog, \
+                     QtCore.SIGNAL("pressed()"), self.addfileaction)
 
         self.connect(self.ui.New_Document_Confirm, \
                      QtCore.SIGNAL("accepted()"), self.okaction)
 
+    # Selected combobox item functions   
     def selectedproject(self):
         return unicode(self.ui.Select_Project_Box.currentText())
 
     def selecteddoctype(self):
         return unicode(self.ui.Select_Type_Box.currentText())
-    
+
+    def selectedfiletype(self):
+        return unicode(self.ui.File_Type_Box.currentText())
+
+    def selectedtemplate(self):
+        return unicode(self.ui.Template_Name_Box.currentText())
+
+    # Set combobox functions
     def setprojlist(self):
         self.ui.Select_Project_Box.clear()
         for proj in db.getprojs():
@@ -205,15 +239,77 @@ class documentDialog(QtGui.QDialog):
         self.ui.Select_Type_Box.clear()
         for doctype in db.getdoctypes(project):
             self.ui.Select_Type_Box.addItem(doctype)
+
+    def setfiletypelist(self):
+        self.ui.File_Type_Box.clear()
+        for filetype in self.conf.filetypes:
+            self.ui.File_Type_Box.addItem(filetype)
+
+    def settmplnamelist(self, filetype):
+        self.ui.Template_Name_Box.clear()
+        for tmpl in db.gettemplates(filetype):
+            self.ui.Template_Name_Box.addItem(tmpl[0])
+
+    # Action functions        
+    def addfileaction(self):
+        filename = self.addfile.getfilename()
+        self.ui.Selected_File_Name.setText(filename)
         
     def okaction(self):
         doctitle = unicode(self.ui.document_title.text())
         project = self.selectedproject()
         doctype = self.selecteddoctype()
         issue = "1"
-        docext = "txt"
+        selectedtab = self.ui.Create_From_Tab.currentIndex()
+
+        if selectedtab == 0:
+            # Create from template
+            filetype = self.selectedfiletype()
+            template = self.selectedtemplate()
+            tmplnamelist = [template, filetype]
+            createfromurl = docs.const_tmplurl(tmplnamelist)
+            create = True
+        if selectedtab == 1:
+            # Create from File
+            addfilepath = unicode(self.ui.Selected_File_Name.text())
+            filetype = addfilepath.rsplit('.')[-1]
+            create = False
+        if selectedtab == 2:
+            # Create from existing Document
+            basedocid = unicode(self.ui.Document_Id.text())
+            basedocissue = unicode(self.ui.Issue.text())
+
+            # Display error if file does not exist
+            if not db.docexists(basedocid, basedocissue):
+                QtGui.QMessageBox.critical(None, "Error","Document "+basedocid+\
+                                           ", issue "+issue+" does not exists")
+                return 
+            else:
+                # Construct url to based on document     
+                filetype = db.getdocext(basedocid, issue)
+                basedoclist = basedocid.split('-')
+                basedoclist.extend([basedocissue, filetype])
+                createfromurl = docs.const_docfileurl(basedoclist) 
+                create = True
+                
         docnamelist = self.doc.createdocnamelist(project, doctype, issue, \
-                                                 docext)
-        self.doc.createdocument(docnamelist, doctitle)
+                                                 filetype)
+        if create:
+            self.doc.createdocument(createfromurl, docnamelist, doctitle)
+        else:
+            self.doc.adddocument(addfilepath, docnamelist, doctitle)
         self.close()
 
+################################################################################
+        
+class addFileDialog(QtGui.QFileDialog):
+    def __init__(self, parent=None):
+        QtGui.QFileDialog.__init__(self, parent)
+
+    def getfilename(self):    
+        return self.getOpenFileName(self, 'Select file to add',
+                                    '/home', "Text (*.txt *.tex)")
+        
+
+
+        

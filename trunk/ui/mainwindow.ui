@@ -46,8 +46,17 @@
     <property name="editTriggers" >
      <set>QAbstractItemView::AnyKeyPressed|QAbstractItemView::EditKeyPressed</set>
     </property>
+    <property name="dragEnabled" >
+     <bool>true</bool>
+    </property>
+    <property name="dragDropMode" >
+     <enum>QAbstractItemView::DragOnly</enum>
+    </property>
     <property name="alternatingRowColors" >
      <bool>true</bool>
+    </property>
+    <property name="selectionMode" >
+     <enum>QAbstractItemView::ContiguousSelection</enum>
     </property>
     <property name="rowCount" >
      <number>40</number>
@@ -97,7 +106,7 @@
     <row/>
     <column>
      <property name="text" >
-      <string>     </string>
+      <string/>
      </property>
     </column>
     <column>
