@@ -63,6 +63,9 @@
      <height>31</height>
     </rect>
    </property>
+   <property name="dragEnabled" >
+    <bool>true</bool>
+   </property>
   </widget>
   <widget class="QLabel" name="label_2" >
    <property name="geometry" >
@@ -113,7 +116,7 @@
     </rect>
    </property>
    <property name="currentIndex" >
-    <number>0</number>
+    <number>2</number>
    </property>
    <widget class="QWidget" name="Template" >
     <attribute name="title" >
@@ -205,6 +208,9 @@
        <height>31</height>
       </rect>
      </property>
+     <property name="dragEnabled" >
+      <bool>true</bool>
+     </property>
     </widget>
    </widget>
    <widget class="QWidget" name="Document" >
@@ -224,7 +230,7 @@
       <string>Document Id:</string>
      </property>
     </widget>
-    <widget class="QLineEdit" name="document_Id" >
+    <widget class="QLineEdit" name="Document_Id" >
      <property name="geometry" >
       <rect>
        <x>10</x>
@@ -232,6 +238,9 @@
        <width>171</width>
        <height>31</height>
       </rect>
+     </property>
+     <property name="dragEnabled" >
+      <bool>true</bool>
      </property>
     </widget>
     <widget class="QLabel" name="label_5" >
@@ -247,7 +256,7 @@
       <string>Issue:</string>
      </property>
     </widget>
-    <widget class="QLineEdit" name="issue" >
+    <widget class="QLineEdit" name="Issue" >
      <property name="geometry" >
       <rect>
        <x>190</x>
@@ -255,6 +264,9 @@
        <width>71</width>
        <height>31</height>
       </rect>
+     </property>
+     <property name="dragEnabled" >
+      <bool>true</bool>
      </property>
     </widget>
    </widget>

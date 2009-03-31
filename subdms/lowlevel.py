@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Sun Mar 29 18:56:52 2009 on violator
-# update count: 168
+# Last modified Tue Mar 31 13:30:36 2009 on violator
+# update count: 174
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -107,6 +107,11 @@ class docname:
     def deconst_docfname(self, docname):
         """ De-construct document file name. """
         return list(docname.replace(".","-").split("-"))  
+
+    def const_tmplurl(self, tmplnamelist):
+        """ Construct the template file url. """
+        return string.join([self.conf.tmplurl, \
+                            string.join(tmplnamelist,'.')], '/')
 
 ################################################################################
 

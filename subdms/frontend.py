@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Sun Mar 29 00:01:11 2009 on violator
-# update count: 713
+# Last modified Tue Mar 31 22:59:07 2009 on violator
+# update count: 733
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -43,14 +43,15 @@ class project:
                       conf.newproj+"Create directory for project: "+projname,1)
 
 class document:
-   def createdocument(self, docnamelist, doctitle):
+   def createdocument(self, createfromurl, docnamelist, doctitle):
       """
       Create a document
-      
+
+      createfromurl: link in repository to the template or document that
+                     this new document should be based on.
       docnamelist: list containing the building blocks of the document name
       doctitle: document title string.
       """
-      txtfileurl=os.path.join(conf.tmplurl, conf.tmpltxt)
       docname=docs.const_docfname(docnamelist)
       docurl=docs.const_docurl(docnamelist)
       docfileurl=docs.const_docfileurl(docnamelist)
@@ -60,8 +61,9 @@ class document:
       # Create document url in repository
       client.mkdir(docurl, "create directory for : "+docname,1)
       
-      # Create document from template
-      self.server_side_copy(txtfileurl, docfileurl, "Create document: "+docname)
+      # Create document from template or existing document
+      self.server_side_copy(createfromurl, docfileurl, "Create document: "\
+                            +docname)
       client.checkout(docurl, checkoutpath)
       
       # Set document title and commit document
@@ -71,31 +73,34 @@ class document:
       client.checkin(docpath, conf.newdoc+ \
                      "Commit document properties for: "+docname)
    
-   def adddocument(self, docnamelist, doctitle, addfile):
+   def adddocument(self, addfilepath, docnamelist, doctitle):
       """    
-      Add a document
-      
+      Add an existing document 
+
+      addfilepath: path to the file to be added.
       docnamelist: list containing the building blocks of the document name
       doctitle: document title string.
-      addfile: path to the file to be added.
       """
       docname=docs.const_docfname(docnamelist)
       docurl=docs.const_docurl(docnamelist)
+      docfileurl=docs.const_docfileurl(docnamelist)
       checkoutpath=docs.const_checkoutpath(docnamelist)
       docpath=docs.const_docpath(docnamelist)
 
       # Create document url in repository and check it out to workspace
       client.mkdir(docurl, "create directory for : "+docname,1)
       client.checkout(docurl, checkoutpath)
-
+      
       # Copy file to workspace
-      shutil.copyfile(addfile, docpath)
+      shutil.copyfile(addfilepath, docpath)
       client.add(docpath)
-
+      print docpath
       # Set document title and commit document
-      client.propset('title', doctitle, docpath)
-      client.propset('status', 'preliminary', docpath)
-      client.checkin(docpath, "Add document: "+docname)
+      client.propset(conf.proplist[0], doctitle, docpath)
+      client.propset(conf.proplist[1], conf.statuslist[0], docpath)
+      client.propset(conf.proplist[2], conf.svnkeywords, docpath) 
+      client.checkin(docpath, conf.newdoc+ \
+                     "Commit document properties for: "+docname)
 
    def commit(self, docnamelist, message):
       """commit changes on file"""
