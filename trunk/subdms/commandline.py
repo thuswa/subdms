@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Wed Apr  1 00:33:59 2009 on violator
-# update count: 327
+# Last modified Wed Apr  1 12:26:12 2009 on violator
+# update count: 44
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -21,17 +21,18 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import os
+import sys
 
 import database
 import frontend
 
 """
-Command line interface class. 
+Command-line interface class. 
 """
 
 class cli:
     def __init__(self):
-        """ Initialize database """
+        """ Initialize depndecy classes """
         self.db = database.sqlitedb()
         self.doc = frontend.document()
         
@@ -41,42 +42,47 @@ class cli:
 
         # Display help 
         if args[1] == "help" or args[1] == "--help" or args[1] == "-h":
-            self.dislayhelp()
+            self.displayhelp()
             return
 
         # Check for valid number of arguments
         if len(args) > 6:
-            raise Error, "To manny arguments. "+shorthelp  
+            sys.exit("To many arguments. "+shorthelp)  
         
         if len(args) < 5:
-            raise Error, "To few arguments. "+shorthelp  
+            sys.exit("To few arguments. "+shorthelp)  
 
         # Check if "add" is given as argument 
         if args[1] == "add":
             # Get filename and check if file exists
             addfilepath = os.path.abspath(args[2])
             if not os.path.exists(addfilepath):
-                raise FileError, "Filename "+filnamepath+" does not exist."
-
+                sys.exit("File name "+addfilepath+" does not exist.")
+            
+            # Get file extension and check if it is supported 
+            filetype = addfilepath.rsplit('.')[-1]
+            if not self.db.gettemplates(filetype):
+                sys.exit("File extension "+filetype+" is not supported.")
+            
             # Get project and check if it exists
             project = args[3]
             if not self.db.projexists(project):
-                raise DMSError, "Project "+project+" does not exist."
+                sys.exit("Project "+project+" does not exist.")
 
             # Get doctype and check if it exists
             doctype = args[4]
             if not doctype in self.db.getdoctypes(project):
-                raise DMSError, "Doctype "+doctype+" does not exist for "\
-                      "project "+project
+                sys.exit("Doctype "+doctype+" does not exist for "\
+                         "project "+project)
 
             # Check if title is given as argument 
             if len(args) == 6:
                 title = args[5]
             else:
-                title = os.path.split(filename)[-1].rsplit(".")[0]
+                title = os.path.split(addfilepath)[-1].rsplit(".")[0]
 
             # Finally call adddocument     
-            self.adddocument(filename, project, doctype, title)
+            self.adddocument(addfilepath, filetype, project, doctype, title)
         else:
             print shorthelp
             
@@ -84,16 +90,25 @@ class cli:
         """ Display help text. """
         print "Usage: subdms add filename project doctype [title]"
         print
-        print "This command line inteface makes it possible to add documents"
-        print "in the DMS"
-        print "If no title is given the filename without extension is"
-        print "is set as title"
+        print "Example:"
+        print " > subdms add filename.txt myproject note \"Techinical note\""
+        print "or:"
+        print " > subdms add \"this project note.txt\" myproject note"
+        print
+        print "This command line interface makes it possible to add documents "\
+              "in the DMS."
+        print "It is a compliment to add files via the graphical "\
+              "user interface."
+        print "And opens for the possibility to write scripts to automate"\
+              "the adding of files"              
+        print "If you enter a title, make sure the title is a string"
+        print "If no title is given the filename without extension is "\
+              "set as title."
         
-    def adddocument(self, addfilepath, project, doctype, doctitle):
-        """ Add document fom command line. """
+    def adddocument(self, addfilepath, filetype, project, doctype, doctitle):
+        """ Add document from command line. """
 
         issue = '1'
-        filetype = addfilepath.rsplit('.')[-1]
         docnamelist = self.doc.createdocnamelist(project, doctype, issue, \
                                                  filetype)
         self.doc.adddocument(addfilepath, docnamelist, doctitle)
