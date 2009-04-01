@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Tue Mar 31 22:59:07 2009 on violator
-# update count: 733
+# Last modified Wed Apr  1 22:47:58 2009 on violator
+# update count: 748
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -117,8 +117,17 @@ class document:
       
    def checkout(self, docnamelist):
       """check-out file to workspace"""
-      client.checkout(docs.const_docurl(docnamelist), \
-                      docs.const_checkoutpath(docnamelist))
+
+      # Check status of doucument 
+      if self.getstatus(docnamelist) == conf.statuslist[5] or \
+         self.getstatus(docnamelist) == conf.statuslist[4]:
+         client.export(docs.const_docurl(docnamelist), \
+                       docs.const_checkoutpath(docnamelist))
+         # Set file to read-only
+         os.chmod(docs.const_docpath(docnamelist), 0444)
+      else:                  
+         client.checkout(docs.const_docurl(docnamelist), \
+                         docs.const_checkoutpath(docnamelist))
       #  client.lock( 'file.txt', 'reason for locking' )
 
    def release(self, docnamelist):
@@ -215,7 +224,8 @@ class document:
 
    def ischeckedout(self, docnamelist):
       """ Return true if docname is checked out. """
-      if os.path.exists(docs.const_docpath(docnamelist)):
+      if os.path.exists(os.path.join(docs.const_checkoutpath(docnamelist), \
+                                     '.svn')):
          return True
       else:
          return False
