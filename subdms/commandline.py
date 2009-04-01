@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Wed Apr  1 12:26:12 2009 on violator
-# update count: 44
+# Last modified Wed Apr  1 19:31:20 2009 on violator
+# update count: 46
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -57,12 +57,12 @@ class cli:
             # Get filename and check if file exists
             addfilepath = os.path.abspath(args[2])
             if not os.path.exists(addfilepath):
-                sys.exit("File name "+addfilepath+" does not exist.")
+                sys.exit("File "+addfilepath+" does not exist.")
             
             # Get file extension and check if it is supported 
             filetype = addfilepath.rsplit('.')[-1]
             if not self.db.gettemplates(filetype):
-                sys.exit("File extension "+filetype+" is not supported.")
+                sys.exit("File extension ."+filetype+" is not supported.")
             
             # Get project and check if it exists
             project = args[3]
