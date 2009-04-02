@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Wed Apr  1 19:31:20 2009 on violator
-# update count: 46
+# Last modified Thu Apr  2 20:49:57 2009 on violator
+# update count: 48
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -32,7 +32,7 @@ Command-line interface class.
 
 class cli:
     def __init__(self):
-        """ Initialize depndecy classes """
+        """ Initialize dependency classes """
         self.db = database.sqlitedb()
         self.doc = frontend.document()
         
@@ -54,7 +54,7 @@ class cli:
 
         # Check if "add" is given as argument 
         if args[1] == "add":
-            # Get filename and check if file exists
+            # Get file name and check if file exists
             addfilepath = os.path.abspath(args[2])
             if not os.path.exists(addfilepath):
                 sys.exit("File "+addfilepath+" does not exist.")
@@ -91,7 +91,7 @@ class cli:
         print "Usage: subdms add filename project doctype [title]"
         print
         print "Example:"
-        print " > subdms add filename.txt myproject note \"Techinical note\""
+        print " > subdms add filename.txt myproject note \"Technical note\""
         print "or:"
         print " > subdms add \"this project note.txt\" myproject note"
         print
@@ -102,7 +102,7 @@ class cli:
         print "And opens for the possibility to write scripts to automate"\
               "the adding of files"              
         print "If you enter a title, make sure the title is a string"
-        print "If no title is given the filename without extension is "\
+        print "If no title is given the file name without extension is "\
               "set as title."
         
     def adddocument(self, addfilepath, filetype, project, doctype, doctitle):

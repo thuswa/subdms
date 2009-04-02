@@ -1,6 +1,6 @@
 $Id$
-Last modified Wed Apr  1 21:38:08 2009 on violator
-update count: 36
+Last modified Thu Apr  2 20:47:40 2009 on violator
+update count: 39
 
 Subdms - Subversion Based Document Management System
 ####################################################
@@ -50,26 +50,34 @@ Using the graphical user interface
    This will launch the file in editor defined in /etc/subdms/sumbdms.cfg
 
 5. Commit Changes. As with other version control systems, local changes made to 
-   the document can be commited to the central repository. 
+   the document can be committed to the central repository. 
    Select the document in the list and use "Tools" -> "Commit Changes", 
    this will launch a dialog where a commit message can be entered.
 
-6. Check-in document. To remove the local copy of the docmuent, select the 
-   document in the list and use "Tools" -> "Check-in Docmument". 
+6. Check-in document. To remove the local copy of the document, select the 
+   document in the list and use "Tools" -> "Check-in Document". 
    This will commit any local changes made to the document and remove 
    the local copy form workspace.
 
-7. Release document.
-
-8. Create a new issue of the document.
+7. Release document. The "Release Document" action also resides in the "Tools"
+   Menu. Select the document you want to release in the document list. 
+   This action will check-in your document, set its to status "released", 
+   and any prior issues to status "obsolete". Both the status "released" and
+   "obsolete" means that a document issue with one of these status can only be 
+   checked out read-only, and no more changes can be made to those issues.  
+ 
+8. Create a new issue of the document. This action is found in the "Create" 
+   menu as "New issue". As with the other actions, the document in question 
+   must be selected in the document list. Note that this action only works on 
+   documents with status "released".  
 
 Document list
 -------------
-The document list displayes information of the created documents. 
+The document list displays information of the created documents. 
 The first unnamed column displays the state of the document as follows:
     O = Document is Checked-out	  
     I = Document is Checked-in
-    M = Document is localy modified
+    M = Document is locally modified
 
 
 Command-line usage
@@ -77,7 +85,7 @@ Command-line usage
 Usage: subdms add filename project doctype [title]
 
 Example:
- > subdms add filename.txt myproject note "Techinical note"
+ > subdms add filename.txt myproject note "Technical note"
 or:
  > subdms add "this project note.txt" myproject note
 

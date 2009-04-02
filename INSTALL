@@ -1,6 +1,6 @@
 $Id$
-Last modified Mon Mar 16 16:40:49 2009 on havoc
-update count: 16
+Last modified Thu Apr  2 19:58:27 2009 on violator
+update count: 18
 
 How to install 
 ==============
@@ -14,6 +14,9 @@ How to install
 This will copy the package to the appropriate directory for third-party
 modules (/usr/local/lib/python2.5/site-packages/) in their Python installation.
 
+Note: If you install from source, i.e. a checked-out snapshot from the 
+      repository you have to run the "generateui" script in the "tools" folder
+      to generate the the necessary ui files. 
 
 Requires: 
 	  python:     http://www.python.org 	  
