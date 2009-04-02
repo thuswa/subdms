@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Tue Mar 31 13:30:36 2009 on violator
-# update count: 174
+# Last modified Thu Apr  2 23:10:36 2009 on violator
+# update count: 175
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -41,7 +41,7 @@ class config:
         self.workpath = conf.get("Path", "workspace")
         self.dbpath = conf.get("Path", "database")
         self.doctypes = list(conf.get("Document", "type").split())
-        self.filetypes = ['txt','tex']
+        self.filetypes = ['pdf','tex','txt','zip']
         self.tmpltxt = conf.get("Template", "txt")
         self.tmpltex = conf.get("Template", "tex")
         self.txteditor = conf.get("Editor", "txt")
