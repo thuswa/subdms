@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Tue Mar 31 22:26:55 2009 on violator
-# update count: 656
+# Last modified Thu Apr  2 20:42:45 2009 on violator
+# update count: 665
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -157,11 +157,18 @@ class ClientUi(QtGui.QMainWindow):
             self.ui.statusbar.showMessage(message, 1500)
 
     def newissue(self):     
-        """ Create a new issue """
+        """ Create a new issue. """
         docnamelist = self.getselecteddoc()
-        if docnamelist:
-            message = self.doc.newissue(docnamelist)
-            self.ui.statusbar.showMessage(message, 1500)
+        if self.doc.getstatus(docnamelist) != "released":
+            QtGui.QMessageBox.critical(None, "Error",\
+                                       "The selected document does not have "\
+                                       "status \"released\". A new issue can "\
+                                       "not be created unless the current "\
+                                       "issue has first been released.")
+        else:
+            if docnamelist:
+                message = self.doc.newissue(docnamelist)
+                self.ui.statusbar.showMessage(message, 1500)
 
 ################################################################################
             
