@@ -38,7 +38,7 @@ CLASSIFIERS = [
 ]
 
 setup(name='subdms',
-      version='0.0.1',
+      version='0.1.0',
       description='A document management system based on subversion',
       author='Albert Thuswaldner',
       author_email='thuswa@gmail.com',
