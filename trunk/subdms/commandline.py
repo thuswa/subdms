@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Thu Apr  2 20:49:57 2009 on violator
-# update count: 48
+# Last modified Thu Apr  2 23:00:21 2009 on violator
+# update count: 53
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -24,6 +24,7 @@ import os
 import sys
 
 import database
+import lowlevel
 import frontend
 
 """
@@ -33,6 +34,7 @@ Command-line interface class.
 class cli:
     def __init__(self):
         """ Initialize dependency classes """
+        self.conf = lowlevel.config()
         self.db = database.sqlitedb()
         self.doc = frontend.document()
         
@@ -61,7 +63,7 @@ class cli:
             
             # Get file extension and check if it is supported 
             filetype = addfilepath.rsplit('.')[-1]
-            if not self.db.gettemplates(filetype):
+            if not filetype in self.conf.filetypes:
                 sys.exit("File extension ."+filetype+" is not supported.")
             
             # Get project and check if it exists
