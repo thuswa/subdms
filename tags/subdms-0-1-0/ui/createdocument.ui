@@ -1,0 +1,307 @@
+<ui version="4.0" >
+ <class>New_Document_Dialog</class>
+ <widget class="QDialog" name="New_Document_Dialog" >
+  <property name="enabled" >
+   <bool>true</bool>
+  </property>
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>294</width>
+    <height>329</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>Create Document</string>
+  </property>
+  <property name="modal" >
+   <bool>true</bool>
+  </property>
+  <widget class="QDialogButtonBox" name="New_Document_Confirm" >
+   <property name="geometry" >
+    <rect>
+     <x>80</x>
+     <y>290</y>
+     <width>211</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="orientation" >
+    <enum>Qt::Horizontal</enum>
+   </property>
+   <property name="standardButtons" >
+    <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+   </property>
+  </widget>
+  <widget class="QComboBox" name="Select_Project_Box" >
+   <property name="geometry" >
+    <rect>
+     <x>100</x>
+     <y>10</y>
+     <width>191</width>
+     <height>31</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QComboBox" name="Select_Type_Box" >
+   <property name="geometry" >
+    <rect>
+     <x>100</x>
+     <y>50</y>
+     <width>191</width>
+     <height>31</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="document_title" >
+   <property name="geometry" >
+    <rect>
+     <x>10</x>
+     <y>120</y>
+     <width>281</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="dragEnabled" >
+    <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_2" >
+   <property name="geometry" >
+    <rect>
+     <x>10</x>
+     <y>100</y>
+     <width>111</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text" >
+    <string>Document title:</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_3" >
+   <property name="geometry" >
+    <rect>
+     <x>10</x>
+     <y>20</y>
+     <width>64</width>
+     <height>19</height>
+    </rect>
+   </property>
+   <property name="text" >
+    <string>Project:</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_4" >
+   <property name="geometry" >
+    <rect>
+     <x>10</x>
+     <y>60</y>
+     <width>64</width>
+     <height>19</height>
+    </rect>
+   </property>
+   <property name="text" >
+    <string>Doctype:</string>
+   </property>
+  </widget>
+  <widget class="QTabWidget" name="Create_From_Tab" >
+   <property name="geometry" >
+    <rect>
+     <x>0</x>
+     <y>180</y>
+     <width>291</width>
+     <height>111</height>
+    </rect>
+   </property>
+   <property name="currentIndex" >
+    <number>2</number>
+   </property>
+   <widget class="QWidget" name="Template" >
+    <attribute name="title" >
+     <string>Template</string>
+    </attribute>
+    <widget class="QLabel" name="label_6" >
+     <property name="geometry" >
+      <rect>
+       <x>10</x>
+       <y>10</y>
+       <width>64</width>
+       <height>19</height>
+      </rect>
+     </property>
+     <property name="text" >
+      <string>File type:</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_7" >
+     <property name="geometry" >
+      <rect>
+       <x>90</x>
+       <y>10</y>
+       <width>121</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text" >
+      <string>Template Name:</string>
+     </property>
+    </widget>
+    <widget class="QComboBox" name="File_Type_Box" >
+     <property name="geometry" >
+      <rect>
+       <x>10</x>
+       <y>30</y>
+       <width>71</width>
+       <height>31</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QComboBox" name="Template_Name_Box" >
+     <property name="geometry" >
+      <rect>
+       <x>90</x>
+       <y>30</y>
+       <width>181</width>
+       <height>31</height>
+      </rect>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QWidget" name="File" >
+    <attribute name="title" >
+     <string>File</string>
+    </attribute>
+    <widget class="QLabel" name="label_8" >
+     <property name="geometry" >
+      <rect>
+       <x>10</x>
+       <y>10</y>
+       <width>151</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="text" >
+      <string>Select File to add:</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="Open_File_Dialog" >
+     <property name="geometry" >
+      <rect>
+       <x>250</x>
+       <y>30</y>
+       <width>31</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="text" >
+      <string>...</string>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="Selected_File_Name" >
+     <property name="geometry" >
+      <rect>
+       <x>10</x>
+       <y>30</y>
+       <width>231</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="dragEnabled" >
+      <bool>true</bool>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QWidget" name="Document" >
+    <attribute name="title" >
+     <string>Document</string>
+    </attribute>
+    <widget class="QLabel" name="label" >
+     <property name="geometry" >
+      <rect>
+       <x>10</x>
+       <y>10</y>
+       <width>101</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="text" >
+      <string>Document Id:</string>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="Document_Id" >
+     <property name="geometry" >
+      <rect>
+       <x>10</x>
+       <y>30</y>
+       <width>171</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="dragEnabled" >
+      <bool>true</bool>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_5" >
+     <property name="geometry" >
+      <rect>
+       <x>190</x>
+       <y>10</y>
+       <width>51</width>
+       <height>19</height>
+      </rect>
+     </property>
+     <property name="text" >
+      <string>Issue:</string>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="Issue" >
+     <property name="geometry" >
+      <rect>
+       <x>190</x>
+       <y>30</y>
+       <width>71</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="dragEnabled" >
+      <bool>true</bool>
+     </property>
+    </widget>
+   </widget>
+  </widget>
+  <widget class="QLabel" name="label_9" >
+   <property name="geometry" >
+    <rect>
+     <x>10</x>
+     <y>160</y>
+     <width>101</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="text" >
+    <string>Create From:</string>
+   </property>
+  </widget>
+ </widget>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>New_Document_Confirm</sender>
+   <signal>rejected()</signal>
+   <receiver>New_Document_Dialog</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>316</x>
+     <y>260</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>286</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>

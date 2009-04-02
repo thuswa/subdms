@@ -1,0 +1,98 @@
+$Id$
+Last modified Thu Apr  2 20:47:40 2009 on violator
+update count: 39
+
+Subdms - Subversion Based Document Management System
+####################################################
+
+Goals
+-----
+The goal with this project is to create a full-fledged DMS based on subversion 
+to handle the most common Office document file formats, 
+primarily Open Document Format (ODF).
+ 
+How to set-up subdms
+--------------------
+1. Install the subdms package, see INSTALL file for details.
+
+2. Have a look in the config file /etc/subdms/subdms.cfg to see where the stuff
+   gets installed, and change that if you like. Also you might want to change 
+   the default editor (emacs). 
+
+3. Initiate the server-side of subdms by running the following command in the 
+   terminal:
+ 
+   > subdms-server
+   
+   This will setup the workspace directory, the database and the repository.
+
+4. Run the client by typing:
+   
+   > subdms
+
+How to use
+----------
+Using the graphical user interface 
+
+1. Start by adding a new project using the Menu entry "Create" -> "New Project" 
+
+2. Creating a Document can be done in three ways using the Menu entry
+   "Create" -> "New Document". 
+
+   a. From Template: Create document from a built-in template file
+   b. From File: adding a existing file to the DMS.
+   c. From Document: Base the document on an existing document in the DMS.
+
+3. List documents using Menu "Tools" -> "List Documents".
+
+4. Edit document. Select document in the document list. 
+   Use menu entry "Tools" -> "Edit Document"
+   This will launch the file in editor defined in /etc/subdms/sumbdms.cfg
+
+5. Commit Changes. As with other version control systems, local changes made to 
+   the document can be committed to the central repository. 
+   Select the document in the list and use "Tools" -> "Commit Changes", 
+   this will launch a dialog where a commit message can be entered.
+
+6. Check-in document. To remove the local copy of the document, select the 
+   document in the list and use "Tools" -> "Check-in Document". 
+   This will commit any local changes made to the document and remove 
+   the local copy form workspace.
+
+7. Release document. The "Release Document" action also resides in the "Tools"
+   Menu. Select the document you want to release in the document list. 
+   This action will check-in your document, set its to status "released", 
+   and any prior issues to status "obsolete". Both the status "released" and
+   "obsolete" means that a document issue with one of these status can only be 
+   checked out read-only, and no more changes can be made to those issues.  
+ 
+8. Create a new issue of the document. This action is found in the "Create" 
+   menu as "New issue". As with the other actions, the document in question 
+   must be selected in the document list. Note that this action only works on 
+   documents with status "released".  
+
+Document list
+-------------
+The document list displays information of the created documents. 
+The first unnamed column displays the state of the document as follows:
+    O = Document is Checked-out	  
+    I = Document is Checked-in
+    M = Document is locally modified
+
+
+Command-line usage
+------------------   
+Usage: subdms add filename project doctype [title]
+
+Example:
+ > subdms add filename.txt myproject note "Technical note"
+or:
+ > subdms add "this project note.txt" myproject note
+
+This command line interface makes it possible to add documents in the DMS.
+It is a compliment to add files via the graphical user interface.
+And opens for the possibility to write scripts to automate the adding of files. 
+If you enter a title, make sure the title is a string.
+If no title is given the filename without extension is set as title.
+
+
