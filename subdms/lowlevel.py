@@ -22,6 +22,7 @@
 
 import ConfigParser
 import os
+import shutil
 import string
 import subprocess
 
@@ -135,3 +136,16 @@ class command:
     def launch_editor(self, docpath):
         " Launch appropriate editor. "
         os.system("%s %s &" % (self.conf.txteditor, docpath))
+   
+    def rmtree(self, path):
+        """ Delete directory tree recursively. """
+        shutil.rmtree(path)
+
+    def copyfile(self, frompath, topath):
+        """ Copy file. """
+        shutil.copyfile(frompath, topath)
+       
+    def svncreaterepo(self, repopath):
+        """ Create subversion repository. """
+        subprocess.call(['svnadmin','create', repopath])
+    
