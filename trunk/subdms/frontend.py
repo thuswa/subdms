@@ -22,7 +22,6 @@
 
 import os
 import pysvn
-import shutil
 
 import database
 import lowlevel
@@ -92,7 +91,7 @@ class document:
       client.checkout(docurl, checkoutpath)
       
       # Copy file to workspace
-      shutil.copyfile(addfilepath, docpath)
+      cmd.copyfile(addfilepath, docpath)
       client.add(docpath)
       print docpath
       # Set document title and commit document
@@ -112,7 +111,7 @@ class document:
       message = "Checking in: "+docname
       self.commit(docnamelist, message) 
       # Remove file from workspace
-      shutil.rmtree(docs.const_checkoutpath(docnamelist))
+      cmd.rmtree(docs.const_checkoutpath(docnamelist))
       return message
       
    def checkout(self, docnamelist):
@@ -145,7 +144,7 @@ class document:
       self.commit(docnamelist, conf.release+message)
 
       # Remove file from workspace
-      shutil.rmtree(docs.const_checkoutpath(docnamelist))
+      cmd.rmtree(docs.const_checkoutpath(docnamelist))
       
       # Set previous issue to obsolete
       if current_issue > 1:
@@ -160,7 +159,7 @@ class document:
          self.commit(old_docnamelist, \
                       conf.obsolete+"Set status to obsolete on "+old_docname)
          # Remove file from workspace
-         shutil.rmtree(docs.const_checkoutpath(old_docnamelist))
+         cmd.rmtree(docs.const_checkoutpath(old_docnamelist))
       return message
 
    def editdocument(self, docnamelist):

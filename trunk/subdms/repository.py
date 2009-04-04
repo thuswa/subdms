@@ -22,9 +22,7 @@
 
 import os
 import pysvn
-import shutil
 import string
-import subprocess 
 
 import lowlevel
 
@@ -32,10 +30,11 @@ class repository:
     def __init__(self):    
         self.client = pysvn.Client()
         self.conf = lowlevel.config()
-        
+        self.cmd = lowlevel.command()
+
     def createrepo(self):
         """ create repsitory and layout """
-        subprocess.call(['svnadmin','create', self.conf.repopath])
+        self.cmd.svncreaterepo(self.conf.repopath)
         self.client.mkdir(self.conf.trunkurl, "create trunk directory",1)
         self.client.mkdir(self.conf.tmplurl, "create templates directory",1)
         print "Create repository: "+self.conf.repopath
@@ -45,7 +44,7 @@ class repository:
         revhook='post-commit'
         revhookpath=os.path.join(self.conf.hookspath, revhook)
         # Copy hooks to dir in repository and set to executable
-        shutil.copyfile(os.path.join(self.conf.pkgpath, revhook+'.py'), \
+        self.cmd.copyfile(os.path.join(self.conf.pkgpath, revhook+'.py'), \
                         revhookpath) #fixme
         os.chmod(revhookpath,0755)
         print "Install hook: "+revhook+" ->  "+self.conf.hookspath
@@ -62,8 +61,8 @@ class repository:
         self.client.checkout(self.conf.tmplurl, tmpldir)
         
         # Add templates to dir
-        shutil.copyfile(txtfilepath, txtfiledir)
-        shutil.copyfile(texfilepath, texfiledir)
+        self.cmd.copyfile(txtfilepath, txtfiledir)
+        self.cmd.copyfile(texfilepath, texfiledir)
         self.client.add(txtfiledir)
         self.client.add(texfiledir)
         self.client.propset(self.conf.proplist[2], self.conf.svnkeywords, \
@@ -80,6 +79,6 @@ class repository:
         print "Install template: "+self.conf.tmpltex+" -> "+self.conf.tmplurl 
 
         # Remove template dir from workspace
-        shutil.rmtree(tmpldir)
+        self.cmd.rmtree(tmpldir)
 
 
