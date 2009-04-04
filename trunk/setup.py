@@ -22,9 +22,16 @@
 
 from distutils.core import setup
 
-import shutil
-import string
+import os
 import sys
+
+# Deterimine installpath dependent on which os
+if os.name == 'nt':
+    confpath = 'c:\\Documents and Settings\\All Users\\' \
+        'Application Data\\subdms'
+#    os.mkdir(confpath)
+if os.name == 'posix':
+    confpath = '/etc/subdms'
 
 CLASSIFIERS = [
     'Development Status :: 3 - Alpha',
@@ -36,6 +43,7 @@ CLASSIFIERS = [
     'Topic :: Desktop Environment',
     'Topic :: Office/Business'
 ]
+
 
 setup(name='subdms',
       version='0.1.0',
@@ -49,7 +57,7 @@ setup(name='subdms',
       url='http://subdms.googlecode.com',
       packages=['subdms'],
       package_data = {'subdms' : ['templates/*'] },
-      data_files = [('/etc/subdms', ['subdms.cfg'])],
+      data_files = [(confpath, ['subdms.cfg'])],
       scripts = ['subdms/subdms', 'subdms/subdms-server'],
       platforms='any',
       requires=['pysvn', 'pyqt4', 'pysqlite3', 'svn']

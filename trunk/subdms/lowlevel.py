@@ -31,11 +31,19 @@ class config:
     def __init__(self):
         """ set built-in and user defined configs """
         conf = ConfigParser.ConfigParser()
-        conf.read("/etc/subdms/subdms.cfg")
+
+        # Deterimine config file path dependent on which os
+        if os.name == 'nt':
+            conffilepath = 'c:\\Documents and Settings\\All Users\\' \
+                'Application Data\\subdms\\subdms.cfg'
+        if os.name == 'posix':
+            conffilepath = '/etc/subdms/subdms.cfg'
+        print conffilepath 
+        conf.read(conffilepath)
         
         self.repopath = conf.get("Path", "repository")
         self.hookspath = os.path.join(self.repopath,"hooks") 
-        self.repourl = "file://" + self.repopath
+        self.repourl = "file:///" + self.repopath.replace("\\","/")
         self.trunkurl = self.repourl + "/trunk"
         self.tmplurl = self.repourl + "/templates"
         self.workpath = conf.get("Path", "workspace")
