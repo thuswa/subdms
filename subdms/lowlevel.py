@@ -39,7 +39,6 @@ class config:
                 'Application Data\\subdms\\subdms.cfg'
         if os.name == 'posix':
             conffilepath = '/etc/subdms/subdms.cfg'
-        print conffilepath 
         conf.read(conffilepath)
         
         self.repopath = conf.get("Path", "repository")
