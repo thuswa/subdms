@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Mon Apr  6 22:22:29 2009 on violator
-# update count: 264
+# Last modified Mon Apr  6 23:42:48 2009 on violator
+# update count: 265
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -151,12 +151,12 @@ class command:
 ################################################################################
         
 class svnlook:
-    def __init__(self, repo, rvn):
+    def __init__(self, repo, rvn, option):
         self.cmd = command()
         self.repourl = repo
         self.revision = rvn 
         self.svn_look = "/usr/bin/svnlook"
-        self.option = "--revision"
+        self.option = option
         
     def svnlookcmd(self, command, repourl, option, option2):
         """ Svn_look command. """
