@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Thu Apr  2 23:10:36 2009 on violator
-# update count: 175
+# Last modified Mon Apr  6 20:56:01 2009 on violator
+# update count: 262
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -147,4 +147,61 @@ class command:
     def svncreaterepo(self, repopath):
         """ Create subversion repository. """
         subprocess.call(['svnadmin','create', repopath])
+    
+################################################################################
+        
+class svnlook:
+    def __init__(self, repo, rvn):
+        self.cmd = command()
+        self.repourl = repo
+        self.revision = rvn 
+        self.svn_look = "/usr/bin/svnlook"
+        self.option = "--revision"
+        
+    def svnlookcmd(self, command, repourl, option, rvn_txn):
+        """ Svn_look command. """
+        lookcmd = "%s %s %s %s %s" % (self.svn_look, "%s", "%s", "%s", "%s")
+        return self.cmd.command_output(lookcmd % (command, repourl, \
+                                                  option, rvn_txn))
+
+    def svnlookcmd1(self, command, repourl, option):
+        """ Simplified svn look command """
+        return self.svnlookcmd(command, repourl, option, self.revision)
+
+    def svnlookcmd2(self, command):
+        """ Simplified svn look command """
+        return self.svnlookcmd(command, self.repourl, self.option, \
+                               self.revision)
+    
+    def getauthor(self):
+        """ Get commit author. """
+        return self.svnlookcmd2("author").rstrip("\n")
+
+    def getchanged(self):
+        """ Get commit change. """
+        return self.svnlookcmd2("changed")
+
+    def getdate(self):
+        """ Get commit date. """
+        return self.svnlookcmd2("date").rstrip("\n")
+
+    def getdocfname(self):
+        """ get document file name """
+        return self.getchanged().split("/").pop().rstrip("\n").rstrip()
+        
+    def getlogmsg(self):
+        """ Get commit log message. """
+        return self.svnlookcmd2("log").rstrip("\n").rstrip()
+
+    def getproject(self):
+        """ Get project name. """
+        return self.getlogmsg().split(": ")[-1]
+        
+    def getstatus(self, docurl):
+        """ Get commit status. """
+        return self.svnlookcmd1("propget", docurl, "status")
+
+    def gettitle(self, docurl):
+        """ Get commit title. """
+        return self.svnlookcmd1("propget", docurl, "title")
     

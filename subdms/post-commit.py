@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Sun Mar 29 21:46:00 2009 on violator
-# update count: 142
+# Last modified Mon Apr  6 21:13:13 2009 on violator
+# update count: 159
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -51,38 +51,31 @@ def main():
   obsptrn = re.compile(conf.obsolete)
   
   # Construct svnlook command 
-  look_opt = "--revision"
-  svn_look = "/usr/bin/svnlook"
-  look_cmd = "%s %s %s %s %s" % (svn_look, "%s", repos, look_opt, rvn)
-  look_cmd2 = "%s %s %s %s %s" % (svn_look, "propget", repos, "%s", "%s")
-
+  look = lowlevel.svnlook(repos, rvn)
+  
   # Get info about commit
-  log_message = cmd.command_output(look_cmd % "log").rstrip("\n").rstrip()
-  changed = cmd.command_output(look_cmd % "changed")
-  docname = changed.split("/").pop().rstrip("\n").rstrip()
+  log_message = look.getlogmsg()
+  changed = look.getchanged()
+  docfname = look.getdocfname()
 
   if newprojptrn.match(log_message):
-    # Get project name 
-    projname = log_message.split(": ")[-1]
-
-    # Write data to db
-    db.writeprojlist(projname, conf.doctypes)
+    db.writeprojlist(look.getproject(), conf.doctypes)
      
-  if docname:
+  if docfname:
     # create docname list
-    docnamelist = docs.deconst_docfname(docname)
+    docnamelist = docs.deconst_docfname(docfname)
     docurl = docs.const_docinrepopath(docnamelist)
 
     # Get author, date and other properties
-    author = cmd.command_output(look_cmd % "author").rstrip("\n")
-    date = cmd.command_output(look_cmd % "date").rstrip("\n")
+    author = look.getauthor()
+    date = look.getdate()
 
     if tmplptrn.match(log_message):
-      tmplname, filetype = docname.split(".")
+      tmplname, filetype = docfname.split(".")
       db.writetmpllist(rvn, tmplname, filetype, tmplptrn.sub("",log_message))
     else:
-      title = cmd.command_output(look_cmd2 % ("title", docurl))
-      status = cmd.command_output(look_cmd2 % ("status", docurl))
+      title = look.gettitle(docurl)
+      status = look.getstatus(docurl)
 
     if newdocptrn.match(log_message):
       # Create write string
