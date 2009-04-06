@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Thu Apr  2 20:42:45 2009 on violator
-# update count: 665
+# Last modified Mon Apr  6 21:09:23 2009 on violator
+# update count: 666
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -250,7 +250,8 @@ class documentDialog(QtGui.QDialog):
     def setfiletypelist(self):
         self.ui.File_Type_Box.clear()
         for filetype in self.conf.filetypes:
-            self.ui.File_Type_Box.addItem(filetype)
+            if db.gettemplates(filetype):
+                self.ui.File_Type_Box.addItem(filetype)
 
     def settmplnamelist(self, filetype):
         self.ui.Template_Name_Box.clear()
