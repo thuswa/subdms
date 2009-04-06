@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Mon Apr  6 20:56:01 2009 on violator
-# update count: 262
+# Last modified Mon Apr  6 22:22:29 2009 on violator
+# update count: 264
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -158,15 +158,15 @@ class svnlook:
         self.svn_look = "/usr/bin/svnlook"
         self.option = "--revision"
         
-    def svnlookcmd(self, command, repourl, option, rvn_txn):
+    def svnlookcmd(self, command, repourl, option, option2):
         """ Svn_look command. """
         lookcmd = "%s %s %s %s %s" % (self.svn_look, "%s", "%s", "%s", "%s")
         return self.cmd.command_output(lookcmd % (command, repourl, \
-                                                  option, rvn_txn))
+                                                  option, option2))
 
-    def svnlookcmd1(self, command, repourl, option):
+    def svnlookcmd1(self, command, option, option2):
         """ Simplified svn look command """
-        return self.svnlookcmd(command, repourl, option, self.revision)
+        return self.svnlookcmd(command, self.repourl, option, option2)
 
     def svnlookcmd2(self, command):
         """ Simplified svn look command """
@@ -199,9 +199,9 @@ class svnlook:
         
     def getstatus(self, docurl):
         """ Get commit status. """
-        return self.svnlookcmd1("propget", docurl, "status")
+        return self.svnlookcmd1("propget", "status", docurl)
 
     def gettitle(self, docurl):
         """ Get commit title. """
-        return self.svnlookcmd1("propget", docurl, "title")
+        return self.svnlookcmd1("propget", "title", docurl)
     
