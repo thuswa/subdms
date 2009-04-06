@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Mon Apr  6 23:16:32 2009 on violator
-# update count: 161
+# Last modified Mon Apr  6 23:43:00 2009 on violator
+# update count: 162
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -51,7 +51,7 @@ def main():
   obsptrn = re.compile(conf.obsolete)
   
   # Construct svnlook command 
-  look = lowlevel.svnlook(repos, rvn)
+  look = lowlevel.svnlook(repos, rvn, "--revision")
   
   # Get info about commit
   log_message = look.getlogmsg()

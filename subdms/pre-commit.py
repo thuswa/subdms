@@ -1,58 +1,53 @@
 #!/usr/bin/python
 # $Id$
-# Last modified Sat Mar 28 20:42:49 2009 on violator
-# update count: 44
+# Last modified Mon Apr  6 23:57:14 2009 on violator
+# update count: 67
 
-import lowlevel
+from optparse import OptionParser
+import re
+
+from subdms import lowlevel
 
 """ pre-commit hook to restrict commits. """
 
-#def files_changed(look_cmd):
-# """ List the files added or updated by this transaction.
-#
-#"svnlook changed" gives output like:
-# U trunk/file1.cpp
-# A trunk/file2.cpp
-# """
-# def filename(line):
-# return line[4:]
-# def added_or_updated(line):
-# return line and line[0] in ("A", "U")
-# return [
-# filename(line)
-# for line in command_output(look_cmd % "changed").split("\n")
-# if added_or_updated(line)]
-#
-#def file_contents(filename, look_cmd):
-# " Return a file's contents for this transaction. "
-# return command_output(
-# "%s %s" % (look_cmd % "cat", filename))
-#
+conf = lowlevel.config()
+docs = lowlevel.docname()
+
 def main():
-    usage = """usage: %prog REPOS TXN
-    #
-    #Run pre-commit options on a repository transaction."""
-    from optparse import OptionParser
-    parser = OptionParser(usage=usage)
-    parser.add_option("-r", "--revision",
-                      help="Test mode. TXN actually refers to a revision.",
-                      action="store_true", default=False)
-    # errors = 0
-    # try:
-    (opts, (repos, txn_or_rvn)) = parser.parse_args()
-    look_opt = ("--transaction", "--revision")[opts.revision]
-    look_cmd = "/usr/bin/svnlook %s %s %s %s > /home/thuswa/svnproj/log.txt" % ("%s", repos, look_opt, txn_or_rvn)
-## files_changed(look_cmd)
-    # print txn_or_rvnome/thuswa/svnproj/l
-    # print look_cmd
-    # command_output(look_cmd % "log > /home/thuswa/svnproj/log.txt")
-    # except:
-    print look_cmd
-    command_output(look_cmd % "log")
-    # parser.print_help()
-    # errors += 1
-    # return errors
-    #
+  usage = """usage: %prog REPOS TXN
+  #
+  #Run pre-commit options on a repository transaction."""
+
+  parser = OptionParser(usage=usage)
+
+  # Search patterns for action selection
+  tmplptrn = re.compile(conf.tmpl)
+  relptrn = re.compile(conf.release)
+  obsptrn = re.compile(conf.obsolete)
+ 
+  errors = 0
+  (opts, (repos, txn)) = parser.parse_args()
+
+  # Construct svnlook command
+  look = lowlevel.svnlook(repos, txn, "--transaction")      
+  # Get info about commit
+  docfname = look.getdocfname()
+
+  if docfname:
+    # create docname list
+    docnamelist = docs.deconst_docfname(docfname)
+    docurl = docs.const_docinrepopath(docnamelist)
+
+    log_message = look.getlogmsg()
+
+    if not tmplptrn.match(log_message):
+      status = look.getstatus(docurl)
+
+      if not relptrn.match(log_message) and not obsptrn.match(log_message):
+          if status in conf.statuslist[4:6]:
+              error = 1
+  return errors
+  
     
 if __name__ == "__main__":
     import sys
