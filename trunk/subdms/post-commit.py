@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Mon Apr  6 21:13:13 2009 on violator
-# update count: 159
+# Last modified Mon Apr  6 23:16:32 2009 on violator
+# update count: 161
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -34,7 +34,7 @@ docs = lowlevel.docname()
 db = database.sqlitedb()
 
 def main():
-  usage = """usage: %prog REPOS TXN
+  usage = """usage: %prog REPOS REV
   #
   #Run pre-commit options on a repository transaction."""
 
