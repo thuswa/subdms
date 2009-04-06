@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Tue Mar 31 11:53:50 2009 on violator
-# update count: 187
+# Last modified Mon Apr  6 23:36:38 2009 on violator
+# update count: 189
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -41,13 +41,14 @@ class repository:
 
     def installhooks(self):
         """ Install hooks in repository """
-        revhook='post-commit'
-        revhookpath=os.path.join(self.conf.hookspath, revhook)
-        # Copy hooks to dir in repository and set to executable
-        self.cmd.copyfile(os.path.join(self.conf.pkgpath, revhook+'.py'), \
-                        revhookpath) #fixme
-        os.chmod(revhookpath,0755)
-        print "Install hook: "+revhook+" ->  "+self.conf.hookspath
+        revhooklist=['pre-commit', 'post-commit']
+        for revhook in revhooklist:
+            revhookpath=os.path.join(self.conf.hookspath, revhook)
+            # Copy hooks to dir in repository and set to executable
+            self.cmd.copyfile(os.path.join(self.conf.pkgpath, revhook+'.py'), \
+                              revhookpath) #fixme
+            os.chmod(revhookpath,0755)
+            print "Install hook: "+revhook+" ->  "+self.conf.hookspath
 
     def installtemplates(self):
         """ Install templates in repository """
