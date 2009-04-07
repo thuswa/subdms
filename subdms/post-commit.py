@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Mon Apr  6 23:43:00 2009 on violator
-# update count: 162
+# Last modified Tue Apr  7 12:55:28 2009 on violator
+# update count: 163
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -43,12 +43,12 @@ def main():
   (opts,(repos, rvn)) = parser.parse_args()
 
   # Search patterns for action selection
-  tmplptrn = re.compile(conf.tmpl)
   newdocptrn = re.compile(conf.newdoc)
   newprojptrn = re.compile(conf.newproj)
-  statchgptrn = re.compile(conf.statchg)
-  relptrn = re.compile(conf.release)
   obsptrn = re.compile(conf.obsolete)
+  relptrn = re.compile(conf.release)
+  statchgptrn = re.compile(conf.statchg)
+  tmplptrn = re.compile(conf.tmpl)
   
   # Construct svnlook command 
   look = lowlevel.svnlook(repos, rvn, "--revision")
