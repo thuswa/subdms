@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Tue Apr  7 21:10:02 2009 on violator
-# update count: 279
+# Last modified Tue Apr  7 22:54:12 2009 on violator
+# update count: 291
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -148,9 +148,24 @@ class command:
     def copyfile(self, frompath, topath):
         """ Copy file. """
         shutil.copyfile(frompath, topath)
-       
+
+    def createworkspace(self):
+        """ Create workspace directory. """
+        if not os.path.isdir(self.conf.workpath):
+            os.makedirs(self.conf.workpath)
+            print "Create workspace: "+ self.conf.workpath
+
+    def createdbpath(self):
+        """ Create database directory. """
+        dbbasedir = os.path.dirname(self.conf.dbpath)
+        if not os.path.isdir(dbbasedir):
+            os.makedirs(dbbasedir)
+    
     def svncreaterepo(self, repopath):
         """ Create subversion repository. """
+        repobasedir = os.path.dirname(self.conf.repopath)
+        if not os.path.isdir(repobasedir):
+            os.makedirs(repobasedir)
         subprocess.call(['svnadmin','create', repopath])
     
 ################################################################################
