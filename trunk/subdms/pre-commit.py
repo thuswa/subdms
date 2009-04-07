@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # $Id$
-# Last modified Mon Apr  6 23:57:14 2009 on violator
-# update count: 67
+# Last modified Tue Apr  7 12:55:38 2009 on violator
+# update count: 77
 
 from optparse import OptionParser
 import re
@@ -21,11 +21,13 @@ def main():
   parser = OptionParser(usage=usage)
 
   # Search patterns for action selection
-  tmplptrn = re.compile(conf.tmpl)
-  relptrn = re.compile(conf.release)
+  newdocptrn = re.compile(conf.newdoc)
   obsptrn = re.compile(conf.obsolete)
+  relptrn = re.compile(conf.release)
+  tmplptrn = re.compile(conf.tmpl)
  
   errors = 0
+  status = conf.statuslist[0]
   (opts, (repos, txn)) = parser.parse_args()
 
   # Construct svnlook command
@@ -41,11 +43,13 @@ def main():
     log_message = look.getlogmsg()
 
     if not tmplptrn.match(log_message):
-      status = look.getstatus(docurl)
+        status = look.getstatus(docurl)
 
-      if not relptrn.match(log_message) and not obsptrn.match(log_message):
-          if status in conf.statuslist[4:6]:
-              error = 1
+        if not relptrn.match(log_message) and not obsptrn.match(log_message) \
+               and not newdocptrn.match(log_message):
+            if status in conf.statuslist[4:6]:
+                errors = 1
+                print docfname+" is "+status+" and thus read-only." 
   return errors
   
     
