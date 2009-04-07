@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Wed Apr  1 22:47:58 2009 on violator
-# update count: 748
+# Last modified Tue Apr  7 20:55:43 2009 on violator
+# update count: 749
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -166,7 +166,7 @@ class document:
       """ Edit the document. """
       if not self.ischeckedout(docnamelist):
          self.checkout(docnamelist)
-      cmd.launch_editor(docs.const_docpath(docnamelist))   
+      cmd.launch_editor(docnamelist)   
       
    def newissue(self, docnamelist):
       """Create new issue of the document"""

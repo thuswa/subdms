@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Mon Apr  6 23:42:48 2009 on violator
-# update count: 265
+# Last modified Tue Apr  7 21:10:02 2009 on violator
+# update count: 279
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -31,7 +31,7 @@ import subprocess
 class config:    
     def __init__(self):
         """ set built-in and user defined configs """
-        conf = ConfigParser.ConfigParser()
+        self.conf = ConfigParser.ConfigParser()
 
         # Deterimine config file path dependent on which os
         if os.name == 'nt':
@@ -39,21 +39,19 @@ class config:
                 'Application Data\\subdms\\subdms.cfg'
         if os.name == 'posix':
             conffilepath = '/etc/subdms/subdms.cfg'
-        conf.read(conffilepath)
+        self.conf.read(conffilepath)
         
-        self.repopath = conf.get("Path", "repository")
+        self.repopath = self.conf.get("Path", "repository")
         self.hookspath = os.path.join(self.repopath,"hooks") 
         self.repourl = "file:///" + self.repopath.replace("\\","/")
         self.trunkurl = self.repourl + "/trunk"
         self.tmplurl = self.repourl + "/templates"
-        self.workpath = conf.get("Path", "workspace")
-        self.dbpath = conf.get("Path", "database")
-        self.doctypes = list(conf.get("Document", "type").split())
+        self.workpath = self.conf.get("Path", "workspace")
+        self.dbpath = self.conf.get("Path", "database")
+        self.doctypes = list(self.conf.get("Document", "type").split())
         self.filetypes = ['pdf','tex','txt','zip']
-        self.tmpltxt = conf.get("Template", "txt")
-        self.tmpltex = conf.get("Template", "tex")
-        self.txteditor = conf.get("Editor", "txt")
-        self.texeditor = conf.get("Editor", "tex")
+        self.tmpltxt = self.conf.get("Template", "txt")
+        self.tmpltex = self.conf.get("Template", "tex")
         self.proplist = ['title', 'status', 'svn:keywords']
         self.svnkeywords=string.join(["LastChangedDate", \
                                       "LastChangedRevision", "Id", \
@@ -68,13 +66,17 @@ class config:
                            'released', 'obsolete'] 
         self.pkgpath = os.path.dirname(os.path.realpath(__file__))
         self.tmplpath = os.path.join(self.pkgpath, "templates")
-        
+
+    def geteditor(self, filetype):
+        """ Get appropriate editor for filetype. """
+        return self.conf.get("Editor", filetype)
+
 ################################################################################
 
 class docname:
     def __init__(self):    
         self.conf = config()
-
+       
     def const_checkoutpath(self, docnamelist):
         """ Construct the check-out path """
         return os.path.join(self.conf.workpath, \
@@ -126,15 +128,18 @@ class docname:
 class command:
     def __init__(self):
         self.conf = config()
+        self.docs = docname()
         
     def command_output(self, cmd):
         " Capture a command's standard output. "
         return subprocess.Popen(
             cmd.split(), stdout=subprocess.PIPE).communicate()[0]
 
-    def launch_editor(self, docpath):
+    def launch_editor(self, docnamelist):
         " Launch appropriate editor. "
-        os.system("%s %s &" % (self.conf.txteditor, docpath))
+        docpath = self.docs.const_docpath(docnamelist)
+        filetype = docnamelist[-1]
+        os.system("%s %s &" % (self.conf.geteditor(filetype), docpath))
    
     def rmtree(self, path):
         """ Delete directory tree recursively. """
