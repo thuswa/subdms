@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Tue Apr  7 20:55:43 2009 on violator
-# update count: 749
+# Last modified Wed Apr  8 16:46:25 2009 on violator
+# update count: 865
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -23,25 +23,35 @@
 import os
 import pysvn
 
-import database
 import lowlevel
 
 """ Frontend classes """
 
-client = pysvn.Client()
-cmd = lowlevel.command()
-conf = lowlevel.config()
-docs = lowlevel.docname()
-db = database.sqlitedb()
-
 class project:
-   def createproject(self, projname):
-      """Create a project"""
-      for doc in conf.doctypes:
-         client.mkdir(os.path.join(conf.trunkurl, projname, doc), \
-                      conf.newproj+"Create directory for project: "+projname,1)
+   def __init__(self):
+      """ Initialize project class """
+      self.client = pysvn.Client()
+      self.conf = lowlevel.config()
+      self.link = lowlevel.linkname()
+      
+   def createproject(self, project):
+      """ Create project method. """
+      for doc in self.conf.doctypes:
+         self.client.mkdir(self.link.const_doctypeurl(project, doc), \
+                           self.conf.newproj+"Create directory for project: "\
+                           +project,1)
+         
+################################################################################
 
 class document:
+   def __init__(self):
+      """ Initialize project class """
+      self.client = pysvn.Client()
+      self.cmd = lowlevel.command()
+      self.conf = lowlevel.config()
+      self.link = lowlevel.linkname()
+      self.status = docstatus()
+
    def createdocument(self, createfromurl, docnamelist, doctitle):
       """
       Create a document
@@ -51,25 +61,26 @@ class document:
       docnamelist: list containing the building blocks of the document name
       doctitle: document title string.
       """
-      docname=docs.const_docfname(docnamelist)
-      docurl=docs.const_docurl(docnamelist)
-      docfileurl=docs.const_docfileurl(docnamelist)
-      checkoutpath=docs.const_checkoutpath(docnamelist)
-      docpath=docs.const_docpath(docnamelist)
+      docname=self.link.const_docfname(docnamelist)
+      docurl=self.link.const_docurl(docnamelist)
+      docfileurl=self.link.const_docfileurl(docnamelist)
+      checkoutpath=self.link.const_checkoutpath(docnamelist)
+      docpath=self.link.const_docpath(docnamelist)
 
       # Create document url in repository
-      client.mkdir(docurl, "create directory for : "+docname,1)
+      self.client.mkdir(docurl, "create directory for : "+docname,1)
       
       # Create document from template or existing document
       self.server_side_copy(createfromurl, docfileurl, "Create document: "\
                             +docname)
-      client.checkout(docurl, checkoutpath)
+      self.client.checkout(docurl, checkoutpath)
       
       # Set document title and commit document
-      client.propset(conf.proplist[0], doctitle, docpath)
-      client.propset(conf.proplist[1], conf.statuslist[0], docpath)
-      #client.propset(conf.proplist[2], conf.svnkeywords, docpath) 
-      client.checkin(docpath, conf.newdoc+ \
+      self.settitle(doctitle, docpath)
+      self.status.setpreliminary(docpath)
+
+      #self.client.propset(conf.proplist[2], conf.svnkeywords, docpath) 
+      self.client.checkin(docpath, self.conf.newdoc+ \
                      "Commit document properties for: "+docname)
    
    def adddocument(self, addfilepath, docnamelist, doctitle):
@@ -80,168 +91,156 @@ class document:
       docnamelist: list containing the building blocks of the document name
       doctitle: document title string.
       """
-      docname=docs.const_docfname(docnamelist)
-      docurl=docs.const_docurl(docnamelist)
-      docfileurl=docs.const_docfileurl(docnamelist)
-      checkoutpath=docs.const_checkoutpath(docnamelist)
-      docpath=docs.const_docpath(docnamelist)
+      docname=self.link.const_docfname(docnamelist)
+      docurl=self.link.const_docurl(docnamelist)
+      docfileurl=self.link.const_docfileurl(docnamelist)
+      checkoutpath=self.link.const_checkoutpath(docnamelist)
+      docpath=self.link.const_docpath(docnamelist)
 
       # Create document url in repository and check it out to workspace
-      client.mkdir(docurl, "create directory for : "+docname,1)
-      client.checkout(docurl, checkoutpath)
+      self.client.mkdir(docurl, "create directory for : "+docname,1)
+      self.client.checkout(docurl, checkoutpath)
       
       # Copy file to workspace
-      cmd.copyfile(addfilepath, docpath)
-      client.add(docpath)
-      print docpath
+      self.cmd.copyfile(addfilepath, docpath)
+      self.client.add(docpath)
+
       # Set document title and commit document
-      client.propset(conf.proplist[0], doctitle, docpath)
-      client.propset(conf.proplist[1], conf.statuslist[0], docpath)
-      client.propset(conf.proplist[2], conf.svnkeywords, docpath) 
-      client.checkin(docpath, conf.newdoc+ \
+      self.settitle(doctitle, docpath)
+      self.status.setpreliminary(docpath)
+      self.setsvnkeywords(docpath)
+
+      self.client.checkin(docpath, self.conf.newdoc+ \
                      "Commit document properties for: "+docname)
 
    def commit(self, docnamelist, message):
       """commit changes on file"""
-      client.checkin(docs.const_docpath(docnamelist), message)
+      self.client.checkin(self.link.const_docpath(docnamelist), message)
 
    def checkin(self, docnamelist):
       """check-in file from workspace"""
-      docname = docs.const_docname(docnamelist)
+      docname = self.link.const_docname(docnamelist)
       message = "Checking in: "+docname
       self.commit(docnamelist, message) 
       # Remove file from workspace
-      cmd.rmtree(docs.const_checkoutpath(docnamelist))
+      self.cmd.rmtree(self.link.const_checkoutpath(docnamelist))
       return message
       
    def checkout(self, docnamelist):
       """check-out file to workspace"""
 
       # Check status of doucument 
-      if self.getstatus(docnamelist) == conf.statuslist[5] or \
-         self.getstatus(docnamelist) == conf.statuslist[4]:
-         client.export(docs.const_docurl(docnamelist), \
-                       docs.const_checkoutpath(docnamelist))
-         # Set file to read-only
-         os.chmod(docs.const_docpath(docnamelist), 0444)
+      if self.status.isreleased(docnamelist) or \
+         self.status.isobsolete(docnamelist):
+         self.client.export(self.link.const_docurl(docnamelist), \
+                       self.link.const_checkoutpath(docnamelist))
+         self.cmd.setreadonly(self.link.const_docpath(docnamelist))
       else:                  
-         client.checkout(docs.const_docurl(docnamelist), \
-                         docs.const_checkoutpath(docnamelist))
-      #  client.lock( 'file.txt', 'reason for locking' )
+         self.client.checkout(self.link.const_docurl(docnamelist), \
+                         self.link.const_checkoutpath(docnamelist))
+      #  self.client.lock( 'file.txt', 'reason for locking' )
 
    def release(self, docnamelist):
       """Release the document"""
       current_issue = self.getissueno(docnamelist)
-      docname = docs.const_docname(docnamelist)
+      docname = self.link.const_docname(docnamelist)
       message = "Release "+docname
 
       if not self.ischeckedout(docnamelist):
          self.checkout(docnamelist)
 
       # Set status of document to released
-      client.propset(conf.proplist[1], conf.statuslist[4], \
-                     docs.const_docpath(docnamelist))
-      self.commit(docnamelist, conf.release+message)
+      self.status.setreleased(self.link.const_docpath(docnamelist))
+      self.commit(docnamelist, self.conf.release+message)
 
       # Remove file from workspace
-      cmd.rmtree(docs.const_checkoutpath(docnamelist))
+      self.cmd.rmtree(self.link.const_checkoutpath(docnamelist))
       
       # Set previous issue to obsolete
       if current_issue > 1:
          old_issue = str(current_issue - 1)
          old_docnamelist = self.setissueno(docnamelist, old_issue)
-         old_docname = docs.const_docname(old_docnamelist)
-         old_docpath = docs.const_docpath(old_docnamelist)
-         old_docurl = docs.const_docurl(old_docnamelist)
-         client.checkout(old_docurl, \
-                         docs.const_checkoutpath(old_docnamelist))
-         client.propset(conf.proplist[1], conf.statuslist[5], old_docpath)
+         old_docname = self.link.const_docname(old_docnamelist)
+         old_docpath = self.link.const_docpath(old_docnamelist)
+         old_docurl = self.link.const_docurl(old_docnamelist)
+         self.client.checkout(old_docurl, \
+                         self.link.const_checkoutpath(old_docnamelist))
+         self.status.setobsolete(old_docpath)
          self.commit(old_docnamelist, \
-                      conf.obsolete+"Set status to obsolete on "+old_docname)
+                     self.conf.obsolete+"Set status to obsolete on " \
+                     +old_docname)
          # Remove file from workspace
-         cmd.rmtree(docs.const_checkoutpath(old_docnamelist))
+         self.cmd.rmtree(self.link.const_checkoutpath(old_docnamelist))
       return message
 
    def editdocument(self, docnamelist):
       """ Edit the document. """
       if not self.ischeckedout(docnamelist):
          self.checkout(docnamelist)
-      cmd.launch_editor(docnamelist)   
+      self.cmd.launch_editor(docnamelist)   
       
    def newissue(self, docnamelist):
       """Create new issue of the document"""
       new_issue = str(self.getissueno(docnamelist) + 1)
       new_docnamelist = self.setissueno(docnamelist, new_issue)
-      docname = docs.const_docname(new_docnamelist)
-      docurl=docs.const_docurl(new_docnamelist)
-      docfileurl=docs.const_docfileurl(new_docnamelist)
-      docpath = docs.const_docpath(new_docnamelist)
-      checkoutpath=docs.const_checkoutpath(new_docnamelist)
+      docname = self.link.const_docname(new_docnamelist)
+      docurl=self.link.const_docurl(new_docnamelist)
+      docfileurl=self.link.const_docfileurl(new_docnamelist)
+      docpath = self.link.const_docpath(new_docnamelist)
+      checkoutpath=self.link.const_checkoutpath(new_docnamelist)
       message = " Created "+docname
 
       # Create document url in repository
-      client.mkdir(docurl, "create directory for : "+docname,1)
+      self.client.mkdir(docurl, "create directory for : "+docname,1)
 
       # Copy issue to new issue
-      self.server_side_copy(docs.const_docfileurl(docnamelist), \
+      self.server_side_copy(self.link.const_docfileurl(docnamelist), \
                             docfileurl, message)
-      client.checkout(docurl, checkoutpath)
+      self.client.checkout(docurl, checkoutpath)
       
       # Set document title and commit document
-      client.propset(conf.proplist[1], conf.statuslist[0], docpath)
-      client.checkin(docpath, conf.newdoc+ \
+      self.status.setpreliminary(docpath)
+      self.client.checkin(docpath, self.conf.newdoc+ \
                      "Commit document properties for: "+docname)
       return message   
          
    def getissueno(self, docnamelist):
-      """ Get document issue number """ 
+      """ Get document issue number. """ 
       return int(docnamelist[3])
 
    def setissueno(self, docnamelist, issue_no):
-      """ Set document issue number """ 
+      """ Set document issue number. """ 
       returnlist = docnamelist[:3]
       returnlist.extend([issue_no, docnamelist[4]])
       return returnlist
 
    def gettitle(self, docnamelist):
-      """ Get document title """ 
-      return client.propget('title', \
-                            docs.const_docurl(docnamelist)).values().pop()
+      """ Get document title. """ 
+      return self.client.propget('title', \
+                  self.link.const_docurl(docnamelist)).values().pop()
 
-   def getstatus(self, docnamelist):
-      """ Get document status """ 
-      return client.propget('status', \
-                            docs.const_docurl(docnamelist)).values().pop()
+   def settitle(self, doctitle, docpath):
+      """ Set document title. """ 
+      self.client.propset(self.conf.proplist[0], doctitle, docpath)
 
-   def createdocnamelist(self, project, doctype, issue, docext):
-      """
-      Create docnamelist - list containing the building blocks of
-      the document name
-      """
-      docno="%04d" % (db.getdocno(project, doctype) + 1)
-      return [project, doctype, docno, issue, docext]
+   def setsvnkeywords(self, docpath):
+      """ Set svn keywords. """  
+      self.client.propset(self.conf.proplist[2], self.conf.svnkeywords, \
+                          docpath) 
 
    def ischeckedout(self, docnamelist):
       """ Return true if docname is checked out. """
-      if os.path.exists(os.path.join(docs.const_checkoutpath(docnamelist), \
-                                     '.svn')):
+      if os.path.exists(os.path.join(\
+         self.link.const_checkoutpath(docnamelist), '.svn')):
          return True
       else:
          return False
 
-   def reverttohead(self, docnamelist):
-      """ Revert to head revision undo local changes. """
-      return None
-   
-   def reverttoprerev(self, docnamelist):
-      """ Revert to previous revision. """
-      return None
-
    def getstate(self, docnamelist):
       """ Get document state. """
       if self.ischeckedout(docnamelist):
-         docpath = docs.const_docpath(docnamelist)
-         state = client.status(docpath)[0]
+         docpath = self.link.const_docpath(docnamelist)
+         state = self.client.status(docpath)[0]
          return_state = ['O', 'Checked Out']
          if state.text_status == pysvn.wc_status_kind.modified:
             return_state = ['M', 'Modified']
@@ -255,6 +254,64 @@ class document:
       """ Server side copy in repository URL -> URL """
       def get_log_message():
          return True, log_message
-      client.callback_get_log_message = get_log_message
-      client.copy(source, target)
+      self.client.callback_get_log_message = get_log_message
+      self.client.copy(source, target)
 
+   def reverttohead(self, docnamelist):
+      """ Revert to head revision undo local changes. """
+      return None
+   
+   def reverttoprerev(self, docnamelist):
+      """ Revert to previous revision. """
+      return None
+
+################################################################################
+
+class docstatus:
+   def __init__(self):
+      """ Initialize document status class """
+      self.client = pysvn.Client()
+      self.conf = lowlevel.config()
+      self.link = lowlevel.linkname()
+
+   def getstatus(self, docnamelist):
+      """ Get document status """ 
+      return self.client.propget('status', \
+                            self.link.const_docurl(docnamelist)).values().pop()
+
+   def setpreliminary(self, docpath):
+      """ Set document status to preliminary. """ 
+      self.client.propset(self.conf.proplist[1], \
+                          self.conf.statuslist[0], docpath)
+
+   def setreleased(self, docpath):
+      """ Set document status to released. """ 
+      self.client.propset(self.conf.proplist[1], self.conf.statuslist[4], \
+                          docpath)
+
+   def setobsolete(self, docpath):
+      """ Set document status to obsolete. """
+      self.client.propset(self.conf.proplist[1], self.conf.statuslist[5], \
+                          docpath)
+
+
+   def ispreliminary(self, docnamelist):
+      """ Return true if document is released. """
+      if getstatus(self, docnamelist) == self.conf.statuslist[0]:
+         return True
+      else:
+         return False
+
+   def isreleased(self, docnamelist):
+      """ Return true if document is released. """
+      if getstatus(self, docnamelist) == self.conf.statuslist[5]:
+         return True
+      else:
+         return False
+
+   def isobsolete(self, docnamelist):
+      """ Return true if document is obsolete. """
+      if getstatus(self, docnamelist) == self.conf.statuslist[5]:
+         return True
+      else:
+         return False

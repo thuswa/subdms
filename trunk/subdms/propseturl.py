@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Sun Mar 15 20:04:22 2009 on violator
-# update count: 98
+# Last modified Wed Apr  8 12:53:26 2009 on violator
+# update count: 100
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -25,7 +25,7 @@ from svn import fs, repos, core
 import lowlevel
 
 conf = lowlevel.config()
-docs = lowlevel.docname()
+link = lowlevel.linkname()
 
 def propset(docnamelist, propname, propvalue):
     """
@@ -47,7 +47,7 @@ def propset(docnamelist, propname, propvalue):
     txn_root = fs.txn_root(txn)
 
     # change property on node
-    fs.change_node_prop(txn_root, docs.const_docinrepopath(docnamelist), \
+    fs.change_node_prop(txn_root, link.const_docinrepopath(docnamelist), \
                         propname, propvalue)
     fs.commit_txn(txn)
 
