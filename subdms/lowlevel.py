@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Wed Apr  8 12:52:03 2009 on violator
-# update count: 319
+# Last modified Thu Apr  9 00:48:42 2009 on violator
+# update count: 366
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -52,8 +52,7 @@ class config:
         self.dbpath = self.conf.get("Path", "database")
         self.doctypes = list(self.conf.get("Document", "type").split())
         self.filetypes = ['pdf','tex','txt','zip']
-        self.tmpltxt = self.conf.get("Template", "txt")
-        self.tmpltex = self.conf.get("Template", "tex")
+        self.tmpltypes = ['tex','txt']
         self.proplist = ['title', 'status', 'svn:keywords']
         self.svnkeywords=string.join(["LastChangedDate", \
                                       "LastChangedRevision", "Id", \
@@ -73,6 +72,10 @@ class config:
         """ Get appropriate editor for filetype. """
         return self.conf.get("Editor", filetype)
 
+    def gettemplate(self, tmpltype):
+        """ Get default template. """
+        return self.conf.get("Template", tmpltype)
+    
 ################################################################################
 
 class linkname:
@@ -133,11 +136,44 @@ class linkname:
         """ De-construct document file name. """
         return list(docname.replace(".","-").split("-"))  
 
-    def const_tmplurl(self, tmplnamelist):
-        """ Construct the template file url. """
-        return string.join([self.conf.tmplurl, \
-                            string.join(tmplnamelist,'.')], '/')
+    def const_tmpltypeurl(self, tmpltype):
+        """ Create directory in repo for template file types. """
+        return os.path.join(self.conf.tmplurl, tmpltype)
 
+    def const_tmplurl(self, tmplnamelist):
+        """ Construct the template url. """
+        tmpllist = [tmplnamelist[1], tmplnamelist[0]]
+        return string.join([self.conf.tmplurl, \
+                            string.join(tmpllist,'-')], '/')
+
+    def const_tmplfileurl(self, tmplnamelist):
+        """ Construct the template file url. """
+        return string.join([self.const_tmplurl(tmplnamelist), \
+                            self.const_tmplfname(tmplnamelist)], '/')
+
+    def const_tmpldir(self, tmplnamelist):
+        """ Construct the template file check-out dir. """
+        tmpllist =['template']
+        tmpllist.extend(tmplnamelist)
+        return os.path.join(self.conf.workpath, string.join(tmpllist))
+
+    def const_tmplfilepath(self, tmplnamelist):
+        """ Construct the the template file path. """
+        return os.path.join(self.const_tmpldir(tmplnamelist), \
+                            self.const_tmplfname(tmplnamelist))
+
+    def const_tmplfname(self, tmplnamelist):
+        """ Construct template file name. """
+        return string.join(tmplnamelist, ".")  
+
+    def deconst_tmplfname(self, tmplname):
+        """ De-construct template file name. """
+        return list(tmplname.split("."))  
+
+    def const_defaulttmplpath(self,tmplname):
+        """ Construct the default template file path. """
+        return os.path.join(self.conf.tmplpath, tmplname)
+    
 ################################################################################
 
 class command:
