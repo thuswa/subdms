@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Wed Apr  8 21:21:13 2009 on violator
-# update count: 252
+# Last modified Wed Apr  8 23:29:24 2009 on violator
+# update count: 255
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -33,5 +33,3 @@ class docinteg:
         """ Initialize docinteg """
         self.conf = lowlevel.config()
 
-        
-    def createdb(self):
