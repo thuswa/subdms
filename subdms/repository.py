@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Mon Apr  6 23:36:38 2009 on violator
-# update count: 189
+# Last modified Wed Apr  8 00:19:44 2009 on violator
+# update count: 191
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -47,7 +47,7 @@ class repository:
             # Copy hooks to dir in repository and set to executable
             self.cmd.copyfile(os.path.join(self.conf.pkgpath, revhook+'.py'), \
                               revhookpath) #fixme
-            os.chmod(revhookpath,0755)
+            self.cmd.setexecutable(revhookpath)
             print "Install hook: "+revhook+" ->  "+self.conf.hookspath
 
     def installtemplates(self):

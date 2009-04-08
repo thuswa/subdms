@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Tue Apr  7 12:55:28 2009 on violator
-# update count: 163
+# Last modified Wed Apr  8 12:52:40 2009 on violator
+# update count: 165
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -30,7 +30,7 @@ from subdms import database
 
 cmd = lowlevel.command()
 conf = lowlevel.config()
-docs = lowlevel.docname()
+link = lowlevel.linkname()
 db = database.sqlitedb()
 
 def main():
@@ -63,8 +63,8 @@ def main():
      
   if docfname:
     # create docname list
-    docnamelist = docs.deconst_docfname(docfname)
-    docurl = docs.const_docinrepopath(docnamelist)
+    docnamelist = link.deconst_docfname(docfname)
+    docurl = link.const_docinrepopath(docnamelist)
 
     # Get author, date and other properties
     author = look.getauthor()

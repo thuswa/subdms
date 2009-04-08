@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Tue Apr  7 13:38:11 2009 on violator
-# update count: 672
+# Last modified Wed Apr  8 19:26:46 2009 on violator
+# update count: 682
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -32,7 +32,6 @@ from createdocumentui import Ui_New_Document_Dialog
 from createprojui import Ui_New_Project_Dialog
 from mainwindow import Ui_MainWindow
 
-docs = lowlevel.docname()
 db = database.sqlitedb()
 
 ################################################################################
@@ -40,6 +39,8 @@ db = database.sqlitedb()
 class ClientUi(QtGui.QMainWindow):
     def __init__(self, parent=None):
         self.doc = frontend.document()
+        self.link = lowlevel.linkname()
+        self.status = frontend.docstatus()
         QtGui.QWidget.__init__(self, parent)
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
@@ -102,7 +103,7 @@ class ClientUi(QtGui.QMainWindow):
         for doc in db.getalldocs():
             docnamelist = list(doc[1:6])
             state = QtGui.QTableWidgetItem(self.doc.getstate(docnamelist)[0])
-            docid = QtGui.QTableWidgetItem(docs.const_docid(docnamelist))
+            docid = QtGui.QTableWidgetItem(self.link.const_docid(docnamelist))
             title = QtGui.QTableWidgetItem(doc[6])
             doctype = QtGui.QTableWidgetItem(doc[5])
             issue =  QtGui.QTableWidgetItem(doc[4])
@@ -122,9 +123,9 @@ class ClientUi(QtGui.QMainWindow):
         typeitem = self.ui.documentlist.item(row, 3)
         issueitem = self.ui.documentlist.item(row, 4)
         if docitem:
-            return docs.deconst_docfname(unicode(docitem.text())+'-'+ \
-                                         unicode(issueitem.text())+'.'+ \
-                                         unicode(typeitem.text()))
+            return self.link.deconst_docfname(unicode(docitem.text())+'-'+ \
+                                              unicode(issueitem.text())+'.'+ \
+                                              unicode(typeitem.text()))
         else:
             return None
 
@@ -159,7 +160,7 @@ class ClientUi(QtGui.QMainWindow):
     def newissue(self):     
         """ Create a new issue. """
         docnamelist = self.getselecteddoc()
-        if self.doc.getstatus(docnamelist) != "released":
+        if self.status.getstatus(docnamelist) != "released":
             QtGui.QMessageBox.critical(None, "Error",\
                                        "The selected document does not have "\
                                        "status \"released\". A new issue can "\
@@ -203,6 +204,7 @@ class projectDialog(QtGui.QDialog):
 class documentDialog(QtGui.QDialog):
     def __init__(self, parent=None):
         self.doc = frontend.document()
+        self.link = lowlevel.linkname()
         self.conf = lowlevel.config()
         self.addfile = addFileDialog()
         QtGui.QDialog.__init__(self, parent)
@@ -275,7 +277,7 @@ class documentDialog(QtGui.QDialog):
             filetype = self.selectedfiletype()
             template = self.selectedtemplate()
             tmplnamelist = [template, filetype]
-            createfromurl = docs.const_tmplurl(tmplnamelist)
+            createfromurl = self.link.const_tmplurl(tmplnamelist)
             create = True
         if selectedtab == 1:
             # Create from File
@@ -297,11 +299,11 @@ class documentDialog(QtGui.QDialog):
                 filetype = db.getdocext(basedocid, issue)
                 basedoclist = basedocid.split('-')
                 basedoclist.extend([basedocissue, filetype])
-                createfromurl = docs.const_docfileurl(basedoclist) 
+                createfromurl = self.link.const_docfileurl(basedoclist) 
                 create = True
                 
-        docnamelist = self.doc.createdocnamelist(project, doctype, issue, \
-                                                 filetype)
+        docnamelist = self.link.const_docnamelist(project, doctype, issue, \
+                                                  filetype)
         if create:
             self.doc.createdocument(createfromurl, docnamelist, doctitle)
         else:

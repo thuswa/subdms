@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Tue Apr  7 22:54:12 2009 on violator
-# update count: 291
+# Last modified Wed Apr  8 12:52:03 2009 on violator
+# update count: 319
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -25,6 +25,8 @@ import os
 import shutil
 import string
 import subprocess
+
+import database
 
 """ Low-level classes.  """
 
@@ -73,10 +75,10 @@ class config:
 
 ################################################################################
 
-class docname:
+class linkname:
     def __init__(self):    
         self.conf = config()
-       
+        
     def const_checkoutpath(self, docnamelist):
         """ Construct the check-out path """
         return os.path.join(self.conf.workpath, \
@@ -114,6 +116,19 @@ class docname:
         return os.path.join(self.const_checkoutpath(docnamelist), \
                                 self.const_docfname(docnamelist))
 
+    def const_doctypeurl(self, project, doctype):
+        """ Create directory in repo for project document types. """
+        return os.path.join(self.conf.trunkurl, project, doctype)
+
+    def const_docnamelist(self, project, doctype, issue, docext):
+        """
+        Create docnamelist - list containing the building blocks of
+        the document name
+        """
+        db = database.sqlitedb()
+        docno="%04d" % (db.getdocno(project, doctype) + 1)
+        return [project, doctype, docno, issue, docext]
+  
     def deconst_docfname(self, docname):
         """ De-construct document file name. """
         return list(docname.replace(".","-").split("-"))  
@@ -127,8 +142,9 @@ class docname:
 
 class command:
     def __init__(self):
+        """ Initialize command class """
         self.conf = config()
-        self.docs = docname()
+        self.link = linkname()
         
     def command_output(self, cmd):
         " Capture a command's standard output. "
@@ -137,7 +153,7 @@ class command:
 
     def launch_editor(self, docnamelist):
         " Launch appropriate editor. "
-        docpath = self.docs.const_docpath(docnamelist)
+        docpath = self.link.const_docpath(docnamelist)
         filetype = docnamelist[-1]
         os.system("%s %s &" % (self.conf.geteditor(filetype), docpath))
    
@@ -167,7 +183,15 @@ class command:
         if not os.path.isdir(repobasedir):
             os.makedirs(repobasedir)
         subprocess.call(['svnadmin','create', repopath])
-    
+
+    def setreadonly(self, filepath):
+        """ Set file to read-only. """
+        os.chmod(filepath, 0444)
+
+    def setexecutable(self, filepath):
+        """ Set file to executable. """
+        os.chmod(filepath, 0755)
+
 ################################################################################
         
 class svnlook:

@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Thu Apr  2 23:00:21 2009 on violator
-# update count: 53
+# Last modified Wed Apr  8 12:50:03 2009 on violator
+# update count: 57
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -37,6 +37,7 @@ class cli:
         self.conf = lowlevel.config()
         self.db = database.sqlitedb()
         self.doc = frontend.document()
+        self.link = lowlevel.linkname()
         
     def parseargs(self, args):
         """ Parse the args list and start actions accordingly."""
@@ -111,7 +112,7 @@ class cli:
         """ Add document from command line. """
 
         issue = '1'
-        docnamelist = self.doc.createdocnamelist(project, doctype, issue, \
+        docnamelist = self.link.const_docnamelist(project, doctype, issue, \
                                                  filetype)
         self.doc.adddocument(addfilepath, docnamelist, doctitle)
             

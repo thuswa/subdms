@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # $Id$
-# Last modified Tue Apr  7 12:55:38 2009 on violator
-# update count: 77
+# Last modified Wed Apr  8 12:53:06 2009 on violator
+# update count: 79
 
 from optparse import OptionParser
 import re
@@ -11,7 +11,7 @@ from subdms import lowlevel
 """ pre-commit hook to restrict commits. """
 
 conf = lowlevel.config()
-docs = lowlevel.docname()
+link = lowlevel.linkname()
 
 def main():
   usage = """usage: %prog REPOS TXN
@@ -37,8 +37,8 @@ def main():
 
   if docfname:
     # create docname list
-    docnamelist = docs.deconst_docfname(docfname)
-    docurl = docs.const_docinrepopath(docnamelist)
+    docnamelist = link.deconst_docfname(docfname)
+    docurl = link.const_docinrepopath(docnamelist)
 
     log_message = look.getlogmsg()
 
