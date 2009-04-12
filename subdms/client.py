@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Wed Apr  8 19:26:46 2009 on violator
-# update count: 682
+# Last modified Sun Apr 12 22:23:03 2009 on violator
+# update count: 780
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -46,7 +46,8 @@ class ClientUi(QtGui.QMainWindow):
         self.ui.setupUi(self)
         self.aboutdialog = aboutDialog()
         self.projdialog = projectDialog()
-        self.docdialog = documentDialog()
+        self.docdialog = documentDialog('P')
+        self.tmpldialog = documentDialog('T')
         
         # Set column width on list object
         self.ui.documentlist.setColumnWidth(0, 40)
@@ -63,7 +64,10 @@ class ClientUi(QtGui.QMainWindow):
         self.connect(self.ui.actionNew_Document, QtCore.SIGNAL("activated()"), \
                      self.showdocdialog)
         self.connect(self.ui.actionNew_Issue, QtCore.SIGNAL("activated()"), \
-                     self.newissue)        
+                     self.newissue)
+        self.connect(self.ui.actionNew_Template, QtCore.SIGNAL("activated()"), \
+                     self.showtmpldialog)
+
         # Tools menu
         self.connect(self.ui.actionEdit_Document, \
                      QtCore.SIGNAL("activated()"), self.editdoc)
@@ -75,6 +79,8 @@ class ClientUi(QtGui.QMainWindow):
                      QtCore.SIGNAL("activated()"), self.releasedoc)
         self.connect(self.ui.actionList_Documents, \
                      QtCore.SIGNAL("activated()"), self.setdocumentlist)
+        self.connect(self.ui.actionList_Templates, \
+                     QtCore.SIGNAL("activated()"), self.settemplatelist)
         # Help menu
         self.connect(self.ui.actionAbout, QtCore.SIGNAL("activated()"), \
                      self.showaboutdialog)
@@ -82,7 +88,7 @@ class ClientUi(QtGui.QMainWindow):
     def showaboutdialog(self):
         """ Show about dialog """
         self.aboutdialog.show()
-        
+ 
     def showdocdialog(self):
         """ Show create document """        
         # Check if at least one project exist
@@ -96,18 +102,36 @@ class ClientUi(QtGui.QMainWindow):
             self.docdialog.setdoctypelist(self.docdialog.selectedproject())
             self.docdialog.settmplnamelist(self.docdialog.selectedfiletype())
             self.docdialog.show()
-    
+
+    def showtmpldialog(self):
+        """ Show create template """        
+        self.tmpldialog.setprojlist()
+        self.tmpldialog.setfiletypelist()
+        self.tmpldialog.setdoctypelist(self.tmpldialog.selectedproject())
+        self.tmpldialog.settmplnamelist(self.tmpldialog.selectedfiletype())
+        self.tmpldialog.ui.Title_Label.setText("Template title:")
+        self.tmpldialog.setWindowTitle("Create Template") 
+        self.tmpldialog.show()
+
+    def settemplatelist(self):
+        """ List the existing templates """
+        self.setlist(db.getalltmpls())        
     def setdocumentlist(self):
         """ List the existing documents """
+        self.setlist(db.getalldocs())
+
+    def setlist(self, docs):
+        """ List the existing documents """
+        self.ui.documentlist.clearContents()
         n = 0
-        for doc in db.getalldocs():
-            docnamelist = list(doc[1:6])
+        for doc in docs:
+            docnamelist = list(doc[1:7])
             state = QtGui.QTableWidgetItem(self.doc.getstate(docnamelist)[0])
             docid = QtGui.QTableWidgetItem(self.link.const_docid(docnamelist))
-            title = QtGui.QTableWidgetItem(doc[6])
-            doctype = QtGui.QTableWidgetItem(doc[5])
-            issue =  QtGui.QTableWidgetItem(doc[4])
-            status = QtGui.QTableWidgetItem(doc[8])
+            title = QtGui.QTableWidgetItem(doc[7])
+            doctype = QtGui.QTableWidgetItem(doc[6])
+            issue =  QtGui.QTableWidgetItem(doc[5])
+            status = QtGui.QTableWidgetItem(doc[9])
             self.ui.documentlist.setItem(n, 0, state)
             self.ui.documentlist.setItem(n, 1, docid)
             self.ui.documentlist.setItem(n, 2, title)
@@ -184,6 +208,7 @@ class aboutDialog(QtGui.QDialog):
 class projectDialog(QtGui.QDialog):
     def __init__(self, parent=None):
         self.proj = frontend.project()
+        self.conf = lowlevel.config()
         QtGui.QDialog.__init__(self, parent)
         self.ui = Ui_New_Project_Dialog()
         self.ui.setupUi(self)
@@ -191,18 +216,18 @@ class projectDialog(QtGui.QDialog):
                      self.okaction)
 
     def okaction(self):
-        proj = unicode(self.ui.Project_name.text())
+        proj = unicode(self.ui.Project_name.text()).upper()
         if db.projexists(proj):
             QtGui.QMessageBox.critical(None, "Error", \
                                        "Project "+proj+" already exists")
         else:
-            self.proj.createproject(proj)
+            self.proj.createproject("P", proj, self.conf.doctypes)
             self.close()
 
 ################################################################################
             
 class documentDialog(QtGui.QDialog):
-    def __init__(self, parent=None):
+    def __init__(self, category, parent=None):
         self.doc = frontend.document()
         self.link = lowlevel.linkname()
         self.conf = lowlevel.config()
@@ -210,7 +235,9 @@ class documentDialog(QtGui.QDialog):
         QtGui.QDialog.__init__(self, parent)
         self.ui = Ui_New_Document_Dialog()
         self.ui.setupUi(self)
-
+        self.cat = category
+        self.tmpllist = []
+        
         # Connect comboboxes and buttons
         self.connect(self.ui.Select_Project_Box, \
                      QtCore.SIGNAL("activated(project)"),
@@ -236,14 +263,18 @@ class documentDialog(QtGui.QDialog):
         return unicode(self.ui.File_Type_Box.currentText())
 
     def selectedtemplate(self):
-        return unicode(self.ui.Template_Name_Box.currentText())
+        n = self.ui.Template_Name_Box.currentIndex()
+        return self.tmpllist[n*6:n*6+6]
 
     # Set combobox functions
     def setprojlist(self):
         self.ui.Select_Project_Box.clear()
-        for proj in db.getprojs():
-            self.ui.Select_Project_Box.addItem(proj[0])
-
+        if self.cat == "P":
+            for proj in db.getprojs():
+                self.ui.Select_Project_Box.addItem(proj[0])
+        else:
+            self.ui.Select_Project_Box.addItem("TMPL")
+            
     def setdoctypelist(self, project):
         self.ui.Select_Type_Box.clear()
         for doctype in db.getdoctypes(project):
@@ -254,11 +285,14 @@ class documentDialog(QtGui.QDialog):
         for filetype in self.conf.filetypes:
             if db.gettemplates(filetype):
                 self.ui.File_Type_Box.addItem(filetype)
-
+                
     def settmplnamelist(self, filetype):
+        n=0
         self.ui.Template_Name_Box.clear()
         for tmpl in db.gettemplates(filetype):
-            self.ui.Template_Name_Box.addItem(tmpl[0])
+            self.tmpllist[n*6:n*6+6] = list(tmpl[1:7])
+            self.ui.Template_Name_Box.addItem(tmpl[7])
+            n += 1
 
     # Action functions        
     def addfileaction(self):
@@ -268,16 +302,15 @@ class documentDialog(QtGui.QDialog):
     def okaction(self):
         doctitle = unicode(self.ui.document_title.text())
         project = self.selectedproject()
-        doctype = self.selecteddoctype()
+        doctype = self.selecteddoctype().upper()
         issue = "1"
         selectedtab = self.ui.Create_From_Tab.currentIndex()
 
         if selectedtab == 0:
             # Create from template
-            filetype = self.selectedfiletype()
-            template = self.selectedtemplate()
-            tmplnamelist = [template, filetype]
-            createfromurl = self.link.const_tmplurl(tmplnamelist)
+            tmplnamelist = self.selectedtemplate()
+            createfromurl = self.link.const_docfileurl(tmplnamelist)
+            filetype = tmplnamelist.pop(-1)
             create = True
         if selectedtab == 1:
             # Create from File
@@ -302,8 +335,8 @@ class documentDialog(QtGui.QDialog):
                 createfromurl = self.link.const_docfileurl(basedoclist) 
                 create = True
                 
-        docnamelist = self.link.const_docnamelist(project, doctype, issue, \
-                                                  filetype)
+        docnamelist = self.link.const_docnamelist(self.cat, project, doctype, \
+                                                  issue, filetype)
         if create:
             self.doc.createdocument(createfromurl, docnamelist, doctitle)
         else:

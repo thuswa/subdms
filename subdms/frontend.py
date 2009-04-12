@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Wed Apr  8 16:46:25 2009 on violator
-# update count: 865
+# Last modified Fri Apr 10 13:32:13 2009 on violator
+# update count: 867
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -34,9 +34,9 @@ class project:
       self.conf = lowlevel.config()
       self.link = lowlevel.linkname()
       
-   def createproject(self, project):
+   def createproject(self, category, project, doctypes):
       """ Create project method. """
-      for doc in self.conf.doctypes:
+      for doc in doctypes:
          self.client.mkdir(self.link.const_doctypeurl(project, doc), \
                            self.conf.newproj+"Create directory for project: "\
                            +project,1)
@@ -206,12 +206,12 @@ class document:
          
    def getissueno(self, docnamelist):
       """ Get document issue number. """ 
-      return int(docnamelist[3])
+      return int(docnamelist[4])
 
    def setissueno(self, docnamelist, issue_no):
       """ Set document issue number. """ 
-      returnlist = docnamelist[:3]
-      returnlist.extend([issue_no, docnamelist[4]])
+      returnlist = docnamelist[:4]
+      returnlist.extend([issue_no, docnamelist[5]])
       return returnlist
 
    def gettitle(self, docnamelist):

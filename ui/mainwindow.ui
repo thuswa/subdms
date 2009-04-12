@@ -164,6 +164,7 @@
     <addaction name="actionNew_Project" />
     <addaction name="actionNew_Document" />
     <addaction name="actionNew_Issue" />
+    <addaction name="actionNew_Template" />
    </widget>
    <widget class="QMenu" name="menuTools" >
     <property name="title" >
@@ -175,6 +176,7 @@
     <addaction name="actionRelease_Document" />
     <addaction name="separator" />
     <addaction name="actionList_Documents" />
+    <addaction name="actionList_Templates" />
    </widget>
    <addaction name="menuFile" />
    <addaction name="menuCreate" />
@@ -230,6 +232,16 @@
   <action name="actionCommit_Changes" >
    <property name="text" >
     <string>Commit Changes</string>
+   </property>
+  </action>
+  <action name="actionList_Templates" >
+   <property name="text" >
+    <string>List Templates</string>
+   </property>
+  </action>
+  <action name="actionNew_Template" >
+   <property name="text" >
+    <string>New Template</string>
    </property>
   </action>
  </widget>

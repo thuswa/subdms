@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Tue Mar 31 19:55:52 2009 on violator
-# update count: 248
+# Last modified Sun Apr 12 21:34:57 2009 on violator
+# update count: 295
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -42,8 +42,9 @@ class sqlitedb:
         """ Create database """
         # Create the simpliest table 
         self.cursor.execute("create table revlist(revnum INTEGER PRIMARY KEY," \
-                            "project, doctype, docno, issue, docext, " \
-                            "doctitle, date, status, author, logtext TEXT)")
+                            "category, project, doctype, docno, issue, " \
+                            "docext, doctitle, date, status, author, " \
+                            "logtext TEXT)")
 
         self.cursor.execute("create table projlist(projname TEXT PRIMARY KEY," \
                             "doctypes)")
@@ -56,9 +57,9 @@ class sqlitedb:
     def writerevlist(self,rvn, writestr):
         """ Write to documents table in database. """
         # Construct sql command string
-        db_str="insert into revlist(revnum, project, doctype, docno, issue, " \
-                "docext, doctitle, date, status, author, logtext) " \
-                "values(\"%s\", \"%s\")" \
+        db_str="insert into revlist(revnum, category, project, doctype, " \
+                "docno, issue, docext, doctitle, date, status, author, " \
+                "logtext) values(\"%s\", \"%s\")" \
                 % (rvn, string.join(writestr, "\",\""))
         # Excecute sql command
         self.cursor.execute(db_str)
@@ -74,42 +75,37 @@ class sqlitedb:
         self.cursor.execute(db_str)
         self.con.commit()
 
-    def writetmpllist(self, rvn, tmplname, filetype, logtext):
-        """ Write to template table in database. """
-        # Construct sql command string
-        db_str="insert into tmpllist(rvn, tmplname, filetype, logtext) " \
-                "values(\"%s\", \"%s\", \"%s\", \"%s\")" \
-                % (rvn, tmplname, filetype, logtext)
-        # Excecute sql command
-        self.cursor.execute(db_str)
-        self.con.commit()
-
     def statuschg(self, docnamelist, status):
         """ Update document status """
+        d = docnamelist
         self.cursor.execute("update revlist set status=? " \
-                "where project=? and doctype=? and docno=? and issue=?", \
-                (status, docnamelist[0], docnamelist[1], docnamelist[2], \
-                 docnamelist[3], ))
+                            "where category=? and project=? and doctype=? " \
+                            "and docno=? and issue=?" , \
+                            (status, d[0], d[1], d[2], d[3], d[4] ))
         self.con.commit()
         
     def getalldocs(self):
         """ Get complete documents table from database. """
-        self.cursor.execute("select * from revlist")
+        self.cursor.execute("select * from revlist " \
+                            "where category = \"P\"")
         return self.cursor.fetchall()
 
     def getallprojs(self):
         """ Get complete projects table from database. """
-        self.cursor.execute("select * from projlist")
+        self.cursor.execute("select * from projlist " \
+                            "where projname != \"TMPL\"")
         return self.cursor.fetchall()
 
     def getalltmpls(self):
         """ Get complete templates table from database. """
-        self.cursor.execute("select * from tmpllist")
+        self.cursor.execute("select * from revlist " \
+                            "where category = \"T\"")
         return self.cursor.fetchall()
 
     def getprojs(self):
         """ Get list of all projects from database. """
-        self.cursor.execute("select projname from projlist")
+        self.cursor.execute("select projname from projlist "
+                            "where projname != \"TMPL\"")
         return self.cursor.fetchall()
 
     def projexists(self, project):
@@ -123,11 +119,12 @@ class sqlitedb:
 
     def docexists(self, documentid, issue):
         """ Check if project exists in database. """
-        project, doctype, docno = documentid.split("-")
+        category, project, doctype, docno = documentid.split("-")
         # Query database 
         self.cursor.execute("select * from revlist " \
-                 "where project=? and doctype=? and docno=? and issue=?", \
-                            (project, doctype, docno, issue, ))
+                            "where category=? project=? and doctype=? "\
+                            "and docno=? and issue=?", \
+                            (category, project, doctype, docno, issue, ))
         if self.cursor.fetchall():
             return True
         else:
@@ -139,12 +136,12 @@ class sqlitedb:
                             "where projname=?", (project, ))
         return self.cursor.fetchone()[0].split(",")
 
-    def getdocno(self, project, doctype):
+    def getdocno(self, category, project, doctype):
         """ Get document number from this project and type. """
         # Query database 
         self.cursor.execute("select max(docno) from revlist " \
-                            "where project=? and doctype=?" \
-                            , (project, doctype))
+                            "where category = ? and project=? and doctype=?" \
+                            , (category, project, doctype))
         # Get document number
         docno = self.cursor.fetchone()[0]
 
@@ -156,14 +153,17 @@ class sqlitedb:
     def getdocext(self, documentid, issue):
         """ Get document file type. """
         # Query database
-        project, doctype, docno = documentid.split("-")
+        category, project, doctype, docno = documentid.split("-")
         self.cursor.execute("select docext from revlist " \
-                    "where project=? and doctype=? and docno=? and issue=?", \
-                            (project, doctype, docno, issue, ))
+                            "where category=? and project=? and doctype=? " \
+                            "and docno=? and issue=?", \
+                            (category, project, doctype, docno, issue, ))
         return self.cursor.fetchone()[0]
 
     def gettemplates(self, filetype):
         """ Get templates of one file type from database. """
-        self.cursor.execute("select tmplname from tmpllist " \
-                            "where filetype=?", (filetype, ))
+        self.cursor.execute("select * from revlist " \
+                            "where category = \"T\" and docext=? and " \
+                            "status=\"released\"", (filetype, ))
         return self.cursor.fetchall()
+

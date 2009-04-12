@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Thu Apr  9 00:48:42 2009 on violator
-# update count: 366
+# Last modified Fri Apr 10 13:29:33 2009 on violator
+# update count: 394
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -46,18 +46,16 @@ class config:
         self.repopath = self.conf.get("Path", "repository")
         self.hookspath = os.path.join(self.repopath,"hooks") 
         self.repourl = "file:///" + self.repopath.replace("\\","/")
-        self.trunkurl = self.repourl + "/trunk"
-        self.tmplurl = self.repourl + "/templates"
         self.workpath = self.conf.get("Path", "workspace")
         self.dbpath = self.conf.get("Path", "database")
         self.doctypes = list(self.conf.get("Document", "type").split())
+        self.categories = ['P','T']
         self.filetypes = ['pdf','tex','txt','zip']
         self.tmpltypes = ['tex','txt']
         self.proplist = ['title', 'status', 'svn:keywords']
         self.svnkeywords=string.join(["LastChangedDate", \
                                       "LastChangedRevision", "Id", \
                                       "Author"])
-        self.tmpl = 'template'.encode("hex")
         self.statchg = 'statuschange'.encode("hex")
         self.newdoc = 'newdocument'.encode("hex")
         self.newproj = 'newproject'.encode("hex")
@@ -101,7 +99,7 @@ class linkname:
 
     def const_docurl(self, docnamelist):
         """ Construct the document url. """
-        docurllist=[self.conf.trunkurl]
+        docurllist=[self.conf.repourl]
         docurllist.extend(docnamelist[:-1])
         return string.join(docurllist, '/')
 
@@ -121,59 +119,33 @@ class linkname:
 
     def const_doctypeurl(self, project, doctype):
         """ Create directory in repo for project document types. """
-        return os.path.join(self.conf.trunkurl, project, doctype)
+        return os.path.join(self.conf.repourl, project, doctype)
 
-    def const_docnamelist(self, project, doctype, issue, docext):
+    def const_docnamelist(self, category, project, doctype, issue, docext):
         """
         Create docnamelist - list containing the building blocks of
         the document name
         """
         db = database.sqlitedb()
-        docno="%04d" % (db.getdocno(project, doctype) + 1)
-        return [project, doctype, docno, issue, docext]
+        docno="%04d" % (db.getdocno(category, project, doctype) + 1)
+        return [category, project, doctype, docno, issue, docext]
   
     def deconst_docfname(self, docname):
         """ De-construct document file name. """
         return list(docname.replace(".","-").split("-"))  
 
-    def const_tmpltypeurl(self, tmpltype):
-        """ Create directory in repo for template file types. """
-        return os.path.join(self.conf.tmplurl, tmpltype)
-
-    def const_tmplurl(self, tmplnamelist):
-        """ Construct the template url. """
-        tmpllist = [tmplnamelist[1], tmplnamelist[0]]
-        return string.join([self.conf.tmplurl, \
-                            string.join(tmpllist,'-')], '/')
-
-    def const_tmplfileurl(self, tmplnamelist):
-        """ Construct the template file url. """
-        return string.join([self.const_tmplurl(tmplnamelist), \
-                            self.const_tmplfname(tmplnamelist)], '/')
-
-    def const_tmpldir(self, tmplnamelist):
-        """ Construct the template file check-out dir. """
-        tmpllist =['template']
-        tmpllist.extend(tmplnamelist)
-        return os.path.join(self.conf.workpath, string.join(tmpllist))
-
-    def const_tmplfilepath(self, tmplnamelist):
-        """ Construct the the template file path. """
-        return os.path.join(self.const_tmpldir(tmplnamelist), \
-                            self.const_tmplfname(tmplnamelist))
-
-    def const_tmplfname(self, tmplnamelist):
-        """ Construct template file name. """
-        return string.join(tmplnamelist, ".")  
-
-    def deconst_tmplfname(self, tmplname):
-        """ De-construct template file name. """
-        return list(tmplname.split("."))  
-
-    def const_defaulttmplpath(self,tmplname):
+    def const_defaulttmplpath(self, tmplname):
         """ Construct the default template file path. """
         return os.path.join(self.conf.tmplpath, tmplname)
-    
+
+    def const_repohookpath(self, repohook):
+        """ Construct repository hook path. """
+        return os.path.join(self.conf.hookspath, repohook)
+
+    def const_hookfilepath(self, hookfile):
+        """ Construct path to hook file. """
+        return os.path.join(self.conf.pkgpath, hookfile+'.py')
+
 ################################################################################
 
 class command:

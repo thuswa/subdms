@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Thu Apr  9 00:49:38 2009 on violator
-# update count: 255
+# Last modified Thu Apr  9 23:45:28 2009 on violator
+# update count: 294
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -20,79 +20,53 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import os
 import pysvn
-import string
 
 import lowlevel
+import frontend
 
 class repository:
     def __init__(self):    
         self.client = pysvn.Client()
         self.conf = lowlevel.config()
         self.cmd = lowlevel.command()
+        self.doc = frontend.document()
         self.link = lowlevel.linkname()
-
+        self.proj = frontend.project()
+        
     def createrepo(self):
         """ create repsitory and layout """
         self.cmd.svncreaterepo(self.conf.repopath)
-        self.client.mkdir(self.conf.trunkurl, "create trunk directory",1)
         print "Create repository: "+self.conf.repopath
 
     def installhooks(self):
         """ Install hooks in repository """
-        revhooklist=['pre-commit', 'post-commit']
-        for revhook in revhooklist:
-            revhookpath=os.path.join(self.conf.hookspath, revhook)
+        repohooklist=['pre-commit', 'post-commit']
+        for repohook in repohooklist:
+            repohookpath = self.link.const_repohookpath(repohook)
+
             # Copy hooks to dir in repository and set to executable
-            self.cmd.copyfile(os.path.join(self.conf.pkgpath, revhook+'.py'), \
-                              revhookpath) #fixme
-            self.cmd.setexecutable(revhookpath)
-            print "Install hook: "+revhook+" ->  "+self.conf.hookspath
+            self.cmd.copyfile(self.link.const_hookfilepath(repohook), \
+                              repohookpath)
+            self.cmd.setexecutable(repohookpath)
+            print "Install hook: "+repohook+" ->  "+self.conf.hookspath
 
     def installtemplates(self):
         """ Install templates in repository """
         # Create url for template types in repo
-        self.createtmplurls()
-
+        category = self.conf.categories[1]
+        project = 'TMPL'
+        issue = '1'
+        doctypes =['GEN']
+        self.proj.createproject(category, project, doctypes)
         # Add default templates to repo
         for tmpl in self.conf.tmpltypes:
+            tmplnamelist = self.link.const_docnamelist(category, project, \
+                                                      doctypes[0], issue, tmpl)
             tmplfname = self.conf.gettemplate(tmpl)
-            tmplnamelist = self.link.deconst_tmplfname(tmplfname)
             tmplpath = self.link.const_defaulttmplpath(tmplfname)
-            self.addtemplate(tmplpath, tmplnamelist)                
-            print "Install template: "+tmplfname+" -> "+self.conf.tmplurl 
+            self.doc.adddocument(tmplpath, tmplnamelist, "default")
+            self.doc.release(tmplnamelist)
+            print "Install template: "+tmplfname+" -> "+self.conf.repourl 
 
-    def addtemplate(self, addtemplatepath, tmplnamelist):
-        """ Add new template to repo. """
-        tmplfname = self.link.const_tmplfname(tmplnamelist)
-        tmplurl = self.link.const_tmplurl(tmplnamelist)
-        tmpldir = self.link.const_tmpldir(tmplnamelist)
-        tmplfilepath = self.link.const_tmplfilepath(tmplnamelist)
-
-        # Create template url in repository and check it out to workspace
-        self.client.mkdir(tmplurl, "create directory for template: "+ \
-                          tmplfname,1)
-        self.client.checkout(tmplurl, tmpldir)
-
-        # Add templates to dir
-        self.cmd.copyfile(addtemplatepath, tmplfilepath)
-        self.client.add(tmplfilepath)
-
-        self.client.propset(self.conf.proplist[2], self.conf.svnkeywords, \
-                            tmplfilepath)
-        
-        # Commit templates
-        self.client.checkin(tmplfilepath, self.conf.tmpl+\
-                            "Installing template: "+tmplfname)
-
-        # Remove template dir from workspace
-        self.cmd.rmtree(tmpldir)
-
-    def createtmplurls(self):
-        """ Create template file type urls. """
-        for tmpl in self.conf.tmpltypes:
-            self.client.mkdir(self.link.const_tmpltypeurl(tmpl), \
-                              "Create directory for template file type: "\
-                              +tmpl,1)
 
