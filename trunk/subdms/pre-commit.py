@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # $Id$
-# Last modified Wed Apr  8 12:53:06 2009 on violator
-# update count: 79
+# Last modified Thu Apr  9 23:23:21 2009 on violator
+# update count: 83
 
 from optparse import OptionParser
 import re
@@ -24,7 +24,6 @@ def main():
   newdocptrn = re.compile(conf.newdoc)
   obsptrn = re.compile(conf.obsolete)
   relptrn = re.compile(conf.release)
-  tmplptrn = re.compile(conf.tmpl)
  
   errors = 0
   status = conf.statuslist[0]
@@ -41,19 +40,16 @@ def main():
     docurl = link.const_docinrepopath(docnamelist)
 
     log_message = look.getlogmsg()
+    status = look.getstatus(docurl)
 
-    if not tmplptrn.match(log_message):
-        status = look.getstatus(docurl)
-
-        if not relptrn.match(log_message) and not obsptrn.match(log_message) \
-               and not newdocptrn.match(log_message):
-            if status in conf.statuslist[4:6]:
-                errors = 1
-                print docfname+" is "+status+" and thus read-only." 
+    if not relptrn.match(log_message) and not obsptrn.match(log_message) \
+           and not newdocptrn.match(log_message):
+      if status in conf.statuslist[4:6]:
+        errors = 1
+        print docfname+" is "+status+" and thus read-only." 
   return errors
   
-    
 if __name__ == "__main__":
-    import sys
-    sys.exit(main())
+  import sys
+  sys.exit(main())
 
