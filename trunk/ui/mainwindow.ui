@@ -15,6 +15,12 @@
     <height>480</height>
    </size>
   </property>
+  <property name="contextMenuPolicy" >
+   <enum>Qt::ActionsContextMenu</enum>
+  </property>
+  <property name="acceptDrops" >
+   <bool>true</bool>
+  </property>
   <property name="windowTitle" >
    <string>Subdms - Document Managment </string>
   </property>
@@ -38,7 +44,7 @@
      <bool>true</bool>
     </property>
     <property name="contextMenuPolicy" >
-     <enum>Qt::ActionsContextMenu</enum>
+     <enum>Qt::CustomContextMenu</enum>
     </property>
     <property name="acceptDrops" >
      <bool>false</bool>
@@ -47,16 +53,22 @@
      <set>QAbstractItemView::AnyKeyPressed|QAbstractItemView::EditKeyPressed</set>
     </property>
     <property name="dragEnabled" >
-     <bool>true</bool>
+     <bool>false</bool>
+    </property>
+    <property name="dragDropOverwriteMode" >
+     <bool>false</bool>
     </property>
     <property name="dragDropMode" >
-     <enum>QAbstractItemView::DragOnly</enum>
+     <enum>QAbstractItemView::NoDragDrop</enum>
     </property>
     <property name="alternatingRowColors" >
      <bool>true</bool>
     </property>
     <property name="selectionMode" >
      <enum>QAbstractItemView::ContiguousSelection</enum>
+    </property>
+    <property name="selectionBehavior" >
+     <enum>QAbstractItemView::SelectRows</enum>
     </property>
     <property name="rowCount" >
      <number>40</number>
@@ -170,16 +182,22 @@
     <property name="title" >
      <string>Tools</string>
     </property>
+    <addaction name="actionDocument_Info" />
     <addaction name="actionEdit_Document" />
     <addaction name="actionCheck_in_Document" />
     <addaction name="actionCommit_Changes" />
     <addaction name="actionRelease_Document" />
-    <addaction name="separator" />
+   </widget>
+   <widget class="QMenu" name="menuView" >
+    <property name="title" >
+     <string>View</string>
+    </property>
     <addaction name="actionList_Documents" />
     <addaction name="actionList_Templates" />
    </widget>
    <addaction name="menuFile" />
    <addaction name="menuCreate" />
+   <addaction name="menuView" />
    <addaction name="menuTools" />
    <addaction name="menuHelp" />
   </widget>
@@ -242,6 +260,11 @@
   <action name="actionNew_Template" >
    <property name="text" >
     <string>New Template</string>
+   </property>
+  </action>
+  <action name="actionDocument_Info" >
+   <property name="text" >
+    <string>Document Info</string>
    </property>
   </action>
  </widget>
