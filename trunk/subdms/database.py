@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Sun Apr 12 21:34:57 2009 on violator
-# update count: 295
+# Last modified Mon Apr 13 21:49:25 2009 on violator
+# update count: 302
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -48,9 +48,6 @@ class sqlitedb:
 
         self.cursor.execute("create table projlist(projname TEXT PRIMARY KEY," \
                             "doctypes)")
-
-        self.cursor.execute("create table tmpllist(rvn INTEGER PRIMARY KEY,"\
-                            "tmplname, filetype, logtext TEXT)")
 
         print "Create database: "+self.conf.dbpath
 
@@ -167,3 +164,11 @@ class sqlitedb:
                             "status=\"released\"", (filetype, ))
         return self.cursor.fetchall()
 
+    def getdocumentinfo(self, docnamelist):
+        """ Get all info about document. """
+        d = docnamelist
+        self.cursor.execute("select * from revlist " \
+                            "where category=? and project=? and doctype=? " \
+                            "and docno=? and issue=?" , \
+                            (d[0], d[1], d[2], d[3], d[4] ))
+        return self.cursor.fetchall()[0]
