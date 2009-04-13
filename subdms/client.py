@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Sun Apr 12 22:23:03 2009 on violator
-# update count: 780
+# Last modified Tue Apr 14 00:48:28 2009 on violator
+# update count: 921
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -30,6 +30,7 @@ import lowlevel
 from aboutui import Ui_AboutDialog
 from createdocumentui import Ui_New_Document_Dialog
 from createprojui import Ui_New_Project_Dialog
+from documentinfoui import Ui_Document_Info_Dialog
 from mainwindow import Ui_MainWindow
 
 db = database.sqlitedb()
@@ -48,6 +49,7 @@ class ClientUi(QtGui.QMainWindow):
         self.projdialog = projectDialog()
         self.docdialog = documentDialog('P')
         self.tmpldialog = documentDialog('T')
+        self.docinfodialog = documentInfoDialog()
         
         # Set column width on list object
         self.ui.documentlist.setColumnWidth(0, 40)
@@ -67,8 +69,14 @@ class ClientUi(QtGui.QMainWindow):
                      self.newissue)
         self.connect(self.ui.actionNew_Template, QtCore.SIGNAL("activated()"), \
                      self.showtmpldialog)
-
+        # View menu
+        self.connect(self.ui.actionList_Documents, \
+                     QtCore.SIGNAL("activated()"), self.setdocumentlist)
+        self.connect(self.ui.actionList_Templates, \
+                     QtCore.SIGNAL("activated()"), self.settemplatelist)
         # Tools menu
+        self.connect(self.ui.actionDocument_Info, \
+                     QtCore.SIGNAL("activated()"), self.showdocinfo)
         self.connect(self.ui.actionEdit_Document, \
                      QtCore.SIGNAL("activated()"), self.editdoc)
         self.connect(self.ui.actionCheck_in_Document, \
@@ -77,14 +85,24 @@ class ClientUi(QtGui.QMainWindow):
                      QtCore.SIGNAL("activated()"), self.commitdoc)        
         self.connect(self.ui.actionRelease_Document, \
                      QtCore.SIGNAL("activated()"), self.releasedoc)
-        self.connect(self.ui.actionList_Documents, \
-                     QtCore.SIGNAL("activated()"), self.setdocumentlist)
-        self.connect(self.ui.actionList_Templates, \
-                     QtCore.SIGNAL("activated()"), self.settemplatelist)
         # Help menu
         self.connect(self.ui.actionAbout, QtCore.SIGNAL("activated()"), \
                      self.showaboutdialog)
 
+        # Right-click menu = Tools
+        self.connect(self.ui.documentlist, \
+             QtCore.SIGNAL('customContextMenuRequested(const QPoint &)'), \
+                     self.showrightclickmenu)
+
+    def showdocinfo(self):
+        docnamelist = self.getselecteddoc()
+        self.docinfodialog.show()
+        self.docinfodialog.setdocinfo(docnamelist)
+        
+    def showrightclickmenu(self, coord):
+        coord = self.mapToGlobal(coord)
+        self.ui.menuTools.popup(coord)
+        
     def showaboutdialog(self):
         """ Show about dialog """
         self.aboutdialog.show()
@@ -357,6 +375,51 @@ class addFileDialog(QtGui.QFileDialog):
                                     '/home', \
                                     "Supported (*.pdf *.txt *.tex *.zip)")
         
+################################################################################
+
+class documentInfoDialog(QtGui.QDialog):
+    def __init__(self, parent=None):
+        self.doc = frontend.document()
+        self.link = lowlevel.linkname()
+        QtGui.QDialog.__init__(self, parent)
+        self.ui = Ui_Document_Info_Dialog()
+        self.ui.setupUi(self)
+        self.addbuttons()
+
+        # Connect buttons
+        self.connect(self.ui.edit, QtCore.SIGNAL("clicked()"), \
+                     self.savechanges)
+        self.connect(self.ui.checkin, QtCore.SIGNAL("clicked()"), \
+                     self.savechanges)
+        self.connect(self.ui.commit, QtCore.SIGNAL("clicked()"), \
+                     self.savechanges)
+        self.connect(self.ui.save, QtCore.SIGNAL("clicked()"), \
+                     self.savechanges)
 
 
+    def addbuttons(self):
+        self.ui.edit = self.ui.Document_Info_Confirm.addButton("Edit" , 3)
+        self.ui.checkin = self.ui.Document_Info_Confirm.addButton("Check-in" , \
+                                                                     3)
+        self.ui.commit = self.ui.Document_Info_Confirm.addButton("Commit" , \
+                                                                     3)
+        self.ui.save = self.ui.Document_Info_Confirm.addButton("Save" , \
+                                                                     3)
+
+    def setdocinfo(self, docnamelist):
+        """ Set document info. """
+        info = db.getdocumentinfo(docnamelist)
+        self.ui.state.setText(self.doc.getstate(docnamelist)[1])
+        self.ui.document_id.setText(self.link.const_docid(docnamelist))
+        self.ui.issue.setText(str(self.doc.getissueno(docnamelist)))
+        self.ui.status.setText(info[9])
+        self.ui.document_title.setText(info[7])
+        self.ui.file_type.setText(info[6])
+        self.ui.date.setText(info[8][0:19])
+        self.ui.author.setText(info[10])
+
+    def savechanges(self):
+        """ Save changes. """
+        if self.ui.document_title.isModified():
+            print "check save"
         
