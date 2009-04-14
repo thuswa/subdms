@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Tue Apr 14 19:54:12 2009 on violator
-# update count: 892
+# Last modified Tue Apr 14 21:29:29 2009 on violator
+# update count: 900
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -130,8 +130,7 @@ class document:
       """check-out file to workspace"""
 
       # Check status of doucument 
-      if self.status.isreleased(docnamelist) or \
-         self.status.isobsolete(docnamelist):
+      if self.status.isreadonly(docnamelist):
          self.client.export(self.link.const_docurl(docnamelist), \
                        self.link.const_checkoutpath(docnamelist))
          self.cmd.setreadonly(self.link.const_docpath(docnamelist))
@@ -325,9 +324,20 @@ class docstatus:
       else:
          return False
 
+   def isnotreleased(self, docnamelist):
+      """ Return true if document is not released. """
+      return not self.isreleased(docnamelist)
+
    def isobsolete(self, docnamelist):
       """ Return true if document is obsolete. """
       if self.getstatus(docnamelist) == self.conf.statuslist[5]:
          return True
       else:
          return False
+
+   def isreadonly(self, docnamelist):
+      """ Return true if document status implies read-only. """
+      if self.isreleased(docnamelist) or self.isobsolete(docnamelist):
+         return True
+      else:
+         return False:
