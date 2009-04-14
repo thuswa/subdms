@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Mon Apr 13 00:55:41 2009 on violator
-# update count: 869
+# Last modified Tue Apr 14 19:54:12 2009 on violator
+# update count: 892
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -198,11 +198,28 @@ class document:
                             docfileurl, message)
       self.client.checkout(docurl, checkoutpath)
       
-      # Set document title and commit document
+      # Set document status and commit document
       self.status.setpreliminary(docpath)
       self.client.checkin(docpath, self.conf.newdoc+ \
                      "Commit document properties for: "+docname)
       return message   
+
+   def changetitle(self, docnamelist, doctitle):
+      """ Change document title. """
+      wascheckedout = True
+      docpath = self.link.const_docpath(docnamelist)
+      
+      if not self.ischeckedout(docnamelist):
+         self.checkout(docnamelist)
+         wascheckedout = False
+
+      # Set document title and commit document
+      self.settitle(doctitle, docpath)
+      self.client.checkin(docpath, self.conf.newtitle+ \
+                          "Changed document title")
+
+      if not wascheckedout:
+         self.checkin(docnamelist)
          
    def getissueno(self, docnamelist):
       """ Get document issue number. """ 
@@ -294,24 +311,23 @@ class docstatus:
       self.client.propset(self.conf.proplist[1], self.conf.statuslist[5], \
                           docpath)
 
-
    def ispreliminary(self, docnamelist):
       """ Return true if document is released. """
-      if self.getstatus(self, docnamelist) == self.conf.statuslist[0]:
+      if self.getstatus(docnamelist) == self.conf.statuslist[0]:
          return True
       else:
          return False
 
    def isreleased(self, docnamelist):
       """ Return true if document is released. """
-      if self.getstatus(self, docnamelist) == self.conf.statuslist[5]:
+      if self.getstatus(docnamelist) == self.conf.statuslist[5]:
          return True
       else:
          return False
 
    def isobsolete(self, docnamelist):
       """ Return true if document is obsolete. """
-      if self.getstatus(self, docnamelist) == self.conf.statuslist[5]:
+      if self.getstatus(docnamelist) == self.conf.statuslist[5]:
          return True
       else:
          return False

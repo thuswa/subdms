@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Thu Apr  9 23:18:48 2009 on violator
-# update count: 169
+# Last modified Tue Apr 14 14:18:59 2009 on violator
+# update count: 174
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -45,6 +45,7 @@ def main():
   # Search patterns for action selection
   newdocptrn = re.compile(conf.newdoc)
   newprojptrn = re.compile(conf.newproj)
+  newtitleptrn = re.compile(conf.newtitle)
   obsptrn = re.compile(conf.obsolete)
   relptrn = re.compile(conf.release)
   statchgptrn = re.compile(conf.statchg)
@@ -68,14 +69,14 @@ def main():
     # Get author, date and other properties
     author = look.getauthor()
     date = look.getdate()
-    title = look.gettitle(docurl)
+    doctitle = look.gettitle(docurl)
     status = look.getstatus(docurl)
 
     if newdocptrn.match(log_message):
       # Create write string
       writestr=[]
       writestr.extend(docnamelist)
-      writestr.extend([title, date, status, author, \
+      writestr.extend([doctitle, date, status, author, \
                        newdocptrn.sub("",log_message)])
       # Write data to db
       db.writerevlist(rvn, writestr)
@@ -83,6 +84,9 @@ def main():
     if relptrn.match(log_message) or obsptrn.match(log_message):
       db.statuschg(docnamelist, status)
 
+    if newtitleptrn.match(log_message):
+      db.titlechg(docnamelist, doctitle)
+      
 if __name__ == "__main__":
   import sys
   sys.exit(main())

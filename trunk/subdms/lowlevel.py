@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Fri Apr 10 13:29:33 2009 on violator
-# update count: 394
+# Last modified Tue Apr 14 14:05:46 2009 on violator
+# update count: 404
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -42,29 +42,37 @@ class config:
         if os.name == 'posix':
             conffilepath = '/etc/subdms/subdms.cfg'
         self.conf.read(conffilepath)
-        
+
+        # Package paths
+        self.pkgpath = os.path.dirname(os.path.realpath(__file__))
+        self.tmplpath = os.path.join(self.pkgpath, "templates")
+
+        # DMS paths
         self.repopath = self.conf.get("Path", "repository")
         self.hookspath = os.path.join(self.repopath,"hooks") 
         self.repourl = "file:///" + self.repopath.replace("\\","/")
         self.workpath = self.conf.get("Path", "workspace")
         self.dbpath = self.conf.get("Path", "database")
         self.doctypes = list(self.conf.get("Document", "type").split())
+
+        # DMS Lists
         self.categories = ['P','T']
         self.filetypes = ['pdf','tex','txt','zip']
         self.tmpltypes = ['tex','txt']
         self.proplist = ['title', 'status', 'svn:keywords']
+        self.statuslist = ['preliminary', 'in-review' ,'rejected', 'approved', \
+                           'released', 'obsolete'] 
         self.svnkeywords=string.join(["LastChangedDate", \
                                       "LastChangedRevision", "Id", \
                                       "Author"])
+        # Internal Trigger patterns
         self.statchg = 'statuschange'.encode("hex")
         self.newdoc = 'newdocument'.encode("hex")
         self.newproj = 'newproject'.encode("hex")
+        self.newtitle = 'newtitle'.encode("hex")
         self.release = 'release'.encode("hex")
         self.obsolete = 'obsolete'.encode("hex")
-        self.statuslist = ['preliminary', 'in-review' ,'rejected', 'approved', \
-                           'released', 'obsolete'] 
-        self.pkgpath = os.path.dirname(os.path.realpath(__file__))
-        self.tmplpath = os.path.join(self.pkgpath, "templates")
+
 
     def geteditor(self, filetype):
         """ Get appropriate editor for filetype. """
