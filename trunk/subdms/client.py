@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Tue Apr 14 21:28:36 2009 on violator
-# update count: 939
+# Last modified Tue Apr 14 23:58:50 2009 on violator
+# update count: 941
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -96,7 +96,7 @@ class ClientUi(QtGui.QMainWindow):
 
     def showdocinfo(self):
         docnamelist = self.getselecteddoc()
-        if self.status.isredoly(docnamelist) :        
+        #        if self.status.isredoly(docnamelist):        
         self.docinfodialog.show()
         self.docinfodialog.setdocinfo(docnamelist)
         
