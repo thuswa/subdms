@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Tue Apr 14 00:48:28 2009 on violator
-# update count: 921
+# Last modified Tue Apr 14 20:18:43 2009 on violator
+# update count: 936
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -421,5 +421,13 @@ class documentInfoDialog(QtGui.QDialog):
     def savechanges(self):
         """ Save changes. """
         if self.ui.document_title.isModified():
-            print "check save"
+            doctitle = unicode(self.ui.document_title.text())
+            docid = unicode(self.ui.document_id.text())
+            issue = unicode(self.ui.issue.text())
+            filetype = unicode(self.ui.file_type.text())
+            
+            doclist = docid.split('-')
+            doclist.extend([issue, filetype])
+            self.doc.changetitle(doclist, doctitle) 
+
         

@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Mon Apr 13 21:49:25 2009 on violator
-# update count: 302
+# Last modified Tue Apr 14 12:52:39 2009 on violator
+# update count: 307
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -79,6 +79,15 @@ class sqlitedb:
                             "where category=? and project=? and doctype=? " \
                             "and docno=? and issue=?" , \
                             (status, d[0], d[1], d[2], d[3], d[4] ))
+        self.con.commit()
+
+    def titlechg(self, docnamelist, title):
+        """ Update document title """
+        d = docnamelist
+        self.cursor.execute("update revlist set doctitle=? " \
+                            "where category=? and project=? and doctype=? " \
+                            "and docno=? and issue=?" , \
+                            (title, d[0], d[1], d[2], d[3], d[4] ))
         self.con.commit()
         
     def getalldocs(self):
