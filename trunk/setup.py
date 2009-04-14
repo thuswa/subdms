@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Tue Mar 17 16:09:37 2009 on havoc
-# update count: 100
+# Last modified Tue Apr 14 14:14:56 2009 on violator
+# update count: 102
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -44,7 +44,6 @@ CLASSIFIERS = [
     'Topic :: Office/Business'
 ]
 
-
 setup(name='subdms',
       version='0.1.0',
       description='A document management system based on subversion',
@@ -58,7 +57,8 @@ setup(name='subdms',
       packages=['subdms'],
       package_data = {'subdms' : ['templates/*'] },
       data_files = [(confpath, ['subdms.cfg'])],
-      scripts = ['subdms/subdms', 'subdms/subdms-server'],
+      scripts = ['subdms/subdms', 'subdms/subdms-server', \
+                 'subdms/subdms-upgrade'],
       platforms='any',
       requires=['pysvn', 'pyqt4', 'pysqlite3', 'svn']
       )
