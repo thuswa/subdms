@@ -184,6 +184,7 @@
     </property>
     <addaction name="actionDocument_Info" />
     <addaction name="actionEdit_Document" />
+    <addaction name="actionView_Document" />
     <addaction name="actionCheck_in_Document" />
     <addaction name="actionCommit_Changes" />
     <addaction name="actionRelease_Document" />
@@ -265,6 +266,11 @@
   <action name="actionDocument_Info" >
    <property name="text" >
     <string>Document Info</string>
+   </property>
+  </action>
+  <action name="actionView_Document" >
+   <property name="text" >
+    <string>View Document</string>
    </property>
   </action>
  </widget>
