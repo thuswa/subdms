@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Wed Apr 15 20:28:24 2009 on violator
-# update count: 427
+# Last modified Wed Apr 15 23:45:38 2009 on violator
+# update count: 429
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -104,7 +104,7 @@ class linkname:
 
     def const_viewcopyfilepath(self, docnamelist):
         """ Construct the view-copy path """
-        return os.path.join(self.viewcopypath(docnamelist), \
+        return os.path.join(self.const_viewcopypath(docnamelist), \
                             self.const_docfname(docnamelist))
 
     def const_docname(self, docnamelist):
@@ -189,7 +189,7 @@ class command:
 
     def launch_viewer(self, docnamelist):
         """ Launch appropriate viewer. """
-        docpath = self.link.const_viewcopypath(docnamelist)
+        docpath = self.link.const_viewcopyfilepath(docnamelist)
         filetype = docnamelist[-1]
         os.system("%s %s &" % (self.conf.geteditor(filetype), docpath))
 
