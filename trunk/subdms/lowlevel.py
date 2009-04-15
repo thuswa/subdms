@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Tue Apr 14 14:05:46 2009 on violator
-# update count: 404
+# Last modified Wed Apr 15 00:20:36 2009 on violator
+# update count: 419
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -65,6 +65,8 @@ class config:
         self.svnkeywords=string.join(["LastChangedDate", \
                                       "LastChangedRevision", "Id", \
                                       "Author"])
+        self.vc = ['view', 'copy']
+        
         # Internal Trigger patterns
         self.statchg = 'statuschange'.encode("hex")
         self.newdoc = 'newdocument'.encode("hex")
@@ -92,6 +94,13 @@ class linkname:
         """ Construct the check-out path """
         return os.path.join(self.conf.workpath, \
                         os.path.splitext(self.const_docname(docnamelist))[0])
+
+    def const_viewcopypath(self, docnamelist):
+        """ Construct the view-copy path """
+        doclist=docnamelist[:-1]
+        doclist.extend(self.conf.vc)
+        doclist.extend(docnamelist[-1:])
+        return os.path.join(self.conf.workpath, self.const_docfname(doclist))
 
     def const_docname(self, docnamelist):
         """ Construct the document name. """
