@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Wed Apr 15 00:25:11 2009 on violator
-# update count: 911
+# Last modified Wed Apr 15 20:30:44 2009 on violator
+# update count: 927
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -134,9 +134,12 @@ class document:
 
    def export(self, docnamelist):
       """check-out file to workspace"""
+      checkoutpath = self.link.const_viewcopypath(docnamelist)
+      docpath = self.link.const_viewcopyfilepath(docnamelist)
+#      self.cmd.rmtree(checkoutpath)
       self.client.export(self.link.const_docurl(docnamelist), \
-                         self.link.const_viewcopy(docnamelist))
-      self.cmd.setreadonly(self.link.const_docpath(docnamelist))
+                         checkoutpath, True)
+      self.cmd.setreadonly(docpath)
 
    def release(self, docnamelist):
       """Release the document"""
@@ -181,7 +184,7 @@ class document:
       """ View the document. """
       if not self.ischeckedout(docnamelist):
          self.export(docnamelist)
-      self.cmd.launch_editor(docnamelist)   
+      self.cmd.launch_viewer(docnamelist)   
       
    def newissue(self, docnamelist):
       """Create new issue of the document"""
