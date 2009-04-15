@@ -183,8 +183,10 @@
      <string>Tools</string>
     </property>
     <addaction name="actionDocument_Info" />
-    <addaction name="actionEdit_Document" />
+    <addaction name="separator" />
     <addaction name="actionView_Document" />
+    <addaction name="actionEdit_Document" />
+    <addaction name="separator" />
     <addaction name="actionCheck_in_Document" />
     <addaction name="actionCommit_Changes" />
     <addaction name="actionRelease_Document" />
