@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Wed Apr 15 00:20:36 2009 on violator
-# update count: 419
+# Last modified Wed Apr 15 20:28:24 2009 on violator
+# update count: 427
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -100,7 +100,12 @@ class linkname:
         doclist=docnamelist[:-1]
         doclist.extend(self.conf.vc)
         doclist.extend(docnamelist[-1:])
-        return os.path.join(self.conf.workpath, self.const_docfname(doclist))
+        return os.path.join(self.conf.workpath, self.const_docname(doclist))
+
+    def const_viewcopyfilepath(self, docnamelist):
+        """ Construct the view-copy path """
+        return os.path.join(self.viewcopypath(docnamelist), \
+                            self.const_docfname(docnamelist))
 
     def const_docname(self, docnamelist):
         """ Construct the document name. """
@@ -172,16 +177,22 @@ class command:
         self.link = linkname()
         
     def command_output(self, cmd):
-        " Capture a command's standard output. "
+        """ Capture a command's standard output. """
         return subprocess.Popen(
             cmd.split(), stdout=subprocess.PIPE).communicate()[0]
 
     def launch_editor(self, docnamelist):
-        " Launch appropriate editor. "
+        """ Launch appropriate editor. """
         docpath = self.link.const_docpath(docnamelist)
         filetype = docnamelist[-1]
         os.system("%s %s &" % (self.conf.geteditor(filetype), docpath))
-   
+
+    def launch_viewer(self, docnamelist):
+        """ Launch appropriate viewer. """
+        docpath = self.link.const_viewcopypath(docnamelist)
+        filetype = docnamelist[-1]
+        os.system("%s %s &" % (self.conf.geteditor(filetype), docpath))
+
     def rmtree(self, path):
         """ Delete directory tree recursively. """
         shutil.rmtree(path)
