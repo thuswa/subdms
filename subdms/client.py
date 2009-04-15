@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Tue Apr 14 23:58:50 2009 on violator
-# update count: 941
+# Last modified Thu Apr 16 01:40:10 2009 on violator
+# update count: 1055
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -50,6 +50,18 @@ class ClientUi(QtGui.QMainWindow):
         self.docdialog = documentDialog('P')
         self.tmpldialog = documentDialog('T')
         self.docinfodialog = documentInfoDialog()
+
+        self.noselectedlist = [False, False, False, False, False, False, \
+                               False, False, False, False, False, False, False] 
+        self.releasedlist = [True, True, True, False, False, False, \
+                             False, False, False, False, False, False, False] 
+        self.obsoletelist = [False, True, True, False, False, False, \
+                             False, False, False, False, False, False, False] 
+        self.preliminarylist = [False, True, True, True, True, True, \
+                               True, True, True, True, True, True, True] 
+
+        # start with most actions disabled
+        self.disableactions(self.noselectedlist)
         
         # Set column width on list object
         self.ui.documentlist.setColumnWidth(0, 40)
@@ -58,6 +70,9 @@ class ClientUi(QtGui.QMainWindow):
         self.ui.documentlist.setColumnWidth(3, 60)
         self.ui.documentlist.setColumnWidth(4, 60)
         self.ui.documentlist.setColumnWidth(5, 100)
+
+        self.connect(self.ui.documentlist, \
+                     QtCore.SIGNAL("itemSelectionChanged()"), self.docselected)
 
         # Connect menubar entries
         # Create menu
@@ -79,6 +94,8 @@ class ClientUi(QtGui.QMainWindow):
                      QtCore.SIGNAL("activated()"), self.showdocinfo)
         self.connect(self.ui.actionEdit_Document, \
                      QtCore.SIGNAL("activated()"), self.editdoc)
+        self.connect(self.ui.actionView_Document, \
+                     QtCore.SIGNAL("activated()"), self.viewdoc)
         self.connect(self.ui.actionCheck_in_Document, \
                      QtCore.SIGNAL("activated()"), self.checkindoc)
         self.connect(self.ui.actionCommit_Changes, \
@@ -94,22 +111,57 @@ class ClientUi(QtGui.QMainWindow):
              QtCore.SIGNAL('customContextMenuRequested(const QPoint &)'), \
                      self.showrightclickmenu)
 
+        # Connect buttons in document info dialog
+        self.docinfodialog.connect(self.docinfodialog.ui.view, \
+                                   QtCore.SIGNAL("clicked()"), self.viewdoc)
+        self.docinfodialog.connect(self.docinfodialog.ui.edit, \
+                                   QtCore.SIGNAL("clicked()"), self.editdoc)
+        self.docinfodialog.connect(self.docinfodialog.ui.checkin, \
+                                   QtCore.SIGNAL("clicked()"), self.checkindoc)
+        self.docinfodialog.connect(self.docinfodialog.ui.commit, \
+                                   QtCore.SIGNAL("clicked()"), self.commitdoc)
+
+    def docselected(self):
+        docnamelist = self.getselecteddoc()
+        if self.status.isreleased(docnamelist):
+            self.disableactions(self.releasedlist)
+        if self.status.isobsolete(docnamelist):
+            self.disableactions(self.obsoletelist)            
+        if self.status.ispreliminary(docnamelist):
+            self.disableactions(self.preliminarylist)
+
+    def disableactions(self, statuslist):
+        # Menu entries
+        self.ui.actionNew_Issue.setEnabled(statuslist[0])
+        self.ui.actionDocument_Info.setEnabled(statuslist[1])
+        self.ui.actionView_Document.setEnabled(statuslist[2])
+        self.ui.actionEdit_Document.setEnabled(statuslist[3])
+        self.ui.actionCheck_in_Document.setEnabled(statuslist[4])
+        self.ui.actionCommit_Changes.setEnabled(statuslist[5])
+        self.ui.actionRelease_Document.setEnabled(statuslist[6])
+        # Buttons in document info dialog
+        self.docinfodialog.ui.edit.setEnabled(statuslist[7])
+        self.docinfodialog.ui.checkin.setEnabled(statuslist[8])
+        self.docinfodialog.ui.commit.setEnabled(statuslist[9])
+        self.docinfodialog.ui.save.setEnabled(statuslist[10])
+        # Fields in document info dialog 
+        self.docinfodialog.ui.document_title.setReadOnly(statuslist[11])
+        self.docinfodialog.ui.document_keywords.setEnabled(statuslist[12])
+         
     def showdocinfo(self):
         docnamelist = self.getselecteddoc()
-        #        if self.status.isredoly(docnamelist):        
         self.docinfodialog.show()
         self.docinfodialog.setdocinfo(docnamelist)
         
-    def showrightclickmenu(self, coord):
-        coord = self.mapToGlobal(coord)
-        self.ui.menuTools.popup(coord)
+    def showrightclickmenu(self):
+        self.ui.menuTools.popup(QtGui.QCursor.pos())
         
     def showaboutdialog(self):
-        """ Show about dialog """
+        """ Show about dialog. """
         self.aboutdialog.show()
  
     def showdocdialog(self):
-        """ Show create document """        
+        """ Show create document. """        
         # Check if at least one project exist
         if not db.getallprojs():
             QtGui.QMessageBox.critical(None, "Error","No projects exist. "\
@@ -123,7 +175,7 @@ class ClientUi(QtGui.QMainWindow):
             self.docdialog.show()
 
     def showtmpldialog(self):
-        """ Show create template """        
+        """ Show create template. """        
         self.tmpldialog.setprojlist()
         self.tmpldialog.setfiletypelist()
         self.tmpldialog.setdoctypelist(self.tmpldialog.selectedproject())
@@ -133,21 +185,21 @@ class ClientUi(QtGui.QMainWindow):
         self.tmpldialog.show()
 
     def settemplatelist(self):
-        """ List the existing templates """
+        """ List the existing templates. """
         self.setlist(db.getalltmpls())        
     def setdocumentlist(self):
-        """ List the existing documents """
+        """ List the existing documents. """
         self.setlist(db.getalldocs())
 
     def setlist(self, docs):
-        """ List the existing documents """
+        """ List the existing documents. """
         self.ui.documentlist.clearContents()
         n = 0
         for doc in docs:
             docnamelist = list(doc[1:7])
             state = QtGui.QTableWidgetItem(self.doc.getstate(docnamelist)[0])
             docid = QtGui.QTableWidgetItem(self.link.const_docid(docnamelist))
-            title = QtGui.QTableWidgetItem(doc[7])
+            title = QtGui.QTableWidgetItem(doc[7].replace(u"\n" , u" || "))
             doctype = QtGui.QTableWidgetItem(doc[6])
             issue =  QtGui.QTableWidgetItem(doc[5])
             status = QtGui.QTableWidgetItem(doc[9])
@@ -160,7 +212,7 @@ class ClientUi(QtGui.QMainWindow):
             n += 1        
 
     def getselecteddoc(self):
-        """ Get the document selected in list """
+        """ Get the document selected in list. """
         row = self.ui.documentlist.currentRow()
         docitem = self.ui.documentlist.item(row, 1)
         typeitem = self.ui.documentlist.item(row, 3)
@@ -173,7 +225,7 @@ class ClientUi(QtGui.QMainWindow):
             return None
 
     def checkindoc(self):
-        """ Check-in document action """
+        """ Check-in document action. """
         docnamelist = self.getselecteddoc()
         if docnamelist:
             message = self.doc.checkin(docnamelist)
@@ -185,8 +237,14 @@ class ClientUi(QtGui.QMainWindow):
         self.ui.statusbar.showMessage("Launching editor", 1500)
         self.doc.editdocument(docnamelist)
 
+    def viewdoc(self):
+        """ View document action. """
+        docnamelist = self.getselecteddoc()
+        self.ui.statusbar.showMessage("Launching viewer", 1500)
+        self.doc.viewdocument(docnamelist)
+
     def commitdoc(self):     
-        """ Commit changes on document """
+        """ Commit changes on document. """
         docnamelist = self.getselecteddoc()
         text, ok = QtGui.QInputDialog.getText(self, \
                             'Commit changes', 'Enter commit message:')
@@ -256,6 +314,7 @@ class documentDialog(QtGui.QDialog):
         self.ui.setupUi(self)
         self.cat = category
         self.tmpllist = []
+        self.setcategorylist()
         
         # Connect comboboxes and buttons
         self.connect(self.ui.Select_Project_Box, \
@@ -286,13 +345,18 @@ class documentDialog(QtGui.QDialog):
         return self.tmpllist[n*6:n*6+6]
 
     # Set combobox functions
+    def setcategorylist(self):
+        self.ui.Select_Category_Box.clear()
+        self.ui.Select_Category_Box.addItem(self.cat)
+        self.ui.Select_Category_Box.setEnabled(False)
+        
     def setprojlist(self):
         self.ui.Select_Project_Box.clear()
-        if self.cat == "P":
+        if self.cat == "T":
+            self.ui.Select_Project_Box.addItem("TMPL")
+        else:
             for proj in db.getprojs():
                 self.ui.Select_Project_Box.addItem(proj[0])
-        else:
-            self.ui.Select_Project_Box.addItem("TMPL")
             
     def setdoctypelist(self, project):
         self.ui.Select_Type_Box.clear()
@@ -319,7 +383,7 @@ class documentDialog(QtGui.QDialog):
         self.ui.Selected_File_Name.setText(filename)
         
     def okaction(self):
-        doctitle = unicode(self.ui.document_title.text())
+        doctitle = unicode(self.ui.document_title.toPlainText())
         project = self.selectedproject()
         doctype = self.selecteddoctype().upper()
         issue = "1"
@@ -387,18 +451,13 @@ class documentInfoDialog(QtGui.QDialog):
         self.ui.setupUi(self)
         self.addbuttons()
 
-        # Connect buttons
-        self.connect(self.ui.edit, QtCore.SIGNAL("clicked()"), \
-                     self.savechanges)
-        self.connect(self.ui.checkin, QtCore.SIGNAL("clicked()"), \
-                     self.savechanges)
-        self.connect(self.ui.commit, QtCore.SIGNAL("clicked()"), \
-                     self.savechanges)
+        # Connect save button
+        # the rest are set in main window class
         self.connect(self.ui.save, QtCore.SIGNAL("clicked()"), \
                      self.savechanges)
 
-
     def addbuttons(self):
+        self.ui.view = self.ui.Document_Info_Confirm.addButton("View" , 3)
         self.ui.edit = self.ui.Document_Info_Confirm.addButton("Edit" , 3)
         self.ui.checkin = self.ui.Document_Info_Confirm.addButton("Check-in" , \
                                                                      3)
@@ -414,21 +473,21 @@ class documentInfoDialog(QtGui.QDialog):
         self.ui.document_id.setText(self.link.const_docid(docnamelist))
         self.ui.issue.setText(str(self.doc.getissueno(docnamelist)))
         self.ui.status.setText(info[9])
-        self.ui.document_title.setText(info[7])
+        self.ui.document_title.setPlainText(info[7])
         self.ui.file_type.setText(info[6])
-        self.ui.date.setText(info[8][0:19])
+        self.ui.creation_date.setText(info[8][0:19])
         self.ui.author.setText(info[10])
 
     def savechanges(self):
         """ Save changes. """
-        if self.ui.document_title.isModified():
-            doctitle = unicode(self.ui.document_title.text())
-            docid = unicode(self.ui.document_id.text())
-            issue = unicode(self.ui.issue.text())
-            filetype = unicode(self.ui.file_type.text())
-            
-            doclist = docid.split('-')
-            doclist.extend([issue, filetype])
-            self.doc.changetitle(doclist, doctitle) 
+        #if self.ui.document_title.textChanged():
+        doctitle = unicode(self.ui.document_title.toPlainText())
+        docid = unicode(self.ui.document_id.text())
+        issue = unicode(self.ui.issue.text())
+        filetype = unicode(self.ui.file_type.text())
+        print doctitle    
+        doclist = docid.split('-')
+        doclist.extend([issue, filetype])
+        self.doc.changetitle(doclist, doctitle) 
 
         
