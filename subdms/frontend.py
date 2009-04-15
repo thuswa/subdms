@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Tue Apr 14 21:29:29 2009 on violator
-# update count: 900
+# Last modified Wed Apr 15 00:25:11 2009 on violator
+# update count: 911
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -128,16 +128,15 @@ class document:
       
    def checkout(self, docnamelist):
       """check-out file to workspace"""
-
-      # Check status of doucument 
-      if self.status.isreadonly(docnamelist):
-         self.client.export(self.link.const_docurl(docnamelist), \
-                       self.link.const_checkoutpath(docnamelist))
-         self.cmd.setreadonly(self.link.const_docpath(docnamelist))
-      else:                  
-         self.client.checkout(self.link.const_docurl(docnamelist), \
-                         self.link.const_checkoutpath(docnamelist))
+      self.client.checkout(self.link.const_docurl(docnamelist), \
+                           self.link.const_checkoutpath(docnamelist))
       #  self.client.lock( 'file.txt', 'reason for locking' )
+
+   def export(self, docnamelist):
+      """check-out file to workspace"""
+      self.client.export(self.link.const_docurl(docnamelist), \
+                         self.link.const_viewcopy(docnamelist))
+      self.cmd.setreadonly(self.link.const_docpath(docnamelist))
 
    def release(self, docnamelist):
       """Release the document"""
@@ -176,6 +175,12 @@ class document:
       """ Edit the document. """
       if not self.ischeckedout(docnamelist):
          self.checkout(docnamelist)
+      self.cmd.launch_editor(docnamelist)   
+
+   def viewdocument(self, docnamelist):   
+      """ View the document. """
+      if not self.ischeckedout(docnamelist):
+         self.export(docnamelist)
       self.cmd.launch_editor(docnamelist)   
       
    def newissue(self, docnamelist):
@@ -340,4 +345,4 @@ class docstatus:
       if self.isreleased(docnamelist) or self.isobsolete(docnamelist):
          return True
       else:
-         return False:
+         return False
