@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Wed Apr 15 20:30:44 2009 on violator
-# update count: 927
+# Last modified Thu Apr 16 01:34:02 2009 on violator
+# update count: 928
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -327,7 +327,7 @@ class docstatus:
 
    def isreleased(self, docnamelist):
       """ Return true if document is released. """
-      if self.getstatus(docnamelist) == self.conf.statuslist[5]:
+      if self.getstatus(docnamelist) == self.conf.statuslist[4]:
          return True
       else:
          return False
