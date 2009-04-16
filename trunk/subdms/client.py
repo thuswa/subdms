@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Thu Apr 16 21:50:17 2009 on violator
-# update count: 1064
+# Last modified Fri Apr 17 00:12:04 2009 on violator
+# update count: 1094
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -28,6 +28,7 @@ import frontend
 import lowlevel
 
 from aboutui import Ui_AboutDialog
+from commitui import Ui_Commit_Dialog
 from createdocumentui import Ui_New_Document_Dialog
 from createprojui import Ui_New_Project_Dialog
 from documentinfoui import Ui_Document_Info_Dialog
@@ -46,6 +47,7 @@ class ClientUi(QtGui.QMainWindow):
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
         self.aboutdialog = aboutDialog()
+        self.commitdialog = commitDialog()
         self.projdialog = projectDialog()
         self.docdialog = documentDialog('P')
         self.tmpldialog = documentDialog('T')
@@ -101,7 +103,7 @@ class ClientUi(QtGui.QMainWindow):
         self.connect(self.ui.actionCheck_in_Document, \
                      QtCore.SIGNAL("activated()"), self.checkindoc)
         self.connect(self.ui.actionCommit_Changes, \
-                     QtCore.SIGNAL("activated()"), self.commitdoc)        
+                     QtCore.SIGNAL("activated()"), self.showcommitdialog)
         self.connect(self.ui.actionRelease_Document, \
                      QtCore.SIGNAL("activated()"), self.releasedoc)
         # Help menu
@@ -121,7 +123,8 @@ class ClientUi(QtGui.QMainWindow):
         self.docinfodialog.connect(self.docinfodialog.ui.checkin, \
                                    QtCore.SIGNAL("clicked()"), self.checkindoc)
         self.docinfodialog.connect(self.docinfodialog.ui.commit, \
-                                   QtCore.SIGNAL("clicked()"), self.commitdoc)
+                                   QtCore.SIGNAL("clicked()"), \
+                                   self.showcommitdialog)
 
     def docselected(self):
         docnamelist = self.getselecteddoc()
@@ -186,6 +189,11 @@ class ClientUi(QtGui.QMainWindow):
         self.tmpldialog.setWindowTitle("Create Template") 
         self.tmpldialog.show()
 
+    def showcommitdialog(self):     
+        """ Commit changes on document. """
+        docnamelist = self.getselecteddoc()
+        self.commitdialog.showdialog(docnamelist)
+
     def settemplatelist(self):
         """ List the existing templates. """
         self.setlist(db.getalltmpls())        
@@ -244,14 +252,6 @@ class ClientUi(QtGui.QMainWindow):
         docnamelist = self.getselecteddoc()
         self.ui.statusbar.showMessage("Launching viewer", 1500)
         self.doc.viewdocument(docnamelist)
-
-    def commitdoc(self):     
-        """ Commit changes on document. """
-        docnamelist = self.getselecteddoc()
-        text, ok = QtGui.QInputDialog.getText(self, \
-                            'Commit changes', 'Enter commit message:')
-        if ok:
-            self.doc.commit(docnamelist, unicode(text))
             
     def releasedoc(self):     
         """ Release the document action. """
@@ -424,9 +424,11 @@ class documentDialog(QtGui.QDialog):
         docnamelist = self.link.const_docnamelist(self.cat, project, doctype, \
                                                   issue, filetype)
         if create:
-            self.doc.createdocument(createfromurl, docnamelist, doctitle)
+            self.doc.createdocument(createfromurl, docnamelist, doctitle, \
+                                    dockeywords)
         else:
-            self.doc.adddocument(addfilepath, docnamelist, doctitle)
+            self.doc.adddocument(addfilepath, docnamelist, doctitle, \
+                                 dockeywords)
         self.close()
 
 ################################################################################
@@ -495,3 +497,24 @@ class documentInfoDialog(QtGui.QDialog):
         self.doc.changetitle(doclist, doctitle) 
 
         
+################################################################################
+
+class commitDialog(QtGui.QDialog):
+    def __init__(self, parent=None):
+        self.doc = frontend.document()
+        QtGui.QDialog.__init__(self, parent)
+        self.ui = Ui_Commit_Dialog()
+        self.ui.setupUi(self)
+        self.doclist = []
+        self.connect(self.ui.Commit_Changes_Confirm, \
+                     QtCore.SIGNAL("accepted()"), self.okaction)
+
+    def showdialog(self, docnamelist):
+        self.doclist = docnamelist
+        self.show()
+        
+    def okaction(self):
+        dockeywords = unicode(self.ui.commit_message.toPlainText())
+        self.doc.commit(self.doclist, dockeywords)
+        self.close()
+
