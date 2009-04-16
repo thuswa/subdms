@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Thu Apr  9 23:45:28 2009 on violator
-# update count: 294
+# Last modified Thu Apr 16 21:22:10 2009 on violator
+# update count: 296
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -65,7 +65,8 @@ class repository:
                                                       doctypes[0], issue, tmpl)
             tmplfname = self.conf.gettemplate(tmpl)
             tmplpath = self.link.const_defaulttmplpath(tmplfname)
-            self.doc.adddocument(tmplpath, tmplnamelist, "default")
+            keywords = "general, example, template"
+            self.doc.adddocument(tmplpath, tmplnamelist, "default", keywords)
             self.doc.release(tmplnamelist)
             print "Install template: "+tmplfname+" -> "+self.conf.repourl 
 

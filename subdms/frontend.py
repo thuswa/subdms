@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Thu Apr 16 01:34:02 2009 on violator
-# update count: 928
+# Last modified Thu Apr 16 21:27:16 2009 on violator
+# update count: 956
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -52,7 +52,7 @@ class document:
       self.link = lowlevel.linkname()
       self.status = docstatus()
 
-   def createdocument(self, createfromurl, docnamelist, doctitle):
+   def createdocument(self, createfromurl, docnamelist, doctitle, dockeywords):
       """
       Create a document
 
@@ -61,29 +61,28 @@ class document:
       docnamelist: list containing the building blocks of the document name
       doctitle: document title string.
       """
-      docname=self.link.const_docfname(docnamelist)
       docurl=self.link.const_docurl(docnamelist)
       docfileurl=self.link.const_docfileurl(docnamelist)
       checkoutpath=self.link.const_checkoutpath(docnamelist)
       docpath=self.link.const_docpath(docnamelist)
 
       # Create document url in repository
-      self.client.mkdir(docurl, "create directory for : "+docname,1)
+      self.client.mkdir(docurl, "Document directory created.", 1)
       
       # Create document from template or existing document
-      self.server_side_copy(createfromurl, docfileurl, "Create document: "\
-                            +docname)
+      self.server_side_copy(createfromurl, docfileurl, "Document created")
       self.client.checkout(docurl, checkoutpath)
       
       # Set document title and commit document
       self.settitle(doctitle, docpath)
+      self.setkeywords(dockeywords, docpath)
       self.status.setpreliminary(docpath)
 
-      #self.client.propset(conf.proplist[2], conf.svnkeywords, docpath) 
+      #self.client.propset(conf.proplist[], conf.svnkeywords, docpath) 
       self.client.checkin(docpath, self.conf.newdoc+ \
-                     "Commit document properties for: "+docname)
+                     "Commited document properties")
    
-   def adddocument(self, addfilepath, docnamelist, doctitle):
+   def adddocument(self, addfilepath, docnamelist, doctitle, dockeywords):
       """    
       Add an existing document 
 
@@ -98,7 +97,7 @@ class document:
       docpath=self.link.const_docpath(docnamelist)
 
       # Create document url in repository and check it out to workspace
-      self.client.mkdir(docurl, "create directory for : "+docname,1)
+      self.client.mkdir(docurl, "Document directory created.", 1)
       self.client.checkout(docurl, checkoutpath)
       
       # Copy file to workspace
@@ -107,18 +106,19 @@ class document:
 
       # Set document title and commit document
       self.settitle(doctitle, docpath)
-      self.status.setpreliminary(docpath)
+      self.setkeywords(dockeywords, docpath)
       self.setsvnkeywords(docpath)
+      self.status.setpreliminary(docpath)
 
       self.client.checkin(docpath, self.conf.newdoc+ \
-                     "Commit document properties for: "+docname)
+                          "Commited document properties.")
 
    def commit(self, docnamelist, message):
-      """commit changes on file"""
+      """ Commit changes on file. """
       self.client.checkin(self.link.const_docpath(docnamelist), message)
 
    def checkin(self, docnamelist):
-      """check-in file from workspace"""
+      """ Check-in file from workspace. """
       docname = self.link.const_docname(docnamelist)
       message = "Checking in: "+docname
       self.commit(docnamelist, message) 
@@ -127,13 +127,13 @@ class document:
       return message
       
    def checkout(self, docnamelist):
-      """check-out file to workspace"""
+      """ Check-out file to workspace. """
       self.client.checkout(self.link.const_docurl(docnamelist), \
                            self.link.const_checkoutpath(docnamelist))
       #  self.client.lock( 'file.txt', 'reason for locking' )
 
    def export(self, docnamelist):
-      """check-out file to workspace"""
+      """ Export file to workspace. """
       checkoutpath = self.link.const_viewcopypath(docnamelist)
       docpath = self.link.const_viewcopyfilepath(docnamelist)
 #      self.cmd.rmtree(checkoutpath)
@@ -142,7 +142,7 @@ class document:
       self.cmd.setreadonly(docpath)
 
    def release(self, docnamelist):
-      """Release the document"""
+      """ Release the document. """
       current_issue = self.getissueno(docnamelist)
       docname = self.link.const_docname(docnamelist)
       message = "Release "+docname
@@ -152,7 +152,7 @@ class document:
 
       # Set status of document to released
       self.status.setreleased(self.link.const_docpath(docnamelist))
-      self.commit(docnamelist, self.conf.release+message)
+      self.commit(docnamelist, self.conf.release+"Status set to released")
 
       # Remove file from workspace
       self.cmd.rmtree(self.link.const_checkoutpath(docnamelist))
@@ -161,15 +161,13 @@ class document:
       if current_issue > 1:
          old_issue = str(current_issue - 1)
          old_docnamelist = self.setissueno(docnamelist, old_issue)
-         old_docname = self.link.const_docname(old_docnamelist)
          old_docpath = self.link.const_docpath(old_docnamelist)
          old_docurl = self.link.const_docurl(old_docnamelist)
          self.client.checkout(old_docurl, \
                          self.link.const_checkoutpath(old_docnamelist))
          self.status.setobsolete(old_docpath)
          self.commit(old_docnamelist, \
-                     self.conf.obsolete+"Set status to obsolete on " \
-                     +old_docname)
+                     self.conf.obsolete+"Status set to obsolete")
          # Remove file from workspace
          self.cmd.rmtree(self.link.const_checkoutpath(old_docnamelist))
       return message
@@ -187,7 +185,7 @@ class document:
       self.cmd.launch_viewer(docnamelist)   
       
    def newissue(self, docnamelist):
-      """Create new issue of the document"""
+      """ Create new issue of the document. """
       new_issue = str(self.getissueno(docnamelist) + 1)
       new_docnamelist = self.setissueno(docnamelist, new_issue)
       docname = self.link.const_docname(new_docnamelist)
@@ -198,7 +196,7 @@ class document:
       message = " Created "+docname
 
       # Create document url in repository
-      self.client.mkdir(docurl, "create directory for : "+docname,1)
+      self.client.mkdir(docurl, "Document directory created", 1)
 
       # Copy issue to new issue
       self.server_side_copy(self.link.const_docfileurl(docnamelist), \
@@ -207,8 +205,8 @@ class document:
       
       # Set document status and commit document
       self.status.setpreliminary(docpath)
-      self.client.checkin(docpath, self.conf.newdoc+ \
-                     "Commit document properties for: "+docname)
+      self.client.checkin(docpath, self.conf.newdoc+\
+                          "Commited document properties")
       return message   
 
    def changetitle(self, docnamelist, doctitle):
@@ -224,10 +222,25 @@ class document:
       self.settitle(doctitle, docpath)
       self.client.checkin(docpath, self.conf.newtitle+ \
                           "Changed document title")
-
       if not wascheckedout:
          self.checkin(docnamelist)
-         
+
+   def changekeywords(self, docnamelist, dockeywords):
+      """ Change document keywords. """
+      wascheckedout = True
+      docpath = self.link.const_docpath(docnamelist)
+      
+      if not self.ischeckedout(docnamelist):
+         self.checkout(docnamelist)
+         wascheckedout = False
+
+      # Set document keywords and commit document
+      self.setkeywords(doctitle, dockeywords)
+      self.client.checkin(docpath, self.conf.newkeywords+ \
+                          "Changed document keywords")
+      if not wascheckedout:
+         self.checkin(docnamelist)
+
    def getissueno(self, docnamelist):
       """ Get document issue number. """ 
       return int(docnamelist[4])
@@ -252,6 +265,10 @@ class document:
       self.client.propset(self.conf.proplist[2], self.conf.svnkeywords, \
                           docpath) 
 
+   def setkeywords(self, dockeywords, docpath):
+      """ Set document keywords. """ 
+      self.client.propset(self.conf.proplist[3], dockeywords, docpath)
+
    def ischeckedout(self, docnamelist):
       """ Return true if docname is checked out. """
       if os.path.exists(os.path.join(\
@@ -275,7 +292,7 @@ class document:
       return return_state
    
    def server_side_copy(self, source, target, log_message):
-      """ Server side copy in repository URL -> URL """
+      """ Server side copy in repository URL -> URL. """
       def get_log_message():
          return True, log_message
       self.client.callback_get_log_message = get_log_message
@@ -283,23 +300,23 @@ class document:
 
    def reverttohead(self, docnamelist):
       """ Revert to head revision undo local changes. """
-      return None
+      return None #fixme
    
    def reverttoprerev(self, docnamelist):
       """ Revert to previous revision. """
-      return None
+      return None #fixme
 
 ################################################################################
 
 class docstatus:
    def __init__(self):
-      """ Initialize document status class """
+      """ Initialize document status class. """
       self.client = pysvn.Client()
       self.conf = lowlevel.config()
       self.link = lowlevel.linkname()
 
    def getstatus(self, docnamelist):
-      """ Get document status """ 
+      """ Get document status. """ 
       return self.client.propget('status', \
                             self.link.const_docurl(docnamelist)).values().pop()
 
@@ -319,7 +336,7 @@ class docstatus:
                           docpath)
 
    def ispreliminary(self, docnamelist):
-      """ Return true if document is released. """
+      """ Return true if document is preliminary. """
       if self.getstatus(docnamelist) == self.conf.statuslist[0]:
          return True
       else:
