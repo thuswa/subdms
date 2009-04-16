@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Thu Apr  9 13:57:41 2009 on violator
-# update count: 59
+# Last modified Thu Apr 16 22:59:22 2009 on violator
+# update count: 63
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -112,8 +112,9 @@ class cli:
         """ Add document from command line. """
         
         issue = '1'
+        dockeywords=""
         docnamelist = self.link.const_docnamelist(project.upper(), \
                                                   doctype.upper(), issue, \
                                                  filetype)
-        self.doc.adddocument(addfilepath, docnamelist, doctitle)
+        self.doc.adddocument(addfilepath, docnamelist, doctitle, dockeywords)
             

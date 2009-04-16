@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Tue Apr 14 14:18:59 2009 on violator
-# update count: 174
+# Last modified Thu Apr 16 21:08:07 2009 on violator
+# update count: 180
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -46,6 +46,7 @@ def main():
   newdocptrn = re.compile(conf.newdoc)
   newprojptrn = re.compile(conf.newproj)
   newtitleptrn = re.compile(conf.newtitle)
+  newkeywptrn = re.compile(conf.newkeywords)
   obsptrn = re.compile(conf.obsolete)
   relptrn = re.compile(conf.release)
   statchgptrn = re.compile(conf.statchg)
@@ -71,12 +72,13 @@ def main():
     date = look.getdate()
     doctitle = look.gettitle(docurl)
     status = look.getstatus(docurl)
-
+    dockeywords = look.getkeywords(docurl)
+    
     if newdocptrn.match(log_message):
       # Create write string
       writestr=[]
       writestr.extend(docnamelist)
-      writestr.extend([doctitle, date, status, author, \
+      writestr.extend([doctitle, date, status, author, dockeywords, \
                        newdocptrn.sub("",log_message)])
       # Write data to db
       db.writerevlist(rvn, writestr)
@@ -86,6 +88,9 @@ def main():
 
     if newtitleptrn.match(log_message):
       db.titlechg(docnamelist, doctitle)
+
+    if newkeywptrn.match(log_message):
+      db.keywordchg(docnamelist, dockeywords)
       
 if __name__ == "__main__":
   import sys

@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Thu Apr 16 01:40:10 2009 on violator
-# update count: 1055
+# Last modified Thu Apr 16 21:50:17 2009 on violator
+# update count: 1064
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -51,14 +51,15 @@ class ClientUi(QtGui.QMainWindow):
         self.tmpldialog = documentDialog('T')
         self.docinfodialog = documentInfoDialog()
 
+        # Widget state lists
         self.noselectedlist = [False, False, False, False, False, False, \
-                               False, False, False, False, False, False, False] 
+                               False, False, False, False, False, True, True] 
         self.releasedlist = [True, True, True, False, False, False, \
-                             False, False, False, False, False, False, False] 
+                             False, False, False, False, False, True, True] 
         self.obsoletelist = [False, True, True, False, False, False, \
-                             False, False, False, False, False, False, False] 
+                             False, False, False, False, False, True, True] 
         self.preliminarylist = [False, True, True, True, True, True, \
-                               True, True, True, True, True, True, True] 
+                               True, True, True, True, True, False, False] 
 
         # start with most actions disabled
         self.disableactions(self.noselectedlist)
@@ -71,6 +72,7 @@ class ClientUi(QtGui.QMainWindow):
         self.ui.documentlist.setColumnWidth(4, 60)
         self.ui.documentlist.setColumnWidth(5, 100)
 
+        # Connect selection change signal to docselected action
         self.connect(self.ui.documentlist, \
                      QtCore.SIGNAL("itemSelectionChanged()"), self.docselected)
 
@@ -146,7 +148,7 @@ class ClientUi(QtGui.QMainWindow):
         self.docinfodialog.ui.save.setEnabled(statuslist[10])
         # Fields in document info dialog 
         self.docinfodialog.ui.document_title.setReadOnly(statuslist[11])
-        self.docinfodialog.ui.document_keywords.setEnabled(statuslist[12])
+        self.docinfodialog.ui.document_keywords.setReadOnly(statuslist[12])
          
     def showdocinfo(self):
         docnamelist = self.getselecteddoc()
@@ -384,6 +386,7 @@ class documentDialog(QtGui.QDialog):
         
     def okaction(self):
         doctitle = unicode(self.ui.document_title.toPlainText())
+        dockeywords = unicode(self.ui.document_keywords.toPlainText())
         project = self.selectedproject()
         doctype = self.selecteddoctype().upper()
         issue = "1"
@@ -434,7 +437,7 @@ class addFileDialog(QtGui.QFileDialog):
 
     def getfilename(self):
         self.setFilters(["Text (*.txt *.tex)", "Compressed (*.zip)", \
-                         "Portable (*.pdf)"])
+                         "Portable (*.pdf)"]) #fixme
         self.setFilter("Text (*.txt *.tex)")
         return self.getOpenFileName(self, 'Select file to add',
                                     '/home', \
@@ -474,6 +477,7 @@ class documentInfoDialog(QtGui.QDialog):
         self.ui.issue.setText(str(self.doc.getissueno(docnamelist)))
         self.ui.status.setText(info[9])
         self.ui.document_title.setPlainText(info[7])
+        self.ui.document_keywords.setPlainText(info[11])
         self.ui.file_type.setText(info[6])
         self.ui.creation_date.setText(info[8][0:19])
         self.ui.author.setText(info[10])
@@ -482,10 +486,10 @@ class documentInfoDialog(QtGui.QDialog):
         """ Save changes. """
         #if self.ui.document_title.textChanged():
         doctitle = unicode(self.ui.document_title.toPlainText())
+        dockeywords = unicode(self.ui.document_keywords.toPlainText())
         docid = unicode(self.ui.document_id.text())
         issue = unicode(self.ui.issue.text())
         filetype = unicode(self.ui.file_type.text())
-        print doctitle    
         doclist = docid.split('-')
         doclist.extend([issue, filetype])
         self.doc.changetitle(doclist, doctitle) 

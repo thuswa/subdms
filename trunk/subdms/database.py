@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Tue Apr 14 12:52:39 2009 on violator
-# update count: 307
+# Last modified Thu Apr 16 21:32:39 2009 on violator
+# update count: 313
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -44,7 +44,7 @@ class sqlitedb:
         self.cursor.execute("create table revlist(revnum INTEGER PRIMARY KEY," \
                             "category, project, doctype, docno, issue, " \
                             "docext, doctitle, date, status, author, " \
-                            "logtext TEXT)")
+                            "keywords, logtext TEXT)")
 
         self.cursor.execute("create table projlist(projname TEXT PRIMARY KEY," \
                             "doctypes)")
@@ -56,7 +56,7 @@ class sqlitedb:
         # Construct sql command string
         db_str="insert into revlist(revnum, category, project, doctype, " \
                 "docno, issue, docext, doctitle, date, status, author, " \
-                "logtext) values(\"%s\", \"%s\")" \
+                "keywords, logtext) values(\"%s\", \"%s\")" \
                 % (rvn, string.join(writestr, "\",\""))
         # Excecute sql command
         self.cursor.execute(db_str)
@@ -90,6 +90,14 @@ class sqlitedb:
                             (title, d[0], d[1], d[2], d[3], d[4] ))
         self.con.commit()
         
+    def keywordchg(self, docnamelist, keywords):
+        """ Update document keywords """
+        d = docnamelist
+        self.cursor.execute("update revlist set keywords=? " \
+                            "where category=? and project=? and doctype=? " \
+                            "and docno=? and issue=?" , \
+                            (keywords, d[0], d[1], d[2], d[3], d[4] ))
+
     def getalldocs(self):
         """ Get complete documents table from database. """
         self.cursor.execute("select * from revlist " \

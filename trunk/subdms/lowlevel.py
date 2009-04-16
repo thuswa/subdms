@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Wed Apr 15 23:45:38 2009 on violator
-# update count: 429
+# Last modified Thu Apr 16 21:13:10 2009 on violator
+# update count: 434
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -59,7 +59,7 @@ class config:
         self.categories = ['P','T']
         self.filetypes = ['pdf','tex','txt','zip']
         self.tmpltypes = ['tex','txt']
-        self.proplist = ['title', 'status', 'svn:keywords']
+        self.proplist = ['title', 'status', 'svn:keywords', 'keywords']
         self.statuslist = ['preliminary', 'in-review' ,'rejected', 'approved', \
                            'released', 'obsolete'] 
         self.svnkeywords=string.join(["LastChangedDate", \
@@ -72,6 +72,7 @@ class config:
         self.newdoc = 'newdocument'.encode("hex")
         self.newproj = 'newproject'.encode("hex")
         self.newtitle = 'newtitle'.encode("hex")
+        self.newkeywords = 'newkeywords'.encode("hex")
         self.release = 'release'.encode("hex")
         self.obsolete = 'obsolete'.encode("hex")
 
@@ -252,7 +253,7 @@ class svnlook:
         """ Simplified svn look command """
         return self.svnlookcmd(command, self.repourl, self.option, \
                                self.revision)
-    
+
     def getauthor(self):
         """ Get commit author. """
         return self.svnlookcmd2("author").rstrip("\n")
@@ -285,3 +286,6 @@ class svnlook:
         """ Get commit title. """
         return self.svnlookcmd1("propget", "title", docurl)
     
+    def getkeywords(self, docurl):
+        """ Get commit keywords. """
+        return self.svnlookcmd1("propget", "keywords", docurl)
