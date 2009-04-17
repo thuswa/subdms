@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Thu Apr 16 21:13:10 2009 on violator
-# update count: 434
+# Last modified Fri Apr 17 21:36:34 2009 on violator
+# update count: 473
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -53,7 +53,7 @@ class config:
         self.repourl = "file:///" + self.repopath.replace("\\","/")
         self.workpath = self.conf.get("Path", "workspace")
         self.dbpath = self.conf.get("Path", "database")
-        self.doctypes = list(self.conf.get("Document", "type").split())
+        self.doctypes = self.conf.get("Document", "type").replace(" ",", ")
 
         # DMS Lists
         self.categories = ['P','T']
@@ -70,6 +70,7 @@ class config:
         # Internal Trigger patterns
         self.statchg = 'statuschange'.encode("hex")
         self.newdoc = 'newdocument'.encode("hex")
+        self.newdoctype = 'newdoctype'.encode("hex")
         self.newproj = 'newproject'.encode("hex")
         self.newtitle = 'newtitle'.encode("hex")
         self.newkeywords = 'newkeywords'.encode("hex")
@@ -84,7 +85,7 @@ class config:
     def gettemplate(self, tmpltype):
         """ Get default template. """
         return self.conf.get("Template", tmpltype)
-    
+
 ################################################################################
 
 class linkname:
@@ -140,9 +141,18 @@ class linkname:
         return os.path.join(self.const_checkoutpath(docnamelist), \
                                 self.const_docfname(docnamelist))
 
-    def const_doctypeurl(self, project, doctype):
-        """ Create directory in repo for project document types. """
-        return os.path.join(self.conf.repourl, project, doctype)
+    def const_caturl(self, category):
+        """ Construct the category url. """
+        return string.join([self.conf.repourl, category], "/")
+
+    def const_projurl(self, category, project):
+        """ Construct the project url. """
+        return string.join([self.const_caturl(category), project], "/")
+    
+    def const_doctypeurl(self, category, project, doctype):
+        """ Construct the document type url. """
+        return string.join([self.const_projurl(category, project), doctype], \
+                           "/")
 
     def const_docnamelist(self, category, project, doctype, issue, docext):
         """
@@ -274,10 +284,18 @@ class svnlook:
         """ Get commit log message. """
         return self.svnlookcmd2("log").rstrip("\n").rstrip()
 
+    def getcategory(self):
+        """ Get project acronym. """
+        return self.getchanged().split(" ")[3].split("/")[0]
+
     def getproject(self):
-        """ Get project name. """
-        return self.getlogmsg().split(": ")[-1]
-        
+        """ Get project acronym. """
+        return self.getchanged().split(" ")[3].split("/")[1]
+
+    def getdoctype(self):
+        """ Get document type. """
+        return self.getchanged().split(" ")[3].split("/")[2]
+    
     def getstatus(self, docurl):
         """ Get commit status. """
         return self.svnlookcmd1("propget", "status", docurl)

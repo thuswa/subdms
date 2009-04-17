@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Fri Apr 17 00:12:04 2009 on violator
-# update count: 1094
+# Last modified Sat Apr 18 01:07:08 2009 on violator
+# update count: 1147
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -294,13 +294,30 @@ class projectDialog(QtGui.QDialog):
         self.connect(self.ui.New_Project_Confirm, QtCore.SIGNAL("accepted()"), \
                      self.okaction)
 
+        # Set defaults
+        self.setcategorylist()
+        self.setdoctypes()
+        
+    def setcategorylist(self):
+        self.ui.Select_Category_Box.clear()
+        self.ui.Select_Category_Box.addItem(self.conf.categories[0])
+        self.ui.Select_Category_Box.setEnabled(False)
+
+    def setdoctypes(self):
+        self.ui.doctypes.setText(self.conf.doctypes)       
+            
     def okaction(self):
-        proj = unicode(self.ui.Project_name.text()).upper()
-        if db.projexists(proj):
+        category = unicode(self.ui.Select_Category_Box.currentText())
+        acronym = unicode(self.ui.project_acronym.text()).upper()
+        desc = unicode(self.ui.project_description.text())
+        doctypes = unicode(self.ui.doctypes.text()).upper().\
+                   replace(" ","").rsplit(",")
+        if db.projexists(category, acronym):
             QtGui.QMessageBox.critical(None, "Error", \
-                                       "Project "+proj+" already exists")
+                                       "Project "+acronym+" already exists " \
+                                       "in category "+category)
         else:
-            self.proj.createproject("P", proj, self.conf.doctypes)
+            self.proj.createproject(category, acronym, desc, doctypes)
             self.close()
 
 ################################################################################
@@ -320,10 +337,10 @@ class documentDialog(QtGui.QDialog):
         
         # Connect comboboxes and buttons
         self.connect(self.ui.Select_Project_Box, \
-                     QtCore.SIGNAL("activated(project)"),
+                     QtCore.SIGNAL("activated(const QString &)"),
                      self.setdoctypelist)
         self.connect(self.ui.File_Type_Box, \
-                     QtCore.SIGNAL("activated(filetype)"),
+                     QtCore.SIGNAL("activated(const QString &)"),
                      self.settmplnamelist)
 
         self.connect(self.ui.Open_File_Dialog, \
@@ -362,7 +379,7 @@ class documentDialog(QtGui.QDialog):
             
     def setdoctypelist(self, project):
         self.ui.Select_Type_Box.clear()
-        for doctype in db.getdoctypes(project):
+        for doctype in db.getdoctypes(self.cat, unicode(project)).split(","):
             self.ui.Select_Type_Box.addItem(doctype)
 
     def setfiletypelist(self):
@@ -374,7 +391,7 @@ class documentDialog(QtGui.QDialog):
     def settmplnamelist(self, filetype):
         n=0
         self.ui.Template_Name_Box.clear()
-        for tmpl in db.gettemplates(filetype):
+        for tmpl in db.gettemplates(unicode(filetype)):
             self.tmpllist[n*6:n*6+6] = list(tmpl[1:7])
             self.ui.Template_Name_Box.addItem(tmpl[7])
             n += 1

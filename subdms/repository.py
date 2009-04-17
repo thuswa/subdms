@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Thu Apr 16 21:22:10 2009 on violator
-# update count: 296
+# Last modified Fri Apr 17 22:06:00 2009 on violator
+# update count: 302
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -37,6 +37,10 @@ class repository:
     def createrepo(self):
         """ create repsitory and layout """
         self.cmd.svncreaterepo(self.conf.repopath)
+        # Create category dirs in repo
+        for cat in self.conf.categories:
+            self.proj.createcategory(cat)
+            
         print "Create repository: "+self.conf.repopath
 
     def installhooks(self):
@@ -56,9 +60,10 @@ class repository:
         # Create url for template types in repo
         category = self.conf.categories[1]
         project = 'TMPL'
-        issue = '1'
+        description = 'Subdms Template'
         doctypes =['GEN']
-        self.proj.createproject(category, project, doctypes)
+        issue = '1'
+        self.proj.createproject(category, project, description, doctypes)
         # Add default templates to repo
         for tmpl in self.conf.tmpltypes:
             tmplnamelist = self.link.const_docnamelist(category, project, \

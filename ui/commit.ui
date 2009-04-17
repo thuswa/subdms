@@ -21,7 +21,7 @@
   <property name="modal" >
    <bool>true</bool>
   </property>
-  <widget class="QDialogButtonBox" name="New_Project_Confirm" >
+  <widget class="QDialogButtonBox" name="Commit_Changes_Confirm" >
    <property name="geometry" >
     <rect>
      <x>10</x>
@@ -62,12 +62,12 @@
   </widget>
  </widget>
  <tabstops>
-  <tabstop>New_Project_Confirm</tabstop>
+  <tabstop>Commit_Changes_Confirm</tabstop>
  </tabstops>
  <resources/>
  <connections>
   <connection>
-   <sender>New_Project_Confirm</sender>
+   <sender>Commit_Changes_Confirm</sender>
    <signal>rejected()</signal>
    <receiver>Commit_Dialog</receiver>
    <slot>close()</slot>

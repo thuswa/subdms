@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Thu Apr 16 21:27:16 2009 on violator
-# update count: 956
+# Last modified Fri Apr 17 22:02:56 2009 on violator
+# update count: 975
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -25,7 +25,7 @@ import pysvn
 
 import lowlevel
 
-""" Frontend classes """
+""" Front-end classes. """
 
 class project:
    def __init__(self):
@@ -33,14 +33,24 @@ class project:
       self.client = pysvn.Client()
       self.conf = lowlevel.config()
       self.link = lowlevel.linkname()
+
+   def createcategory(self, category):
+      """ Create category dir in repo. """
+      self.client.mkdir(self.link.const_caturl(category), \
+                        "Created a category", 1)
       
-   def createproject(self, category, project, doctypes):
-      """ Create project method. """
+   def createproject(self, category, project, description, doctypes):
+      """ Create project dir in repo. """
+      self.client.mkdir(self.link.const_projurl(category, project), \
+                        self.conf.newproj+description,1)
+      self.adddoctypes(category, project, doctypes)
+
+   def adddoctypes(self, category, project, doctypes):
+      """ Add new doctypes. """
       for doc in doctypes:
-         self.client.mkdir(self.link.const_doctypeurl(project, doc), \
-                           self.conf.newproj+"Create directory for project: "\
-                           +project,1)
-         
+         self.client.mkdir(self.link.const_doctypeurl(category, project, doc), \
+                           self.conf.newdoctype+"Added doctype",1)
+      
 ################################################################################
 
 class document:

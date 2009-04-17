@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Thu Apr 16 21:08:07 2009 on violator
-# update count: 180
+# Last modified Fri Apr 17 21:28:37 2009 on violator
+# update count: 203
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -44,6 +44,7 @@ def main():
 
   # Search patterns for action selection
   newdocptrn = re.compile(conf.newdoc)
+  newdoctptrn = re.compile(conf.newdoctype)
   newprojptrn = re.compile(conf.newproj)
   newtitleptrn = re.compile(conf.newtitle)
   newkeywptrn = re.compile(conf.newkeywords)
@@ -56,12 +57,15 @@ def main():
   
   # Get info about commit
   log_message = look.getlogmsg()
-  changed = look.getchanged()
   docfname = look.getdocfname()
 
   if newprojptrn.match(log_message):
-    db.writeprojlist(look.getproject(), conf.doctypes)
-     
+    description = newprojptrn.sub("",log_message)
+    db.writeprojlist(look.getcategory(), look.getproject(), description)
+
+  if newdoctptrn.match(log_message):
+    db.doctypechg(look.getcategory(), look.getproject(), look.getdoctype())
+  
   if docfname:
     # create docname list
     docnamelist = link.deconst_docfname(docfname)
