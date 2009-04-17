@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Thu Apr 16 21:32:39 2009 on violator
-# update count: 313
+# Last modified Sat Apr 18 00:15:21 2009 on violator
+# update count: 382
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -46,12 +46,13 @@ class sqlitedb:
                             "docext, doctitle, date, status, author, " \
                             "keywords, logtext TEXT)")
 
-        self.cursor.execute("create table projlist(projname TEXT PRIMARY KEY," \
-                            "doctypes)")
+        self.cursor.execute("create table projlist(category, " \
+                            "acronym TEXT PRIMARY KEY, " \
+                            "description, doctypes TEXT)")
 
         print "Create database: "+self.conf.dbpath
 
-    def writerevlist(self,rvn, writestr):
+    def writerevlist(self, rvn, writestr):
         """ Write to documents table in database. """
         # Construct sql command string
         db_str="insert into revlist(revnum, category, project, doctype, " \
@@ -62,16 +63,30 @@ class sqlitedb:
         self.cursor.execute(db_str)
         self.con.commit()
 
-    def writeprojlist(self, projname, doctypes):
+    def writeprojlist(self, category, acronym, description):
         """ Write to project table in database. """
         # Construct sql command string
-        db_str="insert into projlist(projname, doctypes) " \
-                "values(\"%s\", \"%s\")" \
-                % (projname, string.join(doctypes,","))
+        db_str="insert into projlist(category, acronym, description) " \
+                "values(\"%s\", \"%s\", \"%s\")" \
+                % (category, acronym, description)
         # Excecute sql command
         self.cursor.execute(db_str)
         self.con.commit()
 
+    def doctypechg(self, category, project, doctype):
+        """ Update document type list. """
+        doctypes = self.getdoctypes(category, project)
+        if doctypes:
+            doctypes = doctypes+","+doctype
+        else:
+            doctypes = doctype
+
+        print doctypes
+        self.cursor.execute("update projlist set doctypes=? " \
+                            "where category=? and acronym=?" , \
+                            (doctypes, category, project ))
+        self.con.commit()
+                            
     def statuschg(self, docnamelist, status):
         """ Update document status """
         d = docnamelist
@@ -107,7 +122,7 @@ class sqlitedb:
     def getallprojs(self):
         """ Get complete projects table from database. """
         self.cursor.execute("select * from projlist " \
-                            "where projname != \"TMPL\"")
+                            "where acronym != \"TMPL\"")
         return self.cursor.fetchall()
 
     def getalltmpls(self):
@@ -118,14 +133,16 @@ class sqlitedb:
 
     def getprojs(self):
         """ Get list of all projects from database. """
-        self.cursor.execute("select projname from projlist "
-                            "where projname != \"TMPL\"")
+        self.cursor.execute("select acronym from projlist "
+                            "where acronym != \"TMPL\"")
         return self.cursor.fetchall()
 
-    def projexists(self, project):
+    def projexists(self, category, project):
         """ Check if project exists in database. """
         self.cursor.execute("select * from projlist "
-                            "where projname=?", (project, ))
+                            "where category=? and acronym=?" , \
+                            (category, project ))
+
         if self.cursor.fetchall():
             return True
         else:
@@ -144,11 +161,12 @@ class sqlitedb:
         else:
             return False
 
-    def getdoctypes(self, project):
+    def getdoctypes(self, category, project):
         """ Get doctypes list from a project from database. """
         self.cursor.execute("select doctypes from projlist " \
-                            "where projname=?", (project, ))
-        return self.cursor.fetchone()[0].split(",")
+                            "where category=? and acronym=?", \
+                            (category, project,  ))
+        return self.cursor.fetchone()[0]
 
     def getdocno(self, category, project, doctype):
         """ Get document number from this project and type. """
