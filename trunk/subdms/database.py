@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Sat Apr 18 00:15:21 2009 on violator
-# update count: 382
+# Last modified Sat Apr 18 22:49:05 2009 on violator
+# update count: 463
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -41,34 +41,49 @@ class sqlitedb:
     def createdb(self):
         """ Create database """
         # Create the simpliest table 
+        self.cursor.execute("create table doclist(revnum INTEGER PRIMARY KEY," \
+                            "category, project, doctype, docno, issue, " \
+                            "docext, doctitle, status, author, keywords, " \
+                            "cdate, rdate, odate)")
+
         self.cursor.execute("create table revlist(revnum INTEGER PRIMARY KEY," \
                             "category, project, doctype, docno, issue, " \
-                            "docext, doctitle, date, status, author, " \
-                            "keywords, logtext TEXT)")
+                            "revdate, author, logtext TEXT)")
 
-        self.cursor.execute("create table projlist(category, " \
-                            "acronym TEXT PRIMARY KEY, " \
-                            "description, doctypes TEXT)")
+        self.cursor.execute("create table projlist(revnum INTEGER PRIMARY KEY,"\
+                            "category, acronym, description, author, date, " \
+                            "doctypes TEXT)")
 
         print "Create database: "+self.conf.dbpath
 
-    def writerevlist(self, rvn, writestr):
+    def writedoclist(self, rvn, writestr):
         """ Write to documents table in database. """
         # Construct sql command string
-        db_str="insert into revlist(revnum, category, project, doctype, " \
-                "docno, issue, docext, doctitle, date, status, author, " \
-                "keywords, logtext) values(\"%s\", \"%s\")" \
+        db_str="insert into doclist(revnum, category, project, doctype, " \
+                "docno, issue, docext, doctitle, status, author, " \
+                "keywords, cdate, rdate, odate) values(\"%s\", \"%s\")" \
                 % (rvn, string.join(writestr, "\",\""))
         # Excecute sql command
         self.cursor.execute(db_str)
         self.con.commit()
 
-    def writeprojlist(self, category, acronym, description):
+    def writerevlist(self, rvn, writestr):
+        """ Write to revision table in database. """
+        # Construct sql command string
+        db_str="insert into revlist(revnum, category, project, doctype, " \
+                "docno, issue, revdate, author, logtext) " \
+                "values(\"%s\", \"%s\")" \
+                % (rvn, string.join(writestr, "\",\""))
+        # Excecute sql command
+        self.cursor.execute(db_str)
+        self.con.commit()
+
+    def writeprojlist(self, rvn, writestr):
         """ Write to project table in database. """
         # Construct sql command string
-        db_str="insert into projlist(category, acronym, description) " \
-                "values(\"%s\", \"%s\", \"%s\")" \
-                % (category, acronym, description)
+        db_str="insert into projlist(revnum, category, acronym, description, "\
+                "author, date) values(\"%s\", \"%s\")" \
+                % (rvn, string.join(writestr, "\",\""))
         # Excecute sql command
         self.cursor.execute(db_str)
         self.con.commit()
@@ -81,41 +96,40 @@ class sqlitedb:
         else:
             doctypes = doctype
 
-        print doctypes
         self.cursor.execute("update projlist set doctypes=? " \
                             "where category=? and acronym=?" , \
                             (doctypes, category, project ))
         self.con.commit()
-                            
-    def statuschg(self, docnamelist, status):
-        """ Update document status """
+
+    def updatedoclist(self, docnamelist, datastr, data):
+        """ Generic doclist update method. """
         d = docnamelist
-        self.cursor.execute("update revlist set status=? " \
+        self.cursor.execute("update doclist set "+datastr+"=? " \
                             "where category=? and project=? and doctype=? " \
                             "and docno=? and issue=?" , \
-                            (status, d[0], d[1], d[2], d[3], d[4] ))
+                            (data, d[0], d[1], d[2], d[3], d[4] ))
         self.con.commit()
+        
+    def statuschg(self, docnamelist, status, date):
+        """ Update document status. """
+        if status == "released":
+            self.updatedoclist(docnamelist, "rdate", date)
+        if status == "obsolete":
+            self.updatedoclist(docnamelist, "odate", date)
+
+        self.updatedoclist(docnamelist, "status", status)    
 
     def titlechg(self, docnamelist, title):
-        """ Update document title """
-        d = docnamelist
-        self.cursor.execute("update revlist set doctitle=? " \
-                            "where category=? and project=? and doctype=? " \
-                            "and docno=? and issue=?" , \
-                            (title, d[0], d[1], d[2], d[3], d[4] ))
-        self.con.commit()
+        """ Update document title. """
+        self.updatedoclist(docnamelist, "doctitle", title)    
         
     def keywordchg(self, docnamelist, keywords):
         """ Update document keywords """
-        d = docnamelist
-        self.cursor.execute("update revlist set keywords=? " \
-                            "where category=? and project=? and doctype=? " \
-                            "and docno=? and issue=?" , \
-                            (keywords, d[0], d[1], d[2], d[3], d[4] ))
+        self.updatedoclist(docnamelist, "keywords", keywords)    
 
     def getalldocs(self):
         """ Get complete documents table from database. """
-        self.cursor.execute("select * from revlist " \
+        self.cursor.execute("select * from doclist " \
                             "where category = \"P\"")
         return self.cursor.fetchall()
 
@@ -125,9 +139,14 @@ class sqlitedb:
                             "where acronym != \"TMPL\"")
         return self.cursor.fetchall()
 
+    def getallrev(self):
+        """ Get complete revision table from database. """
+        self.cursor.execute("select * from revlist")
+        return self.cursor.fetchall()
+
     def getalltmpls(self):
         """ Get complete templates table from database. """
-        self.cursor.execute("select * from revlist " \
+        self.cursor.execute("select * from doclist " \
                             "where category = \"T\"")
         return self.cursor.fetchall()
 
@@ -152,7 +171,7 @@ class sqlitedb:
         """ Check if project exists in database. """
         category, project, doctype, docno = documentid.split("-")
         # Query database 
-        self.cursor.execute("select * from revlist " \
+        self.cursor.execute("select * from doclist " \
                             "where category=? project=? and doctype=? "\
                             "and docno=? and issue=?", \
                             (category, project, doctype, docno, issue, ))
@@ -171,7 +190,7 @@ class sqlitedb:
     def getdocno(self, category, project, doctype):
         """ Get document number from this project and type. """
         # Query database 
-        self.cursor.execute("select max(docno) from revlist " \
+        self.cursor.execute("select max(docno) from doclist " \
                             "where category = ? and project=? and doctype=?" \
                             , (category, project, doctype))
         # Get document number
@@ -186,7 +205,7 @@ class sqlitedb:
         """ Get document file type. """
         # Query database
         category, project, doctype, docno = documentid.split("-")
-        self.cursor.execute("select docext from revlist " \
+        self.cursor.execute("select docext from doclist " \
                             "where category=? and project=? and doctype=? " \
                             "and docno=? and issue=?", \
                             (category, project, doctype, docno, issue, ))
@@ -194,7 +213,7 @@ class sqlitedb:
 
     def gettemplates(self, filetype):
         """ Get templates of one file type from database. """
-        self.cursor.execute("select * from revlist " \
+        self.cursor.execute("select * from doclist " \
                             "where category = \"T\" and docext=? and " \
                             "status=\"released\"", (filetype, ))
         return self.cursor.fetchall()
@@ -202,7 +221,7 @@ class sqlitedb:
     def getdocumentinfo(self, docnamelist):
         """ Get all info about document. """
         d = docnamelist
-        self.cursor.execute("select * from revlist " \
+        self.cursor.execute("select * from doclist " \
                             "where category=? and project=? and doctype=? " \
                             "and docno=? and issue=?" , \
                             (d[0], d[1], d[2], d[3], d[4] ))

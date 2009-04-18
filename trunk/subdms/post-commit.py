@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Fri Apr 17 21:28:37 2009 on violator
-# update count: 203
+# Last modified Sat Apr 18 23:31:05 2009 on violator
+# update count: 254
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -58,10 +58,15 @@ def main():
   # Get info about commit
   log_message = look.getlogmsg()
   docfname = look.getdocfname()
-
+  author = look.getauthor()
+  date = look.getdate()
+  
   if newprojptrn.match(log_message):
     description = newprojptrn.sub("",log_message)
-    db.writeprojlist(look.getcategory(), look.getproject(), description)
+    category = look.getcategory()
+    project = look.getproject()
+    writestr = [category, project, description, author, date]
+    db.writeprojlist(rvn, writestr)
 
   if newdoctptrn.match(log_message):
     db.doctypechg(look.getcategory(), look.getproject(), look.getdoctype())
@@ -71,31 +76,40 @@ def main():
     docnamelist = link.deconst_docfname(docfname)
     docurl = link.const_docinrepopath(docnamelist)
 
-    # Get author, date and other properties
-    author = look.getauthor()
-    date = look.getdate()
+    # Get document properties
     doctitle = look.gettitle(docurl)
     status = look.getstatus(docurl)
     dockeywords = look.getkeywords(docurl)
-    
+
+    writestr=[]
+    writestr.extend(docnamelist)
     if newdocptrn.match(log_message):
+      log_message = newdocptrn.sub("", log_message)
       # Create write string
-      writestr=[]
-      writestr.extend(docnamelist)
-      writestr.extend([doctitle, date, status, author, dockeywords, \
-                       newdocptrn.sub("",log_message)])
+      writestr.extend([doctitle, status, author, dockeywords, date, "", ""])
       # Write data to db
-      db.writerevlist(rvn, writestr)
+      db.writedoclist(rvn, writestr)
 
     if relptrn.match(log_message) or obsptrn.match(log_message):
-      db.statuschg(docnamelist, status)
+      log_message = relptrn.sub("", log_message)
+      log_message = obsptrn.sub("", log_message)
+      db.statuschg(docnamelist, status, date)
 
     if newtitleptrn.match(log_message):
+      log_message = newtitleptrn.sub("", log_message)
       db.titlechg(docnamelist, doctitle)
 
     if newkeywptrn.match(log_message):
+      log_message = newkeywptrn.sub("", log_message)
       db.keywordchg(docnamelist, dockeywords)
-      
+
+    # Write revision list
+    writestr = writestr[0:5]
+    writestr.append(date)
+    writestr.extend([author, log_message])
+    # Write data to db
+    db.writerevlist(rvn, writestr) 
+   
 if __name__ == "__main__":
   import sys
   sys.exit(main())

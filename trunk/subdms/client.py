@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Sat Apr 18 01:07:08 2009 on violator
-# update count: 1147
+# Last modified Sat Apr 18 23:37:57 2009 on violator
+# update count: 1152
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -212,7 +212,7 @@ class ClientUi(QtGui.QMainWindow):
             title = QtGui.QTableWidgetItem(doc[7].replace(u"\n" , u" || "))
             doctype = QtGui.QTableWidgetItem(doc[6])
             issue =  QtGui.QTableWidgetItem(doc[5])
-            status = QtGui.QTableWidgetItem(doc[9])
+            status = QtGui.QTableWidgetItem(doc[8])
             self.ui.documentlist.setItem(n, 0, state)
             self.ui.documentlist.setItem(n, 1, docid)
             self.ui.documentlist.setItem(n, 2, title)
@@ -494,12 +494,14 @@ class documentInfoDialog(QtGui.QDialog):
         self.ui.state.setText(self.doc.getstate(docnamelist)[1])
         self.ui.document_id.setText(self.link.const_docid(docnamelist))
         self.ui.issue.setText(str(self.doc.getissueno(docnamelist)))
-        self.ui.status.setText(info[9])
+        self.ui.status.setText(info[8])
         self.ui.document_title.setPlainText(info[7])
-        self.ui.document_keywords.setPlainText(info[11])
+        self.ui.document_keywords.setPlainText(info[10])
         self.ui.file_type.setText(info[6])
-        self.ui.creation_date.setText(info[8][0:19])
-        self.ui.author.setText(info[10])
+        self.ui.creation_date.setText(info[11][0:19])
+        self.ui.release_date.setText(info[12][0:19])
+        self.ui.obsolete_date.setText(info[13][0:19])
+        self.ui.author.setText(info[9])
 
     def savechanges(self):
         """ Save changes. """
