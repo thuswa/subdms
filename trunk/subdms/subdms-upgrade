@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Tue Apr 14 14:12:35 2009 on violator
-# update count: 159
+# Last modified Sun Apr 19 01:16:36 2009 on violator
+# update count: 217
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -22,6 +22,9 @@
 
 from subdms import lowlevel, database, repository
 
+import pysvn
+
+client = pysvn.Client()    
 cmd = lowlevel.command()
 conf = lowlevel.config()
 repo = repository.repository()
@@ -29,15 +32,33 @@ repo = repository.repository()
 print "Upgrade subdms server-side"
 print "--------------------------"
 
-# Upgrade db
-db = database.sqlitedb()
+def walkrepo(path):
+    """ Walk the repo find all files. """
+    try:
+        pathlist= client.ls(path)        
+        for p in pathlist:
+            ppath = p["name"]
+            oldpath = path
+            walkrepo(ppath)
+    except:
+        print oldpath
 
-# Upgrade subversion repository and layout
+# Upgrade db
+#db = database.sqlitedb()
+
+# Upgrade subversion repository layout
+walkrepo(conf.repourl)
 
 # Upgrade hooks
-repo.installhooks()
+#repo.installhooks()
 
 # Upgrade templates
-repo.installtemplates()
+#repo.installtemplates()
+
+
+def upgraderepo():
+    """ Upgrade layout in repo. """
+    # Change base dir for project documents
+    client.move(conf.repourl+"/trunk",conf.repourl+"/P") 
 
 
