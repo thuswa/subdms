@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Sat Apr 18 22:49:05 2009 on violator
-# update count: 463
+# Last modified Sun Apr 19 20:25:09 2009 on violator
+# update count: 507
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -24,6 +24,7 @@ from pysqlite2 import dbapi2 as sqlite
 import string
 
 import lowlevel
+import time
 
 """
 Database class. For now a simple sqlite2 database is used.
@@ -226,3 +227,35 @@ class sqlitedb:
                             "and docno=? and issue=?" , \
                             (d[0], d[1], d[2], d[3], d[4] ))
         return self.cursor.fetchall()[0]
+    
+    def upgradedb(self, dblist):
+        """ Upgrade Database tabels """
+        # Create new database
+        self.createdb()
+
+        for dbitem in dblist: 
+            [rvn, project, doctype, docno, issue, docext, doctitle, cdate, \
+             status, author, log_message] = dbitem
+
+            docnamelist = ["P", project, doctype, docno, issue, docext]      
+            dockeywords = ""
+            rdate = ""
+            odate = ""
+            ddate=time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+
+            if status == "released":
+                rdate = ddate                
+            if status == "obsolete":
+                odate = ddate
+                
+            writestr=[]
+            writestr.extend(docnamelist)
+            writestr.extend([doctitle, status, author, dockeywords, cdate, \
+                             rdate, odate])
+            self.writedoclist(rvn, writestr)
+            
+            writestr = writestr[0:5]
+            writestr.append(date)
+            writestr.extend([author, log_message])
+            # Write data to db
+            self.writerevlist(rvn, writestr) 
