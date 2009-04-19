@@ -1,0 +1,14 @@
+$Id$
+Last modified Sun Apr 19 23:39:24 2009 on violator
+update count: 24
+
+
+How to upgrade 
+==============
+If you have used subdms to store 
+
+1. Make sure that all documents are checked-in
+2. run "subdms-upgrade" from the command-line
+3. Check that the documets are correctly converted. 
+
+
