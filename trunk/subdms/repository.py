@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Fri Apr 17 22:06:00 2009 on violator
-# update count: 302
+# Last modified Sun Apr 19 14:25:29 2009 on violator
+# update count: 340
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -24,6 +24,7 @@ import pysvn
 
 import lowlevel
 import frontend
+import string
 
 class repository:
     def __init__(self):    
@@ -75,4 +76,27 @@ class repository:
             self.doc.release(tmplnamelist)
             print "Install template: "+tmplfname+" -> "+self.conf.repourl 
 
+    def walkrepoleafs(self, path, filelist):
+        """ Walk the repo and operate on all files. """
+        try:
+            pathlist= self.client.ls(path)        
+            for p in pathlist:
+                ppath = p["name"]
+                oldpath = path
+                self.walkrepoleafs(ppath, filelist)
+        except:
+            filelist.append(oldpath)
 
+    def upgraderepo():
+        """ Upgrade layout in repo. """
+        # Change base dir for project documents
+        client.copy(self.conf.repourl+"/trunk", self.conf.repourl+"/P") 
+
+    def upgradefilename(filelist):
+        """ Upgrade document file names. """
+        for name in filelist:
+            splitlist=name.split('/')
+            splitlist[-1] = "P-"+splitlist[-1]
+            newname = string.join(splitlist, '/')
+            client.move(name, newname, "Upgrade document name")
+            

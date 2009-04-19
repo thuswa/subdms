@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Sun Apr 19 01:16:36 2009 on violator
-# update count: 217
+# Last modified Sun Apr 19 20:23:39 2009 on violator
+# update count: 239
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -32,22 +32,20 @@ repo = repository.repository()
 print "Upgrade subdms server-side"
 print "--------------------------"
 
-def walkrepo(path):
-    """ Walk the repo find all files. """
-    try:
-        pathlist= client.ls(path)        
-        for p in pathlist:
-            ppath = p["name"]
-            oldpath = path
-            walkrepo(ppath)
-    except:
-        print oldpath
 
 # Upgrade db
-#db = database.sqlitedb()
+db = database.sqlitedb()
+doclist = db.getalldocs()
+# Remove old database
+cmd.rmtree(conf.repodb)
+db.upgradedb()
+
 
 # Upgrade subversion repository layout
-walkrepo(conf.repourl)
+repo.upgraderepo()
+filelist=[]
+repo.walkrepoleafs(conf.repourl, filelist)
+repo.upgradefilename(filelist)
 
 # Upgrade hooks
 #repo.installhooks()
@@ -56,9 +54,5 @@ walkrepo(conf.repourl)
 #repo.installtemplates()
 
 
-def upgraderepo():
-    """ Upgrade layout in repo. """
-    # Change base dir for project documents
-    client.move(conf.repourl+"/trunk",conf.repourl+"/P") 
 
 
