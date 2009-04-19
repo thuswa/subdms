@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Fri Apr 17 22:02:56 2009 on violator
-# update count: 975
+# Last modified Sun Apr 19 21:29:49 2009 on violator
+# update count: 978
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -307,6 +307,13 @@ class document:
          return True, log_message
       self.client.callback_get_log_message = get_log_message
       self.client.copy(source, target)
+
+   def server_side_move(self, source, target, log_message):
+      """ Server side move in repository URL -> URL. """
+      def get_log_message():
+         return True, log_message
+      self.client.callback_get_log_message = get_log_message
+      self.client.move(source, target)
 
    def reverttohead(self, docnamelist):
       """ Revert to head revision undo local changes. """

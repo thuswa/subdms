@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Sun Apr 19 14:25:29 2009 on violator
-# update count: 340
+# Last modified Sun Apr 19 22:47:40 2009 on violator
+# update count: 358
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -87,16 +87,20 @@ class repository:
         except:
             filelist.append(oldpath)
 
-    def upgraderepo():
+    def upgraderepo(self):
         """ Upgrade layout in repo. """
         # Change base dir for project documents
-        client.copy(self.conf.repourl+"/trunk", self.conf.repourl+"/P") 
+        self.doc.server_side_copy(self.conf.repourl+"/trunk", \
+                                  self.conf.repourl+"/P", \
+                                  "Upgrade repo layout") 
 
-    def upgradefilename(filelist):
+    def upgradefilename(self, filelist):
         """ Upgrade document file names. """
         for name in filelist:
             splitlist=name.split('/')
-            splitlist[-1] = "P-"+splitlist[-1]
+            splitlist[-5] = splitlist[-5].upper()
+            splitlist[-4] = splitlist[-4].upper()
+            splitlist[-1] = "P-"+splitlist[-1].upper()
             newname = string.join(splitlist, '/')
-            client.move(name, newname, "Upgrade document name")
+            self.doc.server_side_move(name, newname, "Upgrade document name")
             

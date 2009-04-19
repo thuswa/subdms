@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Sun Apr 19 20:25:09 2009 on violator
-# update count: 507
+# Last modified Sun Apr 19 22:48:23 2009 on violator
+# update count: 511
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -237,7 +237,8 @@ class sqlitedb:
             [rvn, project, doctype, docno, issue, docext, doctitle, cdate, \
              status, author, log_message] = dbitem
 
-            docnamelist = ["P", project, doctype, docno, issue, docext]      
+            docnamelist = ["P", project.upper(), doctype.upper(), docno, \
+                           issue, docext]      
             dockeywords = ""
             rdate = ""
             odate = ""
@@ -246,6 +247,7 @@ class sqlitedb:
             if status == "released":
                 rdate = ddate                
             if status == "obsolete":
+                rdate = ddate                
                 odate = ddate
                 
             writestr=[]
@@ -255,7 +257,7 @@ class sqlitedb:
             self.writedoclist(rvn, writestr)
             
             writestr = writestr[0:5]
-            writestr.append(date)
+            writestr.append(cdate)
             writestr.extend([author, log_message])
             # Write data to db
             self.writerevlist(rvn, writestr) 
