@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Sun Apr 19 22:47:40 2009 on violator
-# update count: 358
+# Last modified Mon Apr 20 00:36:41 2009 on violator
+# update count: 359
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -98,8 +98,8 @@ class repository:
         """ Upgrade document file names. """
         for name in filelist:
             splitlist=name.split('/')
-            splitlist[-5] = splitlist[-5].upper()
-            splitlist[-4] = splitlist[-4].upper()
+            splitlist[-5] = splitlist[-5].upper() #fixme
+            splitlist[-4] = splitlist[-4].upper() #fixme
             splitlist[-1] = "P-"+splitlist[-1].upper()
             newname = string.join(splitlist, '/')
             self.doc.server_side_move(name, newname, "Upgrade document name")
