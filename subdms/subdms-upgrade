@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Sun Apr 19 20:23:39 2009 on violator
-# update count: 239
+# Last modified Sun Apr 19 21:14:57 2009 on violator
+# update count: 257
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -32,26 +32,29 @@ repo = repository.repository()
 print "Upgrade subdms server-side"
 print "--------------------------"
 
-
 # Upgrade db
 db = database.sqlitedb()
-doclist = db.getalldocs()
-# Remove old database
-cmd.rmtree(conf.repodb)
-db.upgradedb()
+doclist = db.getallrev()
+print "Dump database."
 
+# Remove old database
+cmd.rm(conf.dbpath)
+print "Remove old database." 
+db2 = database.sqlitedb()
+db2.upgradedb(doclist)
 
 # Upgrade subversion repository layout
 repo.upgraderepo()
 filelist=[]
 repo.walkrepoleafs(conf.repourl, filelist)
 repo.upgradefilename(filelist)
+print "Upgrade documents in repository."
 
 # Upgrade hooks
-#repo.installhooks()
+repo.installhooks()
 
 # Upgrade templates
-#repo.installtemplates()
+repo.installtemplates()
 
 
 

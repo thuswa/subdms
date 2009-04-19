@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Fri Apr 17 21:36:34 2009 on violator
-# update count: 473
+# Last modified Sun Apr 19 21:00:21 2009 on violator
+# update count: 478
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -203,6 +203,10 @@ class command:
         docpath = self.link.const_viewcopyfilepath(docnamelist)
         filetype = docnamelist[-1]
         os.system("%s %s &" % (self.conf.geteditor(filetype), docpath))
+
+    def rm(self, path):
+        """ Delete file. """
+        os.remove(path)
 
     def rmtree(self, path):
         """ Delete directory tree recursively. """
