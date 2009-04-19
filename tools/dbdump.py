@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Mon Apr 20 00:22:31 2009 on violator
-# update count: 122
+# Last modified Mon Apr 20 00:32:43 2009 on violator
+# update count: 129
 # -*- coding:  utf-8 -*-
 
 from subdms import database
@@ -10,11 +10,15 @@ db = database.sqlitedb()
 
 # Dump database
 print "Document list:"
-print db.getalldocs()
+for row in db.getalldocs():
+    print row
 print "Template list:"
-print db.getalltmpls()
+for row in db.getalltmpls():
+    print row
 print "Project list:"
-print db.getallprojs()
+for row in db.getallprojs(): 
+    print row
 print "Revision list:"
-print db.getallrev()
+for row in db.getallrev():
+    print row 
 
