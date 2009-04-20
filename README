@@ -1,6 +1,6 @@
 $Id$
-Last modified Mon Apr 20 21:56:58 2009 on violator
-update count: 43
+Last modified Mon Apr 20 23:11:10 2009 on violator
+update count: 52
 
 Subdms - Subversion Based Document Management System
 ####################################################
@@ -36,7 +36,10 @@ How to set-up subdms
 
 How to use
 ----------
-Using the graphical user interface 
+Using the graphical user interface:
+
+Note: There is a Right-click menu available that corresponds to the "Tools" 
+      menu in the menubar.
 
 1. Start by adding a new project using the Menu entry "Create" -> "New Project" 
 
@@ -47,9 +50,14 @@ Using the graphical user interface
    b. From File: adding a existing file to the DMS.
    c. From Document: Base the document on an existing document in the DMS.
 
-3. List documents using Menu "Tools" -> "List Documents".
+3. List documents using Menu "View" -> "List Documents". 
 
-4. Edit document. Select document in the document list. 
+4. List templates using Menu "View" -> "List Templates". 
+
+6. To get more information about a document use the "Tools" -> "Document Info".
+
+
+5. Edit document. Select document in the document list. 
    Use menu entry "Tools" -> "Edit Document"
    This will launch the file in editor defined in /etc/subdms/sumbdms.cfg
 
