@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Sun Apr 19 22:48:23 2009 on violator
-# update count: 511
+# Last modified Mon Apr 20 23:38:40 2009 on violator
+# update count: 551
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -228,14 +228,12 @@ class sqlitedb:
                             (d[0], d[1], d[2], d[3], d[4] ))
         return self.cursor.fetchall()[0]
     
-    def upgradedb(self, dblist):
-        """ Upgrade Database tabels """
-        # Create new database
-        self.createdb()
+    def upgradedoclist(self, doclist):
+        """ Upgrade doclist table and revlist. """
 
-        for dbitem in dblist: 
+        for doc in doclist: 
             [rvn, project, doctype, docno, issue, docext, doctitle, cdate, \
-             status, author, log_message] = dbitem
+             status, author, log_message] = doc
 
             docnamelist = ["P", project.upper(), doctype.upper(), docno, \
                            issue, docext]      
@@ -261,3 +259,20 @@ class sqlitedb:
             writestr.extend([author, log_message])
             # Write data to db
             self.writerevlist(rvn, writestr) 
+
+    def upgradeprojlist(self, projlist):
+        """ Upgrade projlist table. """
+
+        for proj in projlist:
+            [projname, doctypes] = proj
+            description = ""
+            author = "upgrade"
+            ddate=time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+            
+            writestr = ["P", projname, description, author, ddate, doctypes]
+            db_str="insert into projlist(revnum, category, acronym, " \
+                    "description, author, date) values(\"%s\", \"%s\")" \
+                    % (rvn, string.join(writestr, "\",\""))
+            # Excecute sql command
+            self.cursor.execute(db_str)
+            self.con.commit()
