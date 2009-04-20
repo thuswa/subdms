@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Sun Apr 19 21:29:49 2009 on violator
-# update count: 978
+# Last modified Mon Apr 20 13:52:17 2009 on violator
+# update count: 979
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -144,8 +144,8 @@ class document:
 
    def export(self, docnamelist):
       """ Export file to workspace. """
-      checkoutpath = self.link.const_viewcopypath(docnamelist)
-      docpath = self.link.const_viewcopyfilepath(docnamelist)
+      checkoutpath = self.link.const_readonlypath(docnamelist)
+      docpath = self.link.const_readonlyfilepath(docnamelist)
 #      self.cmd.rmtree(checkoutpath)
       self.client.export(self.link.const_docurl(docnamelist), \
                          checkoutpath, True)

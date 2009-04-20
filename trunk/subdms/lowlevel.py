@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Sun Apr 19 21:00:21 2009 on violator
-# update count: 478
+# Last modified Mon Apr 20 13:53:24 2009 on violator
+# update count: 487
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -66,6 +66,7 @@ class config:
                                       "LastChangedRevision", "Id", \
                                       "Author"])
         self.vc = ['view', 'copy']
+        self.ro = ['read', 'only']
         
         # Internal Trigger patterns
         self.statchg = 'statuschange'.encode("hex")
@@ -97,16 +98,16 @@ class linkname:
         return os.path.join(self.conf.workpath, \
                         os.path.splitext(self.const_docname(docnamelist))[0])
 
-    def const_viewcopypath(self, docnamelist):
-        """ Construct the view-copy path """
+    def const_readonlypath(self, docnamelist):
+        """ Construct the read-only path """
         doclist=docnamelist[:-1]
-        doclist.extend(self.conf.vc)
+        doclist.extend(self.conf.ro)
         doclist.extend(docnamelist[-1:])
         return os.path.join(self.conf.workpath, self.const_docname(doclist))
 
-    def const_viewcopyfilepath(self, docnamelist):
-        """ Construct the view-copy path """
-        return os.path.join(self.const_viewcopypath(docnamelist), \
+    def const_readonlyfilepath(self, docnamelist):
+        """ Construct the read-only path """
+        return os.path.join(self.const_readonlypath(docnamelist), \
                             self.const_docfname(docnamelist))
 
     def const_docname(self, docnamelist):
@@ -200,7 +201,7 @@ class command:
 
     def launch_viewer(self, docnamelist):
         """ Launch appropriate viewer. """
-        docpath = self.link.const_viewcopyfilepath(docnamelist)
+        docpath = self.link.const_readonlyfilepath(docnamelist)
         filetype = docnamelist[-1]
         os.system("%s %s &" % (self.conf.geteditor(filetype), docpath))
 
