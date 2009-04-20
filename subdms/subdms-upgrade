@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Sun Apr 19 21:14:57 2009 on violator
-# update count: 257
+# Last modified Mon Apr 20 23:16:02 2009 on violator
+# update count: 265
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -22,9 +22,6 @@
 
 from subdms import lowlevel, database, repository
 
-import pysvn
-
-client = pysvn.Client()    
 cmd = lowlevel.command()
 conf = lowlevel.config()
 repo = repository.repository()
@@ -35,15 +32,21 @@ print "--------------------------"
 # Upgrade db
 db = database.sqlitedb()
 doclist = db.getallrev()
+projlist = db.getallprojs()
 print "Dump database."
 
 # Remove old database
 cmd.rm(conf.dbpath)
+
 print "Remove old database." 
 db2 = database.sqlitedb()
-db2.upgradedb(doclist)
+db2.createdb()
+
+db2.upgradedoclist(doclist)
+db2.upgradeprojlist(projlist)
 
 # Upgrade subversion repository layout
+repo = repository.repository()
 repo.upgraderepo()
 filelist=[]
 repo.walkrepoleafs(conf.repourl, filelist)
