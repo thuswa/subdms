@@ -1,14 +1,31 @@
 $Id$
-Last modified Sun Apr 19 23:39:24 2009 on violator
-update count: 24
+Last modified Mon Apr 20 21:42:12 2009 on violator
+update count: 37
 
 
 How to upgrade 
 ==============
-If you have used subdms to store 
+Due to internal changes made to version 0.2 of subdms, the server-side from a 
+previous version 0.1 install have to be upgraded. Using a script provided with 
+the package the repository and database will be upgraded. The document tree in 
+the repository will be copied to a new tree. Data is dumped from the old data 
+base and then reorganized and inserted in a new database. The old database 
+will be deleted.
 
-1. Make sure that all documents are checked-in
-2. run "subdms-upgrade" from the command-line
-3. Check that the documets are correctly converted. 
+Note that this upgrade method is not perfect. Release and obsolete dates will 
+for instance not be correct. Also the upgrade process requires some manual 
+actions taken by the user, so:  
 
+!!! READ THESE INSTRUCTIONS BELOW CAREFULLY !!!
+ 
+1. Make sure that all documents are checked-in.
+2. Close the subdms client window.
+3. run "subdms-upgrade" from the command-line.
+4. Check that the documents are correctly converted. 
+5. The old document tree is still present in the repository. 
+   To remove this run the following command:
+   svn rm file:///<path to repo>/trunk
+    
+   The post-commit hook will exit with an error. This error can be ignored.
 
+ 
