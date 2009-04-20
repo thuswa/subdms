@@ -1,6 +1,6 @@
 $Id$
-Last modified Mon Apr 20 21:42:12 2009 on violator
-update count: 37
+Last modified Mon Apr 20 21:46:54 2009 on violator
+update count: 38
 
 
 How to upgrade 
@@ -19,10 +19,12 @@ actions taken by the user, so:
 !!! READ THESE INSTRUCTIONS BELOW CAREFULLY !!!
  
 1. Make sure that all documents are checked-in.
-2. Close the subdms client window.
-3. run "subdms-upgrade" from the command-line.
-4. Check that the documents are correctly converted. 
-5. The old document tree is still present in the repository. 
+2. Close the subdms client window if it is open.
+4. Make sure that the database path and repository path in 
+   /etc/subdms/subdms.cfg are correct.
+5. run "subdms-upgrade" from the command-line.
+6. Check that the documents are correctly converted. 
+7. The old document tree is still present in the repository. 
    To remove this run the following command:
    svn rm file:///<path to repo>/trunk
     

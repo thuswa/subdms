@@ -1,6 +1,6 @@
 $Id$
-Last modified Thu Apr  2 20:47:40 2009 on violator
-update count: 39
+Last modified Mon Apr 20 21:56:58 2009 on violator
+update count: 43
 
 Subdms - Subversion Based Document Management System
 ####################################################
@@ -13,22 +13,26 @@ primarily Open Document Format (ODF).
  
 How to set-up subdms
 --------------------
-1. Install the subdms package, see INSTALL file for details.
+1.  Install the subdms package, see INSTALL file for details.
 
-2. Have a look in the config file /etc/subdms/subdms.cfg to see where the stuff
-   gets installed, and change that if you like. Also you might want to change 
-   the default editor (emacs). 
+2.  Have a look in the config file /etc/subdms/subdms.cfg to see where the stuff
+    gets installed, and change that if you like. Also you might want to change 
+    the default editors for the different filetypes. 
 
-3. Initiate the server-side of subdms by running the following command in the 
-   terminal:
+3a. If you have used version 0.1 of subdms to store a larger amount of docments
+    you might want to upgrade to the newer 0.2 version, see UPGRADE file for 
+    details.  
+
+3b. With a new clean install, you have to initiate the server-side of subdms by 
+    running the following command in the terminal:
  
-   > subdms-server
+    > subdms-server
    
-   This will setup the workspace directory, the database and the repository.
+    This will setup the workspace directory, the database and the repository.
 
-4. Run the client by typing:
+5.  Run the client by typing:
    
-   > subdms
+    > subdms
 
 How to use
 ----------
