@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Mon Apr 20 23:16:02 2009 on violator
-# update count: 265
+# Last modified Mon Apr 20 23:57:12 2009 on violator
+# update count: 266
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -32,7 +32,7 @@ print "--------------------------"
 # Upgrade db
 db = database.sqlitedb()
 doclist = db.getallrev()
-projlist = db.getallprojs()
+projlist = db.dumpallprojs()
 print "Dump database."
 
 # Remove old database
