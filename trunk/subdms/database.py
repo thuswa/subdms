@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Mon Apr 20 23:38:40 2009 on violator
-# update count: 551
+# Last modified Tue Apr 21 00:00:30 2009 on violator
+# update count: 558
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -151,6 +151,11 @@ class sqlitedb:
                             "where category = \"T\"")
         return self.cursor.fetchall()
 
+    def dumpallprojs(self):
+        """ Dump projects table from database. """
+        self.cursor.execute("select * from projlist")
+        return self.cursor.fetchall()
+
     def getprojs(self):
         """ Get list of all projects from database. """
         self.cursor.execute("select acronym from projlist "
@@ -262,7 +267,7 @@ class sqlitedb:
 
     def upgradeprojlist(self, projlist):
         """ Upgrade projlist table. """
-
+        rvn=1
         for proj in projlist:
             [projname, doctypes] = proj
             description = ""
@@ -271,8 +276,10 @@ class sqlitedb:
             
             writestr = ["P", projname, description, author, ddate, doctypes]
             db_str="insert into projlist(revnum, category, acronym, " \
-                    "description, author, date) values(\"%s\", \"%s\")" \
+                    "description, author, date, doctypes) " \
+                    "values(\"%s\", \"%s\")" \
                     % (rvn, string.join(writestr, "\",\""))
             # Excecute sql command
             self.cursor.execute(db_str)
             self.con.commit()
+            rvn += 1
