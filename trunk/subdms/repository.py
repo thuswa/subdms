@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Tue Apr 21 00:12:23 2009 on violator
-# update count: 363
+# Last modified Thu Apr 23 01:12:46 2009 on violator
+# update count: 372
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -31,9 +31,9 @@ class repository:
         self.client = pysvn.Client()
         self.conf = lowlevel.config()
         self.cmd = lowlevel.command()
-        self.doc = frontend.document()
         self.link = lowlevel.linkname()
         self.proj = frontend.project()
+        self.svncmd = lowlevel.svncmd()
         
     def createrepo(self):
         """ create repsitory and layout """
@@ -58,6 +58,7 @@ class repository:
 
     def installtemplates(self):
         """ Install templates in repository """
+        doc = frontend.document()
         # Create url for template types in repo
         category = self.conf.categories[1]
         project = "TMPL"
@@ -72,8 +73,8 @@ class repository:
             tmplfname = self.conf.gettemplate(tmpl)
             tmplpath = self.link.const_defaulttmplpath(tmplfname)
             keywords = "general, example, template"
-            self.doc.adddocument(tmplpath, tmplnamelist, "default", keywords)
-            self.doc.release(tmplnamelist)
+            doc.adddocument(tmplpath, tmplnamelist, "default", keywords)
+            doc.release(tmplnamelist)
             print "Install template: "+tmplfname+" -> "+self.conf.repourl 
 
     def walkrepoleafs(self, path, filelist):
@@ -90,7 +91,7 @@ class repository:
     def upgraderepo(self):
         """ Upgrade layout in repo. """
         # Change base dir for project documents
-        self.doc.server_side_copy(self.conf.repourl+"/trunk", \
+        self.svncmd.server_side_copy(self.conf.repourl+"/trunk", \
                                   self.conf.repourl+"/P", \
                                   "Upgrade repo layout") 
 
@@ -102,5 +103,5 @@ class repository:
             #splitlist[-4] = splitlist[-4].upper() #fixme
             splitlist[-1] = "P-"+splitlist[-1].upper()
             newname = string.join(splitlist, '/')
-            self.doc.server_side_move(name, newname, "Upgrade document name")
+            self.svncmd.server_side_move(name, newname, "Upgrade document name")
             
