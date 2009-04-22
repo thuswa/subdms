@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Wed Apr 22 11:32:19 2009 on havoc
-# update count: 392
+# Last modified Wed Apr 22 21:06:29 2009 on violator
+# update count: 406
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -38,19 +38,18 @@ class docinteg:
         self.db = database.sqlitedb()
         self.link = lowlevel.linkname()
 
-    def updateallfields(self, docnamelist):
+    def setallfields(self, docnamelist, doctitle, dockeywords, author, status):
         """ Update all document fields. """
-        docinfo = self.db.getdocumentinfo(docnamelist)
         
         # Name the document info
-        proj = docinfo[2]
-        issue = docinfo[5]
-        [doctitle, status, author, keyw] = docinfo[7:-3]
-        rdate = docinfo[12]
+        cat = docnamelist[0]
+        proj = docnamelist[1]
+        issue = docnamelist[-2]
+        rdate = ""
         docid = self.link.const_docid(docnamelist)
         
         # Get the document description
-        desc = self.db.getprojdesc(proj)
+        desc = self.db.getprojdesc(cat, proj)
 
         # Create fieldcontents list
         fieldcontents =[doctitle, docid, issue, status, rdate, author, \
