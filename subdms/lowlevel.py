@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Wed Apr 22 20:44:07 2009 on violator
-# update count: 493
+# Last modified Thu Apr 23 00:56:40 2009 on violator
+# update count: 499
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -22,6 +22,7 @@
 
 import ConfigParser
 import os
+import pysvn
 import shutil
 import string
 import subprocess
@@ -317,3 +318,24 @@ class svnlook:
     def getkeywords(self, docurl):
         """ Get commit keywords. """
         return self.svnlookcmd1("propget", "keywords", docurl)
+
+################################################################################
+
+class svncmd:
+   def __init__(self):
+      """ Initialize subversion command class """
+      self.client = pysvn.Client()
+
+   def server_side_copy(self, source, target, log_message):
+      """ Server side copy in repository URL -> URL. """
+      def get_log_message():
+         return True, log_message
+      self.client.callback_get_log_message = get_log_message
+      self.client.copy(source, target)
+
+   def server_side_move(self, source, target, log_message):
+      """ Server side move in repository URL -> URL. """
+      def get_log_message():
+         return True, log_message
+      self.client.callback_get_log_message = get_log_message
+      self.client.move(source, target)
