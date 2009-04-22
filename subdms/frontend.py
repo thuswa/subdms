@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Mon Apr 20 13:52:17 2009 on violator
-# update count: 979
+# Last modified Wed Apr 22 14:55:48 2009 on violator
+# update count: 984
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -190,8 +190,7 @@ class document:
 
    def viewdocument(self, docnamelist):   
       """ View the document. """
-      if not self.ischeckedout(docnamelist):
-         self.export(docnamelist)
+      self.export(docnamelist)
       self.cmd.launch_viewer(docnamelist)   
       
    def newissue(self, docnamelist):
