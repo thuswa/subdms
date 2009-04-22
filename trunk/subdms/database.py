@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Wed Apr 22 14:47:49 2009 on violator
-# update count: 575
+# Last modified Thu Apr 23 00:10:02 2009 on violator
+# update count: 583
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -23,8 +23,8 @@
 from pysqlite2 import dbapi2 as sqlite
 import string
 
+import epoch
 import lowlevel
-import time
 
 """
 Database class. For now a simple sqlite2 database is used.
@@ -34,6 +34,7 @@ class sqlitedb:
     def __init__(self):
         """ Initialize database """
         self.conf = lowlevel.config()
+        self.dt = epoch.dtime()
         # Create a connection to the database file
         self.con = sqlite.connect(self.conf.dbpath)
         # Get a Cursor object that operates in the context of Connection con:
@@ -252,13 +253,12 @@ class sqlitedb:
             dockeywords = ""
             rdate = ""
             odate = ""
-            ddate=time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
 
             if status == "released":
-                rdate = ddate                
+                rdate = self.dt.datetimestamp()
             if status == "obsolete":
-                rdate = ddate                
-                odate = ddate
+                rdate = self.dt.datetimestamp()
+                odate = rdate
                 
             writestr=[]
             writestr.extend(docnamelist)
