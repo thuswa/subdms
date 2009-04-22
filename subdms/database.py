@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Wed Apr 22 00:28:24 2009 on violator
-# update count: 572
+# Last modified Wed Apr 22 14:47:49 2009 on violator
+# update count: 575
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -162,12 +162,11 @@ class sqlitedb:
                             "where acronym != \"TMPL\"")
         return self.cursor.fetchall()
 
-
-    def getprojdesc(self, project):
+    def getprojdesc(self, category, project):
         """ Get projects description from database. """
         self.cursor.execute("select description from projlist " \
-                            "where acronym = ?", \
-                            (project, ))
+                            "where category=? and acronym=?" , \
+                            (category, project ))
         return self.cursor.fetchone()[0]
 
     def projexists(self, category, project):
