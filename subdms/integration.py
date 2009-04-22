@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Wed Apr 22 01:13:01 2009 on violator
-# update count: 386
+# Last modified Wed Apr 22 11:32:19 2009 on havoc
+# update count: 392
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -37,6 +37,30 @@ class docinteg:
         self.conf = lowlevel.config()
         self.db = database.sqlitedb()
         self.link = lowlevel.linkname()
+
+    def updateallfields(self, docnamelist):
+        """ Update all document fields. """
+        docinfo = self.db.getdocumentinfo(docnamelist)
+        
+        # Name the document info
+        proj = docinfo[2]
+        issue = docinfo[5]
+        [doctitle, status, author, keyw] = docinfo[7:-3]
+        rdate = docinfo[12]
+        docid = self.link.const_docid(docnamelist)
+        
+        # Get the document description
+        desc = self.db.getprojdesc(proj)
+
+        # Create fieldcontents list
+        fieldcontents =[doctitle, docid, issue, status, rdate, author, \
+                        proj, desc, keyw]
+        
+        # Choose action depending on filetype
+        if docnamelist[-1] == "tex": 
+            self.texfieldupdate(docnamelist, self.conf.fieldcodes, \
+                                    fieldcontents)
+
         
     def texfieldpattern(self, fieldcode, fieldcontent=".*"):
         """ return field code string for tex file. """
@@ -56,23 +80,4 @@ class docinteg:
                     line = self.texfieldcode(code, content)
             print line.replace("\n","")
 
-    def texupdateall(self, docnamelist):
-        """ Update all document fields. """
-        docinfo = self.db.getdocumentinfo(docnamelist)
-        
-        # Name the document info
-        proj = docinfo[2]
-        issue = docinfo[5]
-        [doctitle, status, author, keyw] = docinfo[7:-3]
-        rdate = docinfo[12]
-        docid = self.link.const_docid(docnamelist)
-        
-        # Get the document description
-        desc = self.db.getprojdesc(proj)
-
-        # Create fieldcontents list
-        fieldcontents =[doctitle, docid, issue, status, rdate, author, \
-                        proj, desc, keyw]
-        
-        self.texfieldupdate(docnamelist, self.conf.fieldcodes, fieldcontents)
        
