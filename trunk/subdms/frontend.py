@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Wed Apr 22 14:55:48 2009 on violator
-# update count: 984
+# Last modified Thu Apr 23 13:05:51 2009 on violator
+# update count: 1045
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -23,6 +23,7 @@
 import os
 import pysvn
 
+import integration
 import lowlevel
 
 """ Front-end classes. """
@@ -59,8 +60,10 @@ class document:
       self.client = pysvn.Client()
       self.cmd = lowlevel.command()
       self.conf = lowlevel.config()
+      self.integ = integration.docinteg()
       self.link = lowlevel.linkname()
       self.status = docstatus()
+      self.svncmd = lowlevel.svncmd()
 
    def createdocument(self, createfromurl, docnamelist, doctitle, dockeywords):
       """
@@ -80,9 +83,16 @@ class document:
       self.client.mkdir(docurl, "Document directory created.", 1)
       
       # Create document from template or existing document
-      self.server_side_copy(createfromurl, docfileurl, "Document created")
+      self.svncmd.server_side_copy(createfromurl, docfileurl, \
+                                   "Document created")
       self.client.checkout(docurl, checkoutpath)
-      
+
+      # Document integration
+      if self.integ.dodocinteg(docnamelist):
+         self.integ.setallfields(docnamelist, doctitle, dockeywords, \
+                                 self.getauthor(checkoutpath), \
+                                 self.conf.statuslist[0])
+
       # Set document title and commit document
       self.settitle(doctitle, docpath)
       self.setkeywords(dockeywords, docpath)
@@ -113,6 +123,12 @@ class document:
       # Copy file to workspace
       self.cmd.copyfile(addfilepath, docpath)
       self.client.add(docpath)
+
+      # Document integration
+      if self.integ.dodocinteg(docnamelist):
+         self.integ.setallfields(docnamelist, doctitle, dockeywords, \
+                                 self.getauthor(checkoutpath), \
+                                 self.conf.statuslist[0])
 
       # Set document title and commit document
       self.settitle(doctitle, docpath)
@@ -160,6 +176,10 @@ class document:
       if not self.ischeckedout(docnamelist):
          self.checkout(docnamelist)
 
+      # Document integration
+      if self.integ.dodocinteg(docnamelist):
+         self.integ.releaseupdate(docnamelist)
+         
       # Set status of document to released
       self.status.setreleased(self.link.const_docpath(docnamelist))
       self.commit(docnamelist, self.conf.release+"Status set to released")
@@ -176,6 +196,11 @@ class document:
          self.client.checkout(old_docurl, \
                          self.link.const_checkoutpath(old_docnamelist))
          self.status.setobsolete(old_docpath)
+
+         # Document integration
+         if self.integ.dodocinteg(docnamelist):
+            self.integ.obsoleteupdate(old_docnamelist)
+
          self.commit(old_docnamelist, \
                      self.conf.obsolete+"Status set to obsolete")
          # Remove file from workspace
@@ -208,10 +233,18 @@ class document:
       self.client.mkdir(docurl, "Document directory created", 1)
 
       # Copy issue to new issue
-      self.server_side_copy(self.link.const_docfileurl(docnamelist), \
-                            docfileurl, message)
+      self.svncmd.server_side_copy(self.link.const_docfileurl(docnamelist), \
+                                   docfileurl, message)
       self.client.checkout(docurl, checkoutpath)
-      
+
+      # Document integration
+      if self.integ.dodocinteg(new_docnamelist):
+         self.integ.setallfields(new_docnamelist, \
+                                 self.gettitle(new_docnamelist), \
+                                 self.getkeywords(new_docnamelist), \
+                                 self.getauthor(checkoutpath), \
+                                 self.conf.statuslist[0])
+
       # Set document status and commit document
       self.status.setpreliminary(docpath)
       self.client.checkin(docpath, self.conf.newdoc+\
@@ -250,6 +283,14 @@ class document:
       if not wascheckedout:
          self.checkin(docnamelist)
 
+   def getauthor(self, path):
+      """ Get commit author. """
+      return self.client.info(path).commit_author
+
+   def getdate(self, path):
+      """ Get commit date. """
+      return self.client.info(path).commit_time
+   
    def getissueno(self, docnamelist):
       """ Get document issue number. """ 
       return int(docnamelist[4])
@@ -262,7 +303,12 @@ class document:
 
    def gettitle(self, docnamelist):
       """ Get document title. """ 
-      return self.client.propget('title', \
+      return self.client.propget(self.conf.proplist[0], \
+                           self.link.const_docurl(docnamelist)).values().pop()
+
+   def getkeywords(self, docnamelist):
+      """ Get document keywords. """ 
+      return self.client.propget(self.conf.proplist[3], \
                   self.link.const_docurl(docnamelist)).values().pop()
 
    def settitle(self, doctitle, docpath):
@@ -300,20 +346,6 @@ class document:
          return_state = ['I', 'Checked In']
       return return_state
    
-   def server_side_copy(self, source, target, log_message):
-      """ Server side copy in repository URL -> URL. """
-      def get_log_message():
-         return True, log_message
-      self.client.callback_get_log_message = get_log_message
-      self.client.copy(source, target)
-
-   def server_side_move(self, source, target, log_message):
-      """ Server side move in repository URL -> URL. """
-      def get_log_message():
-         return True, log_message
-      self.client.callback_get_log_message = get_log_message
-      self.client.move(source, target)
-
    def reverttohead(self, docnamelist):
       """ Revert to head revision undo local changes. """
       return None #fixme
