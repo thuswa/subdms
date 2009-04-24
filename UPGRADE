@@ -1,16 +1,17 @@
 $Id$
-Last modified Mon Apr 20 21:46:54 2009 on violator
-update count: 38
+Last modified Fri Apr 24 12:43:51 2009 on violator
+update count: 40
 
 
 How to upgrade 
 ==============
 Due to internal changes made to version 0.2 of subdms, the server-side from a 
-previous version 0.1 install have to be upgraded. Using a script provided with 
-the package the repository and database will be upgraded. The document tree in 
-the repository will be copied to a new tree. Data is dumped from the old data 
-base and then reorganized and inserted in a new database. The old database 
-will be deleted.
+previous version 0.1 install can not be used with the newer version, unless it 
+is upgraded. The upgrade of the repository and the database can be performed 
+using a script provided with the package. This script will copy the present 
+document tree in the repository to a new tree. Also, the data contained in the 
+old database will be extracted and then reorganized and inserted into a 
+new database. The old database will be deleted.
 
 Note that this upgrade method is not perfect. Release and obsolete dates will 
 for instance not be correct. Also the upgrade process requires some manual 
