@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Fri Apr 24 02:17:49 2009 on violator
-# update count: 472
+# Last modified Fri Apr 24 14:46:38 2009 on violator
+# update count: 474
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -20,15 +20,12 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import pysvn
-
 import lowlevel
 import frontend
 import string
 
 class repository:
     def __init__(self):    
-        self.client = pysvn.Client()
         self.conf = lowlevel.config()
         self.cmd = lowlevel.command()
         self.link = lowlevel.linkname()
