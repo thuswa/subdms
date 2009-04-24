@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Fri Apr 24 14:46:38 2009 on violator
-# update count: 474
+# Last modified Fri Apr 24 15:26:32 2009 on violator
+# update count: 477
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -85,7 +85,7 @@ class repository:
         """ Walk the repo and list all files. """
         filenamelist= []
         for p in self.svncmd.recursivels(path):
-            if p["kind"] == pysvn.node_kind.file:
+            if p["kind"] == self.svncmd.filekind:
                 filenamelist.append(p["name"])
         return filenamelist   
 
@@ -93,7 +93,7 @@ class repository:
         """ Walk the repo aand list all paths. """
         pathnamelist = []
         for p in self.svncmd.recursivels(path):
-            if p["kind"] != pysvn.node_kind.file:
+            if p["kind"] != self.svncmd.filekind:
                 pathnamelist.append(p["name"])
         return pathnamelist   
 
