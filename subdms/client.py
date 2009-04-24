@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Sat Apr 18 23:37:57 2009 on violator
-# update count: 1152
+# Last modified Fri Apr 24 14:19:54 2009 on violator
+# update count: 1153
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -514,7 +514,7 @@ class documentInfoDialog(QtGui.QDialog):
         doclist = docid.split('-')
         doclist.extend([issue, filetype])
         self.doc.changetitle(doclist, doctitle) 
-
+        self.doc.changekeywords(doclist, dockeywords) 
         
 ################################################################################
 

@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Thu Apr 23 13:05:51 2009 on violator
-# update count: 1045
+# Last modified Fri Apr 24 14:25:28 2009 on violator
+# update count: 1064
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -94,8 +94,8 @@ class document:
                                  self.conf.statuslist[0])
 
       # Set document title and commit document
-      self.settitle(doctitle, docpath)
-      self.setkeywords(dockeywords, docpath)
+      self.settitle(docpath, doctitle)
+      self.setkeywords(docpath, dockeywords)
       self.status.setpreliminary(docpath)
 
       #self.client.propset(conf.proplist[], conf.svnkeywords, docpath) 
@@ -131,8 +131,8 @@ class document:
                                  self.conf.statuslist[0])
 
       # Set document title and commit document
-      self.settitle(doctitle, docpath)
-      self.setkeywords(dockeywords, docpath)
+      self.settitle(docpath, doctitle)
+      self.setkeywords(docpath, dockeywords)
       self.setsvnkeywords(docpath)
       self.status.setpreliminary(docpath)
 
@@ -260,8 +260,12 @@ class document:
          self.checkout(docnamelist)
          wascheckedout = False
 
+      # Document integration
+      if self.integ.dodocinteg(docnamelist):
+         self.integ.updatetitle(docnamelist, doctitle)
+
       # Set document title and commit document
-      self.settitle(doctitle, docpath)
+      self.settitle(docpath, doctitle)
       self.client.checkin(docpath, self.conf.newtitle+ \
                           "Changed document title")
       if not wascheckedout:
@@ -276,8 +280,12 @@ class document:
          self.checkout(docnamelist)
          wascheckedout = False
 
+      # Document integration
+      if self.integ.dodocinteg(docnamelist):
+         self.integ.updatekeywords(docnamelist, dockeywords)
+
       # Set document keywords and commit document
-      self.setkeywords(doctitle, dockeywords)
+      self.setkeywords(docpath, dockeywords)
       self.client.checkin(docpath, self.conf.newkeywords+ \
                           "Changed document keywords")
       if not wascheckedout:
@@ -311,7 +319,7 @@ class document:
       return self.client.propget(self.conf.proplist[3], \
                   self.link.const_docurl(docnamelist)).values().pop()
 
-   def settitle(self, doctitle, docpath):
+   def settitle(self, docpath, doctitle):
       """ Set document title. """ 
       self.client.propset(self.conf.proplist[0], doctitle, docpath)
 
@@ -320,7 +328,7 @@ class document:
       self.client.propset(self.conf.proplist[2], self.conf.svnkeywords, \
                           docpath) 
 
-   def setkeywords(self, dockeywords, docpath):
+   def setkeywords(self, docpath, dockeywords):
       """ Set document keywords. """ 
       self.client.propset(self.conf.proplist[3], dockeywords, docpath)
 
