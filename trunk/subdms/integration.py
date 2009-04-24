@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Fri Apr 24 12:57:06 2009 on violator
-# update count: 480
+# Last modified Fri Apr 24 14:29:02 2009 on violator
+# update count: 481
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -105,7 +105,6 @@ class docinteg:
     def texfieldupdate(self, docnamelist, fieldcodes, fieldcontents):
         """ Update field codes in document. """
         docpath = self.link.const_docpath(docnamelist)
-        print docpath
         for line in fileinput.FileInput(docpath, inplace=1):
             for code, content in map(None, fieldcodes, fieldcontents):
                 fieldptrn = self.texfieldpattern(code)
