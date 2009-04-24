@@ -1,6 +1,6 @@
 $Id$
-Last modified Mon Apr 20 23:11:10 2009 on violator
-update count: 52
+Last modified Fri Apr 24 12:49:34 2009 on violator
+update count: 61
 
 Subdms - Subversion Based Document Management System
 ####################################################
@@ -50,16 +50,22 @@ Note: There is a Right-click menu available that corresponds to the "Tools"
    b. From File: adding a existing file to the DMS.
    c. From Document: Base the document on an existing document in the DMS.
 
-3. List documents using Menu "View" -> "List Documents". 
+3. List all documents using Menu "View" -> "List Documents". 
 
-4. List templates using Menu "View" -> "List Templates". 
+4. List all templates using Menu "View" -> "List Templates". 
 
-6. To get more information about a document use the "Tools" -> "Document Info".
+5. To get more information about a document use the "Tools" -> "Document Info".
+   In this dialog you can also edit the document title and the document 
+   keywords, Press the "Save" button to apply any changes.
 
-
-5. Edit document. Select document in the document list. 
+6. View document. Select document in the document list. 
+   Use menu entry "Tools" -> "View Document"
+   This will display a read-only copy of the document in a viewer/editor 
+   defined in: /etc/subdms/sumbdms.cfg	
+   
+7. Edit document. Select document in the document list. 
    Use menu entry "Tools" -> "Edit Document"
-   This will launch the file in editor defined in /etc/subdms/sumbdms.cfg
+   This will launch an editor defined in /etc/subdms/sumbdms.cfg.
 
 5. Commit Changes. As with other version control systems, local changes made to 
    the document can be committed to the central repository. 
