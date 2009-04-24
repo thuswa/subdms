@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Fri Apr 24 14:25:28 2009 on violator
-# update count: 1064
+# Last modified Fri Apr 24 14:43:21 2009 on violator
+# update count: 1067
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -20,7 +20,6 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import os
 import pysvn
 
 import integration
@@ -334,11 +333,7 @@ class document:
 
    def ischeckedout(self, docnamelist):
       """ Return true if docname is checked out. """
-      if os.path.exists(os.path.join(\
-         self.link.const_checkoutpath(docnamelist), '.svn')):
-         return True
-      else:
-         return False
+      return self.cmd.workingcopyexists(docnamelist)
 
    def getstate(self, docnamelist):
       """ Get document state. """
