@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Thu Apr 23 01:12:46 2009 on violator
-# update count: 372
+# Last modified Fri Apr 24 02:17:49 2009 on violator
+# update count: 472
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -77,31 +77,42 @@ class repository:
             doc.release(tmplnamelist)
             print "Install template: "+tmplfname+" -> "+self.conf.repourl 
 
-    def walkrepoleafs(self, path, filelist):
-        """ Walk the repo and operate on all files. """
-        try:
-            pathlist= self.client.ls(path)        
-            for p in pathlist:
-                ppath = p["name"]
-                oldpath = path
-                self.walkrepoleafs(ppath, filelist)
-        except:
-            filelist.append(oldpath)
+    def walkrepo(self, path):
+        """ Walk the repo and list the content. """
+        repolist= []
+        for p in self.svncmd.recursivels(path):
+            repolist.append(p["name"])
+        return repolist   
+
+    def walkrepoleafs(self, path):
+        """ Walk the repo and list all files. """
+        filenamelist= []
+        for p in self.svncmd.recursivels(path):
+            if p["kind"] == pysvn.node_kind.file:
+                filenamelist.append(p["name"])
+        return filenamelist   
+
+    def walkreponodes(self, path):
+        """ Walk the repo aand list all paths. """
+        pathnamelist = []
+        for p in self.svncmd.recursivels(path):
+            if p["kind"] != pysvn.node_kind.file:
+                pathnamelist.append(p["name"])
+        return pathnamelist   
 
     def upgraderepo(self):
         """ Upgrade layout in repo. """
-        # Change base dir for project documents
+        # Change base dir for project documents        
         self.svncmd.server_side_copy(self.conf.repourl+"/trunk", \
                                   self.conf.repourl+"/P", \
                                   "Upgrade repo layout") 
+        for path in self.walkreponodes(self.conf.repourl+"/P"):
+            self.svncmd.server_side_move(path, path.upper(), \
+                                               "Upgrade document path")
 
-    def upgradefilename(self, filelist):
+    def upgradefilename(self):
         """ Upgrade document file names. """
-        for name in filelist:
-            splitlist=name.split('/')
-            #splitlist[-5] = splitlist[-5].upper() #fixme
-            #splitlist[-4] = splitlist[-4].upper() #fixme
-            splitlist[-1] = "P-"+splitlist[-1].upper()
-            newname = string.join(splitlist, '/')
-            self.svncmd.server_side_move(name, newname, "Upgrade document name")
+        for name in self.walkrepleafs(self.conf.repourl+"/P"):
+            self.svncmd.server_side_move(name, name.upper(), \
+                                               "Upgrade document name")
             

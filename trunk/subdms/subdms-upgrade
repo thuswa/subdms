@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Mon Apr 20 23:57:12 2009 on violator
-# update count: 266
+# Last modified Fri Apr 24 02:18:35 2009 on violator
+# update count: 269
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -48,9 +48,7 @@ db2.upgradeprojlist(projlist)
 # Upgrade subversion repository layout
 repo = repository.repository()
 repo.upgraderepo()
-filelist=[]
-repo.walkrepoleafs(conf.repourl, filelist)
-repo.upgradefilename(filelist)
+repo.upgradefilename()
 print "Upgrade documents in repository."
 
 # Upgrade hooks

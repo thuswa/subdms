@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Thu Apr 23 00:56:40 2009 on violator
-# update count: 499
+# Last modified Fri Apr 24 02:05:39 2009 on violator
+# update count: 516
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -325,7 +325,6 @@ class svncmd:
    def __init__(self):
       """ Initialize subversion command class """
       self.client = pysvn.Client()
-
    def server_side_copy(self, source, target, log_message):
       """ Server side copy in repository URL -> URL. """
       def get_log_message():
@@ -339,3 +338,9 @@ class svncmd:
          return True, log_message
       self.client.callback_get_log_message = get_log_message
       self.client.move(source, target)
+
+   def recursivels(self, path):
+       """ Return resursive listing of repourl. """ 
+       return self.client.ls(path, \
+                             pysvn.Revision(pysvn.opt_revision_kind.head),
+                             True)
