@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Fri Apr 24 02:05:39 2009 on violator
-# update count: 516
+# Last modified Fri Apr 24 14:42:45 2009 on violator
+# update count: 521
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -211,6 +211,14 @@ class command:
         filetype = docnamelist[-1]
         os.system("%s %s &" % (self.conf.geteditor(filetype), docpath))
 
+    def workingcopyexists(self, docnamelist):
+        """ Check if working copy exists. """
+        if os.path.exists(os.path.join( \
+            self.link.const_checkoutpath(docnamelist), '.svn')):
+            return True
+        else:
+            return False
+    
     def rm(self, path):
         """ Delete file. """
         os.remove(path)
