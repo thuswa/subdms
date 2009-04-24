@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Fri Apr 24 14:42:45 2009 on violator
-# update count: 521
+# Last modified Fri Apr 24 15:25:47 2009 on violator
+# update count: 565
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -330,25 +330,66 @@ class svnlook:
 ################################################################################
 
 class svncmd:
-   def __init__(self):
-      """ Initialize subversion command class """
-      self.client = pysvn.Client()
-   def server_side_copy(self, source, target, log_message):
-      """ Server side copy in repository URL -> URL. """
-      def get_log_message():
-         return True, log_message
-      self.client.callback_get_log_message = get_log_message
-      self.client.copy(source, target)
+    def __init__(self):
+        """ Initialize subversion command class """
+        self.client = pysvn.Client()
+        self.modified = pysvn.wc_status_kind.modified
+        self.conflicted = pysvn.wc_status_kind.conflicted
+        self.filekind = pysvn.node_kind.file
+        
+    def add(self, path):
+        """ Add to repository. """
+        self.client.add(path)
+        
+    def checkin(self, path, log_message):
+        """ Check-out from repo. """
+        self.client.checkin(path, log_message)
+        
+    def checkout(self, url, path):
+        """ Check-out from repo. """
+        self.client.checkout(url, path)
 
-   def server_side_move(self, source, target, log_message):
-      """ Server side move in repository URL -> URL. """
-      def get_log_message():
-         return True, log_message
-      self.client.callback_get_log_message = get_log_message
-      self.client.move(source, target)
+    def export(self, url, path):
+        """ Export form repository. """
+        self.client.export(url, path, True)
 
-   def recursivels(self, path):
-       """ Return resursive listing of repourl. """ 
-       return self.client.ls(path, \
-                             pysvn.Revision(pysvn.opt_revision_kind.head),
-                             True)
+    def info(self, path):
+        """ return repository info. """
+        return self.client.info(path)
+    
+    def mkdir(self, url, log_message):
+        """ Make directory in repository. """  
+        self.client.mkdir(url, log_message, 1)
+        
+    def propget(self, property,  url):
+        """ Get property. """
+        return self.client.propget(property, url).values().pop()
+
+    def propset(self, property, propvalue, path):
+        """ Set property. """
+        self.client.propset(property, propvalue, path)
+
+    def recursivels(self, path):
+        """ Return resursive listing of repourl. """ 
+        return self.client.ls(path, \
+                              pysvn.Revision(pysvn.opt_revision_kind.head),
+                              True)
+
+    def server_side_copy(self, source, target, log_message):
+        """ Server side copy in repository URL -> URL. """
+        def get_log_message():
+            return True, log_message
+        self.client.callback_get_log_message = get_log_message
+        self.client.copy(source, target)
+
+    def server_side_move(self, source, target, log_message):
+        """ Server side move in repository URL -> URL. """
+        def get_log_message():
+            return True, log_message
+        self.client.callback_get_log_message = get_log_message
+        self.client.move(source, target)
+
+    def status(self, path):
+        """ Return status of working copy file. """
+        return self.client.status(path)[0]
+

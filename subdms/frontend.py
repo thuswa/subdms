@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Fri Apr 24 14:43:21 2009 on violator
-# update count: 1067
+# Last modified Fri Apr 24 15:23:50 2009 on violator
+# update count: 1105
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -20,8 +20,6 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import pysvn
-
 import integration
 import lowlevel
 
@@ -30,33 +28,31 @@ import lowlevel
 class project:
    def __init__(self):
       """ Initialize project class """
-      self.client = pysvn.Client()
       self.conf = lowlevel.config()
       self.link = lowlevel.linkname()
-
+      self.svncmd = lowlevel.svncmd()
+      
    def createcategory(self, category):
       """ Create category dir in repo. """
-      self.client.mkdir(self.link.const_caturl(category), \
-                        "Created a category", 1)
+      self.svncmd.mkdir(self.link.const_caturl(category), "Created a category")
       
    def createproject(self, category, project, description, doctypes):
       """ Create project dir in repo. """
-      self.client.mkdir(self.link.const_projurl(category, project), \
-                        self.conf.newproj+description,1)
+      self.svncmd.mkdir(self.link.const_projurl(category, project), \
+                        self.conf.newproj+description)
       self.adddoctypes(category, project, doctypes)
 
    def adddoctypes(self, category, project, doctypes):
       """ Add new doctypes. """
       for doc in doctypes:
-         self.client.mkdir(self.link.const_doctypeurl(category, project, doc), \
-                           self.conf.newdoctype+"Added doctype",1)
+         self.svncmd.mkdir(self.link.const_doctypeurl(category, project, doc), \
+                           self.conf.newdoctype+"Added doctype")
       
 ################################################################################
 
 class document:
    def __init__(self):
       """ Initialize project class """
-      self.client = pysvn.Client()
       self.cmd = lowlevel.command()
       self.conf = lowlevel.config()
       self.integ = integration.docinteg()
@@ -79,12 +75,12 @@ class document:
       docpath=self.link.const_docpath(docnamelist)
 
       # Create document url in repository
-      self.client.mkdir(docurl, "Document directory created.", 1)
+      self.svncmd.mkdir(docurl, "Document directory created.")
       
       # Create document from template or existing document
       self.svncmd.server_side_copy(createfromurl, docfileurl, \
                                    "Document created")
-      self.client.checkout(docurl, checkoutpath)
+      self.svncmd.checkout(docurl, checkoutpath)
 
       # Document integration
       if self.integ.dodocinteg(docnamelist):
@@ -97,8 +93,7 @@ class document:
       self.setkeywords(docpath, dockeywords)
       self.status.setpreliminary(docpath)
 
-      #self.client.propset(conf.proplist[], conf.svnkeywords, docpath) 
-      self.client.checkin(docpath, self.conf.newdoc+ \
+      self.svncmd.checkin(docpath, self.conf.newdoc+ \
                      "Commited document properties")
    
    def adddocument(self, addfilepath, docnamelist, doctitle, dockeywords):
@@ -116,12 +111,12 @@ class document:
       docpath=self.link.const_docpath(docnamelist)
 
       # Create document url in repository and check it out to workspace
-      self.client.mkdir(docurl, "Document directory created.", 1)
-      self.client.checkout(docurl, checkoutpath)
+      self.svncmd.mkdir(docurl, "Document directory created.")
+      self.svncmd.checkout(docurl, checkoutpath)
       
       # Copy file to workspace
       self.cmd.copyfile(addfilepath, docpath)
-      self.client.add(docpath)
+      self.svncmd.add(docpath)
 
       # Document integration
       if self.integ.dodocinteg(docnamelist):
@@ -135,12 +130,12 @@ class document:
       self.setsvnkeywords(docpath)
       self.status.setpreliminary(docpath)
 
-      self.client.checkin(docpath, self.conf.newdoc+ \
+      self.svncmd.checkin(docpath, self.conf.newdoc+ \
                           "Commited document properties.")
 
    def commit(self, docnamelist, message):
       """ Commit changes on file. """
-      self.client.checkin(self.link.const_docpath(docnamelist), message)
+      self.svncmd.checkin(self.link.const_docpath(docnamelist), message)
 
    def checkin(self, docnamelist):
       """ Check-in file from workspace. """
@@ -153,7 +148,7 @@ class document:
       
    def checkout(self, docnamelist):
       """ Check-out file to workspace. """
-      self.client.checkout(self.link.const_docurl(docnamelist), \
+      self.svncmd.checkout(self.link.const_docurl(docnamelist), \
                            self.link.const_checkoutpath(docnamelist))
       #  self.client.lock( 'file.txt', 'reason for locking' )
 
@@ -162,8 +157,7 @@ class document:
       checkoutpath = self.link.const_readonlypath(docnamelist)
       docpath = self.link.const_readonlyfilepath(docnamelist)
 #      self.cmd.rmtree(checkoutpath)
-      self.client.export(self.link.const_docurl(docnamelist), \
-                         checkoutpath, True)
+      self.svncmd.export(self.link.const_docurl(docnamelist), checkoutpath)
       self.cmd.setreadonly(docpath)
 
    def release(self, docnamelist):
@@ -192,8 +186,8 @@ class document:
          old_docnamelist = self.setissueno(docnamelist, old_issue)
          old_docpath = self.link.const_docpath(old_docnamelist)
          old_docurl = self.link.const_docurl(old_docnamelist)
-         self.client.checkout(old_docurl, \
-                         self.link.const_checkoutpath(old_docnamelist))
+         self.svncmd.checkout(old_docurl, \
+                              self.link.const_checkoutpath(old_docnamelist))
          self.status.setobsolete(old_docpath)
 
          # Document integration
@@ -229,12 +223,12 @@ class document:
       message = " Created "+docname
 
       # Create document url in repository
-      self.client.mkdir(docurl, "Document directory created", 1)
+      self.svncmd.mkdir(docurl, "Document directory created")
 
       # Copy issue to new issue
       self.svncmd.server_side_copy(self.link.const_docfileurl(docnamelist), \
                                    docfileurl, message)
-      self.client.checkout(docurl, checkoutpath)
+      self.svncmd.checkout(docurl, checkoutpath)
 
       # Document integration
       if self.integ.dodocinteg(new_docnamelist):
@@ -246,7 +240,7 @@ class document:
 
       # Set document status and commit document
       self.status.setpreliminary(docpath)
-      self.client.checkin(docpath, self.conf.newdoc+\
+      self.svncmd.checkin(docpath, self.conf.newdoc+\
                           "Commited document properties")
       return message   
 
@@ -265,7 +259,7 @@ class document:
 
       # Set document title and commit document
       self.settitle(docpath, doctitle)
-      self.client.checkin(docpath, self.conf.newtitle+ \
+      self.svncmd.checkin(docpath, self.conf.newtitle+ \
                           "Changed document title")
       if not wascheckedout:
          self.checkin(docnamelist)
@@ -285,18 +279,18 @@ class document:
 
       # Set document keywords and commit document
       self.setkeywords(docpath, dockeywords)
-      self.client.checkin(docpath, self.conf.newkeywords+ \
+      self.svncmd.checkin(docpath, self.conf.newkeywords+ \
                           "Changed document keywords")
       if not wascheckedout:
          self.checkin(docnamelist)
 
    def getauthor(self, path):
       """ Get commit author. """
-      return self.client.info(path).commit_author
+      return self.svncmd.info(path).commit_author
 
    def getdate(self, path):
       """ Get commit date. """
-      return self.client.info(path).commit_time
+      return self.svncmd.info(path).commit_time
    
    def getissueno(self, docnamelist):
       """ Get document issue number. """ 
@@ -310,26 +304,26 @@ class document:
 
    def gettitle(self, docnamelist):
       """ Get document title. """ 
-      return self.client.propget(self.conf.proplist[0], \
-                           self.link.const_docurl(docnamelist)).values().pop()
+      return self.svncmd.propget(self.conf.proplist[0], \
+                                 self.link.const_docurl(docnamelist))
 
    def getkeywords(self, docnamelist):
       """ Get document keywords. """ 
-      return self.client.propget(self.conf.proplist[3], \
-                  self.link.const_docurl(docnamelist)).values().pop()
+      return self.svncmd.propget(self.conf.proplist[3], \
+                                 self.link.const_docurl(docnamelist))
 
    def settitle(self, docpath, doctitle):
       """ Set document title. """ 
-      self.client.propset(self.conf.proplist[0], doctitle, docpath)
+      self.svncmd.propset(self.conf.proplist[0], doctitle, docpath)
 
    def setsvnkeywords(self, docpath):
       """ Set svn keywords. """  
-      self.client.propset(self.conf.proplist[2], self.conf.svnkeywords, \
+      self.svncmd.propset(self.conf.proplist[2], self.conf.svnkeywords, \
                           docpath) 
 
    def setkeywords(self, docpath, dockeywords):
       """ Set document keywords. """ 
-      self.client.propset(self.conf.proplist[3], dockeywords, docpath)
+      self.svncmd.propset(self.conf.proplist[3], dockeywords, docpath)
 
    def ischeckedout(self, docnamelist):
       """ Return true if docname is checked out. """
@@ -339,11 +333,11 @@ class document:
       """ Get document state. """
       if self.ischeckedout(docnamelist):
          docpath = self.link.const_docpath(docnamelist)
-         state = self.client.status(docpath)[0]
+         state = self.svncmd.status(docpath)
          return_state = ['O', 'Checked Out']
-         if state.text_status == pysvn.wc_status_kind.modified:
+         if state.text_status == self.svncmd.modified:
             return_state = ['M', 'Modified']
-         if state.text_status == pysvn.wc_status_kind.conflicted:
+         if state.text_status == self.svncmd.conflicted:
             return_state = ['C', 'Conflict'] 
       else:
          return_state = ['I', 'Checked In']
@@ -362,28 +356,28 @@ class document:
 class docstatus:
    def __init__(self):
       """ Initialize document status class. """
-      self.client = pysvn.Client()
       self.conf = lowlevel.config()
       self.link = lowlevel.linkname()
-
+      self.svncmd = lowlevel.svncmd()
+      
    def getstatus(self, docnamelist):
       """ Get document status. """ 
-      return self.client.propget('status', \
-                            self.link.const_docurl(docnamelist)).values().pop()
+      return self.svncmd.propget(self.conf.proplist[1],
+                                 self.link.const_docurl(docnamelist))
 
    def setpreliminary(self, docpath):
       """ Set document status to preliminary. """ 
-      self.client.propset(self.conf.proplist[1], \
+      self.svncmd.propset(self.conf.proplist[1], \
                           self.conf.statuslist[0], docpath)
 
    def setreleased(self, docpath):
       """ Set document status to released. """ 
-      self.client.propset(self.conf.proplist[1], self.conf.statuslist[4], \
+      self.svncmd.propset(self.conf.proplist[1], self.conf.statuslist[4], \
                           docpath)
 
    def setobsolete(self, docpath):
       """ Set document status to obsolete. """
-      self.client.propset(self.conf.proplist[1], self.conf.statuslist[5], \
+      self.svncmd.propset(self.conf.proplist[1], self.conf.statuslist[5], \
                           docpath)
 
    def ispreliminary(self, docnamelist):
