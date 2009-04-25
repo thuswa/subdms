@@ -1,7 +1,8 @@
 % $Id$
-% Last modified Thu Apr 23 13:50:33 2009 on violator
-% update count: 22
-\newcommand {\subdmstitle} {Title} 
+% Last modified Sat Apr 25 23:03:04 2009 on violator
+% update count: 33
+
+\newcommand {\subdmstitle} {} 
 \newcommand {\subdmsdocid} {} 
 \newcommand {\subdmsissue} {} 
 \newcommand {\subdmsstatus} {} 
@@ -11,7 +12,7 @@
 \newcommand {\subdmsdesc} {}
 \newcommand {\subdmskeyw} {}
 
-\documentclass[11pt,a4paper]{letter}
+\documentclass[11pt,a4paper]{report}
 \usepackage[latin1]{inputenc}
 \usepackage{amsmath}
 \usepackage{amsfonts}
@@ -29,16 +30,23 @@
 
 %Header
 
-Project: \\
-\subdmsproj  - \subdmsdesc \\
+\bf Project: \\
+\bf \Large \subdmsproj   -   \subdmsdesc \\
 \\
-\bf \Large \subdmstitle
 \\
+\\
+\\
+\bf Title: \\
+\bf \Large \subdmstitle \\
+\\
+
+\\
+\bf Author: 
+\subdmsauthor \\
 Document id: \subdmsdocid \\
 Document issue: \subdmsissue \\ 
 Status: \subdmsstatus \\
 Release date: \subdmsrdate \\
-Author: \subdmsauthor \\
 
 Keywords: \\
 \subdmskeyw \\
