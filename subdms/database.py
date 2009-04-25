@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Fri Apr 24 22:20:06 2009 on violator
-# update count: 584
+# Last modified Sat Apr 25 23:17:03 2009 on violator
+# update count: 586
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -281,7 +281,8 @@ class sqlitedb:
             author = "upgrade"
             ddate=self.dt.datetimestamp()
             
-            writestr = ["P", projname, description, author, ddate, doctypes]
+            writestr = ["P", projname.upper(), description, author, ddate, \
+                        doctypes.upper()]
             db_str="insert into projlist(revnum, category, acronym, " \
                     "description, author, date, doctypes) " \
                     "values(\"%s\", \"%s\")" \
