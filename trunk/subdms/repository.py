@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Fri Apr 24 15:26:32 2009 on violator
-# update count: 477
+# Last modified Sat Apr 25 22:54:20 2009 on violator
+# update count: 568
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -99,17 +99,32 @@ class repository:
 
     def upgraderepo(self):
         """ Upgrade layout in repo. """
-        # Change base dir for project documents        
-        self.svncmd.server_side_copy(self.conf.repourl+"/trunk", \
-                                  self.conf.repourl+"/P", \
-                                  "Upgrade repo layout") 
-        for path in self.walkreponodes(self.conf.repourl+"/P"):
-            self.svncmd.server_side_move(path, path.upper(), \
-                                               "Upgrade document path")
+        projpath = self.conf.repourl+"/P"
+        trunkpath = self.conf.repourl+"/trunk"
+        splitpath = trunkpath.rsplit("///")[1]
+
+        self.svncmd.mkdir(projpath, "Created project path")
+        
+        for old_path in self.walkreponodes(trunkpath):
+            new_path = projpath + old_path.rsplit(splitpath)[1].upper()
+            print new_path
+            self.svncmd.mkdir(new_path, "Upgrade document path")
 
     def upgradefilename(self):
         """ Upgrade document file names. """
-        for name in self.walkrepleafs(self.conf.repourl+"/P"):
-            self.svncmd.server_side_move(name, name.upper(), \
+        projpath = self.conf.repourl+"/P"
+        trunkpath = self.conf.repourl+"/trunk"
+        splitpath = trunkpath.rsplit("///")[1]
+                
+        for old_name in self.walkrepoleafs(trunkpath):
+            docext = old_name.rsplit(".")[1]
+            new_base = old_name.rsplit(splitpath)[1].rsplit(".")[0].upper()
+            new_baselist = new_base.split("/")
+            new_basename = "P-" + new_baselist[-1]             
+            new_path = string.join(new_baselist[:-1], "/")
+            new_name = projpath + new_path + "/" + new_basename + \
+                       "." + docext
+            print new_name
+            self.svncmd.server_side_copy(old_name, new_name, \
                                                "Upgrade document name")
             
