@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Sat Apr 25 22:54:20 2009 on violator
-# update count: 568
+# Last modified Sat Apr 25 23:49:38 2009 on violator
+# update count: 589
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -60,13 +60,18 @@ class repository:
         category = self.conf.categories[1]
         project = "TMPL"
         description = 'Subdms Template'
-        doctypes =['GEN']
+        defaulttype = "GEN"
+        doctypes = [defaulttype]
+        doctypes.extend(self.conf.doctypes.split(","))
+        print doctypes
         issue = '1'
+        # Create template category and project
+        self.proj.createcategory(category)
         self.proj.createproject(category, project, description, doctypes)
         # Add default templates to repo
         for tmpl in self.conf.tmpltypes:
             tmplnamelist = self.link.const_docnamelist(category, project, \
-                                                      doctypes[0], issue, tmpl)
+                                                   defaulttype, issue, tmpl)
             tmplfname = self.conf.gettemplate(tmpl)
             tmplpath = self.link.const_defaulttmplpath(tmplfname)
             keywords = "general, example, template"
