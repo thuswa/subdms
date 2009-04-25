@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Fri Apr 24 14:19:54 2009 on violator
-# update count: 1153
+# Last modified Sat Apr 25 22:01:57 2009 on violator
+# update count: 1154
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -128,12 +128,13 @@ class ClientUi(QtGui.QMainWindow):
 
     def docselected(self):
         docnamelist = self.getselecteddoc()
-        if self.status.isreleased(docnamelist):
-            self.disableactions(self.releasedlist)
-        if self.status.isobsolete(docnamelist):
-            self.disableactions(self.obsoletelist)            
-        if self.status.ispreliminary(docnamelist):
-            self.disableactions(self.preliminarylist)
+        if docnamelist:
+            if self.status.isreleased(docnamelist):
+                self.disableactions(self.releasedlist)
+            if self.status.isobsolete(docnamelist):
+                self.disableactions(self.obsoletelist)            
+            if self.status.ispreliminary(docnamelist):
+                self.disableactions(self.preliminarylist)
 
     def disableactions(self, statuslist):
         # Menu entries
