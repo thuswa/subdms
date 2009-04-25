@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Fri Apr 24 15:25:47 2009 on violator
-# update count: 565
+# Last modified Sat Apr 25 23:55:32 2009 on violator
+# update count: 566
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -54,7 +54,7 @@ class config:
         self.repourl = "file:///" + self.repopath.replace("\\","/")
         self.workpath = self.conf.get("Path", "workspace")
         self.dbpath = self.conf.get("Path", "database")
-        self.doctypes = self.conf.get("Document", "type").replace(" ",", ")
+        self.doctypes = self.conf.get("Document", "type").replace(" ",",")
 
         # DMS Lists
         self.categories = ['P','T']
