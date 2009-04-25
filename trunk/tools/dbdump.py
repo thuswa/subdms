@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Mon Apr 20 00:32:43 2009 on violator
-# update count: 129
+# Last modified Sat Apr 25 23:53:13 2009 on violator
+# update count: 130
 # -*- coding:  utf-8 -*-
 
 from subdms import database
@@ -16,7 +16,7 @@ print "Template list:"
 for row in db.getalltmpls():
     print row
 print "Project list:"
-for row in db.getallprojs(): 
+for row in db.dumpallprojs(): 
     print row
 print "Revision list:"
 for row in db.getallrev():
