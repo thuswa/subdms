@@ -1,0 +1,58 @@
+$Id$
+Last modified Sat Apr 25 20:16:47 2009 on violator
+update count: 17
+
+*2009-04-XX* Version 0.2.0 Released!
+
+This version includes the following improvements:
+ * Added document info dialog
+ * Included option to Install templates
+ * Included right-click menu in document list
+ * Restrict commits on released and obsolete documents
+ * Show-case document integration 
+ * Added support for .zip and .pdf files 
+ * Added support for Document Keywords 
+ * Added option to change document title
+ * Added view document option
+ * Added support multi-line document titles
+ * Disabled actions inappropriate for selected document
+ * Improved the "New Project" dialog
+ * Improved the "Commit Changes" dialog
+ * Included upgrade script
+
+*2009-04-02* Version 0.1.0 Released!
+
+This version is still alpha, although it is a significant improvement over the 
+0.0.1 version, which justifies the jump in version number. 
+
+This version includes the following improvements:
+ * Improved user interface.
+ * Improved document list.
+ * Three ways to create documents: from template, from file, 
+   from existing document
+ * Ability to release documents.
+ * Ability to create new issues of a document.
+ * Support of .tex files. 
+ * Command-line interface to add files to the DMS. 
+ 
+There is no direct upgrade path from version 0.0.1 to 0.1.0, due to internal 
+changes. You have to back up your documents, remove the database and 
+repository, install the new version, and then re-add all documents back. 
+
+*2009-03-17* Version 0.0.1 Released!
+
+This alpha version implements the very basic functions of a Document 
+Management System. 
+
+With it you can:
+ * Create projects and documents
+ * List created documents 
+ * Edit and check-in documents 
+ 
+Atm the system can only handle text files, is not yet completely server/client,
+and the user interface is very basic. All this will of course improve with the 
+coming releases. 
+ 
+
+
+
