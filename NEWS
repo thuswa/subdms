@@ -1,6 +1,6 @@
 $Id$
-Last modified Sat Apr 25 20:16:47 2009 on violator
-update count: 17
+Last modified Mon Apr 27 13:08:29 2009 on violator
+update count: 18
 
 *2009-04-XX* Version 0.2.0 Released!
 
@@ -19,6 +19,11 @@ This version includes the following improvements:
  * Improved the "New Project" dialog
  * Improved the "Commit Changes" dialog
  * Included upgrade script
+
+The most exciting feature is the document integration, for now only .tex files 
+support these feature, to see how it works base a document on the default.tex 
+template and open it top see what happens, pretty close to magic if you ask me!
+
 
 *2009-04-02* Version 0.1.0 Released!
 
