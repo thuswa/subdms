@@ -1,6 +1,6 @@
 # $Id$
-# Last modified Sat Mar 14 22:23:49 2009 on violator
-# update count: 14
+# Last modified Tue Apr 28 00:49:53 2009 on violator
+# update count: 16
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -23,4 +23,4 @@
 This file initialises the subdms package.
 """
 
-
+__version__ = "0.2.0"
