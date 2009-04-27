@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Sat Apr 25 22:01:57 2009 on violator
-# update count: 1154
+# Last modified Tue Apr 28 00:51:57 2009 on violator
+# update count: 1159
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -27,6 +27,7 @@ import database
 import frontend 
 import lowlevel
 
+from subdms import __version__
 from aboutui import Ui_AboutDialog
 from commitui import Ui_Commit_Dialog
 from createdocumentui import Ui_New_Document_Dialog
@@ -282,6 +283,21 @@ class aboutDialog(QtGui.QDialog):
         QtGui.QDialog.__init__(self, parent)
         self.ui = Ui_AboutDialog()
         self.ui.setupUi(self)
+        self.ui.program_name.setText("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML"
+        "4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+        "<html><head><meta name=\"qrichtext\" content=\"1\" "
+        "/><style type=\"text/css\">\n"
+        "p, li { white-space: pre-wrap; }\n"
+        "</style></head><body style=\" font-family:\'Tahoma\'; font-size:10pt;"
+        "font-weight:600; font-style:italic;\">\n"
+        "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; "
+        "margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:"
+        "\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal;\""
+        "><span style=\" font-size:29pt; font-weight:600;\">Subdms</span>< "
+        "span style=\" font-family:\'serif\'; font-size:15pt; font-weight:600;"
+        "\"> "+__version__+"</span></p></body></html>")
+
+
 
 ################################################################################
 
