@@ -1,18 +1,27 @@
 $Id$
-Last modified Fri Apr 24 22:07:34 2009 on violator
-update count: 63
+Last modified Mon Apr 27 13:04:24 2009 on violator
+update count: 95
 
 Subdms - Subversion Based Document Management System
 ####################################################
 
-Goals
------
+Table of Contents
+=================
+I.   Goals
+II.  How to set-up Subdms
+III. How to use
+IV.  Document list
+V.   Command-line usage
+VI.  Document Integration
+
+I. Goals
+--------
 The goal with this project is to create a full-fledged DMS based on subversion 
 to handle the most common Office document file formats, 
 primarily Open Document Format (ODF).
  
-How to set-up subdms
---------------------
+II. How to set-up Subdms
+------------------------
 1.  Install the subdms package, see INSTALL file for details.
 
 2.  Have a look in the config file /etc/subdms/subdms.cfg to see where the stuff
@@ -34,14 +43,15 @@ How to set-up subdms
    
     > subdms
 
-How to use
-----------
+III. How to use
+---------------
 Using the graphical user interface:
 
 Note: There is a Right-click menu available that corresponds to the "Tools" 
       menu in the menubar.
 
- 1. Start by adding a new project using the Menu entry "Create" -> "New Project" 
+ 1. Start by adding a new project using the Menu entry 
+    "Create" -> "New Project" 
 
  2. Creating a Document can be done in three ways using the Menu entry
     "Create" -> "New Document". 
@@ -89,17 +99,16 @@ Note: There is a Right-click menu available that corresponds to the "Tools"
     must be selected in the document list. Note that this action only works on 
     documents with status "released".  
 
-Document list
--------------
+IV. Document list
+-----------------
 The document list displays information of the created documents. 
 The first unnamed column displays the state of the document as follows:
     O = Document is Checked-out	  
     I = Document is Checked-in
     M = Document is locally modified
 
-
-Command-line usage
-------------------   
+V. Command-line usage
+---------------------   
 Usage: subdms add filename project doctype [title]
 
 Example:
@@ -113,4 +122,44 @@ And opens for the possibility to write scripts to automate the adding of files.
 If you enter a title, make sure the title is a string.
 If no title is given the filename without extension is set as title.
 
+VI. Document Integration
+------------------------
+Subdms integrates with your documents by setting values on a number fields: 
 
+Field name        Description  
+-----------       --------------
+subdmstitle	  Document title
+subdmsdocid	  Document id 
+subdmsissue       Document issue
+subdmsstatus      Document Status 
+subdmsrdate       Release date
+subdmsauthor	  Author
+subdmsproj	  Project name
+subdmsdesc	  Project description
+subdmskeyws	  Document keywords
+
+For now only .tex files are supported. For .tex files you define the fields as 
+new commands in the top of your document, as seen below: 
+
+\newcommand {\subdmstitle} {} 
+\newcommand {\subdmsdocid} {} 
+\newcommand {\subdmsissue} {} 
+\newcommand {\subdmsstatus} {} 
+\newcommand {\subdmsrdate} {}
+\newcommand {\subdmsauthor} {}
+\newcommand {\subdmsproj} {}
+\newcommand {\subdmsdesc} {}
+\newcommand {\subdmskeyw} {}
+ 
+Subdms will insert the values between the empty curly brackets to define the 
+fields. 
+
+When you edit the document you can use position these fields where you want to 
+have them, most commonly to define the frontpage of your document/report. For
+instance to use the title field to define the document title:
+
+\bf \Large \subdmstitle \\
+
+This would give you the document title in a large bold faced font.  
+
+See the "default.tex" template for an example how the fields have been used. 
