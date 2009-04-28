@@ -1,7 +1,7 @@
 #!/bin/bash
 # $Id$
-# Last modified Tue Apr 28 00:55:12 2009 on violator
-# Update count: 103
+# Last modified Tue Apr 28 13:37:21 2009 on violator
+# Update count: 108
 #
 # Created 2009-01-29, Albert Thuswaldner
 
@@ -23,8 +23,7 @@ SRVREPO="https://"$PROJ$".googlecode.com/svn"
 SUBDIR="trunk/"
 TAGNAME=$PROJ"-"${VER//./-}
 MESSAGE="Tagging version "$VER
-INITFILE='subdms/__init__.py'
-SETUPFILE="setup.py"
+INITFILE=$PROJ'/__init__.py'
 
 # Set repodir
 REPODIR=$SRVREPO"/"$SUBDIR
@@ -44,10 +43,7 @@ while true; do
 	      $INITFILE > temp 
 	  mv -f temp $INITFILE
 
-	  sed "s/version=[^ ]*/version='$VER',/g" $SETUPFILE > temp 
-	  mv -f temp $SETUPFILE
-
-	  svn ci -m "Uped version" $INITFILE $SETUPFILE  
+	  svn ci -m "Uped version" $INITFILE 
 	  
 	  # Tagging version
 	  svn copy $REPODIR $TAGDIR -m "$MESSAGE"
