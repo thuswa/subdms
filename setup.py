@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Tue Apr 14 14:14:56 2009 on violator
-# update count: 102
+# Last modified Tue Apr 28 13:33:57 2009 on violator
+# update count: 105
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -21,6 +21,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from distutils.core import setup
+
+from subdms import __version__
 
 import os
 import sys
@@ -45,7 +47,7 @@ CLASSIFIERS = [
 ]
 
 setup(name='subdms',
-      version='0.1.0',
+      version=__version__,
       description='A document management system based on subversion',
       author='Albert Thuswaldner',
       author_email='thuswa@gmail.com',
