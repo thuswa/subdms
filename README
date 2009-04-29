@@ -1,6 +1,6 @@
 $Id$
-Last modified Mon Apr 27 13:04:24 2009 on violator
-update count: 95
+Last modified Wed Apr 29 22:42:41 2009 on violator
+update count: 97
 
 Subdms - Subversion Based Document Management System
 ####################################################
@@ -51,7 +51,7 @@ Note: There is a Right-click menu available that corresponds to the "Tools"
       menu in the menubar.
 
  1. Start by adding a new project using the Menu entry 
-    "Create" -> "New Project" 
+    "Create" -> "New Project".  
 
  2. Creating a Document can be done in three ways using the Menu entry
     "Create" -> "New Document". 
@@ -135,7 +135,6 @@ subdmsstatus      Document Status
 subdmsrdate       Release date
 subdmsauthor	  Author
 subdmsproj	  Project name
-subdmsdesc	  Project description
 subdmskeyws	  Document keywords
 
 For now only .tex files are supported. For .tex files you define the fields as 
@@ -148,7 +147,6 @@ new commands in the top of your document, as seen below:
 \newcommand {\subdmsrdate} {}
 \newcommand {\subdmsauthor} {}
 \newcommand {\subdmsproj} {}
-\newcommand {\subdmsdesc} {}
 \newcommand {\subdmskeyw} {}
  
 Subdms will insert the values between the empty curly brackets to define the 

@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Tue Apr 28 00:51:57 2009 on violator
-# update count: 1159
+# Last modified Wed Apr 29 20:48:55 2009 on violator
+# update count: 1165
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -326,15 +326,21 @@ class projectDialog(QtGui.QDialog):
     def okaction(self):
         category = unicode(self.ui.Select_Category_Box.currentText())
         acronym = unicode(self.ui.project_acronym.text()).upper()
-        desc = unicode(self.ui.project_description.text())
+        name = unicode(self.ui.project_name.text())
         doctypes = unicode(self.ui.doctypes.text()).upper().\
                    replace(" ","").rsplit(",")
-        if db.projexists(category, acronym):
+
+        if not acronym:
+            QtGui.QMessageBox.critical(None, "Error", \
+                                       "Project acronym field can not be " \
+                                       "left empty.")
+        elif db.projexists(category, acronym):
             QtGui.QMessageBox.critical(None, "Error", \
                                        "Project "+acronym+" already exists " \
                                        "in category "+category)
+          
         else:
-            self.proj.createproject(category, acronym, desc, doctypes)
+            self.proj.createproject(category, acronym, name, doctypes)
             self.close()
 
 ################################################################################

@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Sat Apr 25 23:17:03 2009 on violator
-# update count: 586
+# Last modified Wed Apr 29 13:08:36 2009 on violator
+# update count: 595
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -53,7 +53,7 @@ class sqlitedb:
                             "revdate, author, logtext TEXT)")
 
         self.cursor.execute("create table projlist(revnum INTEGER PRIMARY KEY,"\
-                            "category, acronym, description, author, date, " \
+                            "category, acronym, projname, author, date, " \
                             "doctypes TEXT)")
 
         print "Create database: "+self.conf.dbpath
@@ -83,7 +83,7 @@ class sqlitedb:
     def writeprojlist(self, rvn, writestr):
         """ Write to project table in database. """
         # Construct sql command string
-        db_str="insert into projlist(revnum, category, acronym, description, "\
+        db_str="insert into projlist(revnum, category, acronym, projname, "\
                 "author, date) values(\"%s\", \"%s\")" \
                 % (rvn, string.join(writestr, "\",\""))
         # Excecute sql command
@@ -163,9 +163,9 @@ class sqlitedb:
                             "where acronym != \"TMPL\"")
         return self.cursor.fetchall()
 
-    def getprojdesc(self, category, project):
-        """ Get projects description from database. """
-        self.cursor.execute("select description from projlist " \
+    def getprojname(self, category, project):
+        """ Get project full name from database. """
+        self.cursor.execute("select projname from projlist " \
                             "where category=? and acronym=?" , \
                             (category, project ))
         return self.cursor.fetchone()[0]
@@ -277,14 +277,13 @@ class sqlitedb:
         rvn=1
         for proj in projlist:
             [projname, doctypes] = proj
-            description = ""
             author = "upgrade"
             ddate=self.dt.datetimestamp()
             
-            writestr = ["P", projname.upper(), description, author, ddate, \
-                        doctypes.upper()]
+            writestr = ["P", projname.upper(), projname.capitalize(), author, \
+                        ddate, doctypes.upper()]
             db_str="insert into projlist(revnum, category, acronym, " \
-                    "description, author, date, doctypes) " \
+                    "projname author, date, doctypes) " \
                     "values(\"%s\", \"%s\")" \
                     % (rvn, string.join(writestr, "\",\""))
             # Excecute sql command

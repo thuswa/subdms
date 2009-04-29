@@ -70,7 +70,7 @@
     </rect>
    </property>
    <property name="text" >
-    <string>Project Description:</string>
+    <string>Project Name:</string>
    </property>
   </widget>
   <widget class="QLabel" name="label_3" >
@@ -86,12 +86,12 @@
     <string>Document Types:</string>
    </property>
   </widget>
-  <widget class="QLineEdit" name="project_description" >
+  <widget class="QLineEdit" name="project_name" >
    <property name="geometry" >
     <rect>
      <x>10</x>
      <y>120</y>
-     <width>341</width>
+     <width>191</width>
      <height>29</height>
     </rect>
    </property>
