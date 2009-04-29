@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Sun Apr 26 00:06:34 2009 on violator
-# update count: 590
+# Last modified Wed Apr 29 22:35:03 2009 on violator
+# update count: 601
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -34,11 +34,10 @@ class repository:
         
     def createrepo(self):
         """ create repsitory and layout """
-        self.cmd.svncreaterepo(self.conf.repopath)
+        self.cmd.svncreaterepo(self.conf.repopath)            
         # Create category dirs in repo
         for cat in self.conf.categories:
             self.proj.createcategory(cat)
-            
         print "Create repository: "+self.conf.repopath
 
     def installhooks(self):
@@ -64,8 +63,7 @@ class repository:
         doctypes = [defaulttype]
         doctypes.extend(self.conf.doctypes.split(","))
         issue = '1'
-        # Create template category and project
-        self.proj.createcategory(category)
+        # Create template project
         self.proj.createproject(category, project, description, doctypes)
         # Add default templates to repo
         for tmpl in self.conf.tmpltypes:
@@ -107,7 +105,9 @@ class repository:
         trunkpath = self.conf.repourl+"/trunk"
         splitpath = trunkpath.rsplit("///")[1]
 
-        self.svncmd.mkdir(projpath, "Created project path")
+        # Create category dirs in repo
+        for cat in self.conf.categories:
+            self.proj.createcategory(cat)
         
         for old_path in self.walkreponodes(trunkpath):
             new_path = projpath + old_path.rsplit(splitpath)[1].upper()

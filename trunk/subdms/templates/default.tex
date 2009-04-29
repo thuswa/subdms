@@ -1,6 +1,6 @@
 % $Id$
-% Last modified Sat Apr 25 23:03:04 2009 on violator
-% update count: 33
+% Last modified Wed Apr 29 12:58:44 2009 on violator
+% update count: 69
 
 \newcommand {\subdmstitle} {} 
 \newcommand {\subdmsdocid} {} 
@@ -9,7 +9,6 @@
 \newcommand {\subdmsrdate} {}
 \newcommand {\subdmsauthor} {}
 \newcommand {\subdmsproj} {}
-\newcommand {\subdmsdesc} {}
 \newcommand {\subdmskeyw} {}
 
 \documentclass[11pt,a4paper]{report}
@@ -26,12 +25,17 @@
 
 \begin{document}
 \pagestyle{empty}
-
-
 %Header
-
+\begin{tabular*}{1.1\textwidth}{@{\extracolsep{\fill}} l l l l}
+Document Id:                &              &   & \\
+\subdmsdocid                &              &   & \\ 
+Release date:               & Issue:       & Status:                   & \\
+\subdmsrdate                & \subdmsissue & \subdmsstatus             & \\
+\hline \\
+\end{tabular*}\\
+\\
 \bf Project: \\
-\bf \Large \subdmsproj   -   \subdmsdesc \\
+\bf \Large \subdmsproj \\
 \\
 \\
 \\
@@ -39,16 +43,13 @@
 \bf Title: \\
 \bf \Large \subdmstitle \\
 \\
-
 \\
 \bf Author: 
 \subdmsauthor \\
-Document id: \subdmsdocid \\
-Document issue: \subdmsissue \\ 
-Status: \subdmsstatus \\
-Release date: \subdmsrdate \\
-
-Keywords: \\
+\\
+\\
+\\
+\Normal Keywords: \\
 \subdmskeyw \\
 
 %\cc{Cclist} 

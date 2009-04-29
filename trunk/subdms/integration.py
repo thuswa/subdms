@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Fri Apr 24 14:29:02 2009 on violator
-# update count: 481
+# Last modified Wed Apr 29 13:01:43 2009 on violator
+# update count: 487
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -49,12 +49,12 @@ class docinteg:
         rdate = ""
         docid = self.link.const_docid(docnamelist)
 
-        # Get the document description
-        desc = self.db.getprojdesc(cat, proj)
+        # Get the project name
+        projname = self.db.getprojname(cat, proj)
         
         # Create fieldcontents list
         fieldcontents =[doctitle, docid, issue, status, rdate, author, \
-                        proj, desc, dockeywords]
+                        projname, dockeywords]
         
         # Choose action depending on filetype
         if docnamelist[-1] == "tex": 
@@ -73,7 +73,7 @@ class docinteg:
     def updatekeywords(self, docnamelist, dockeywords):
         """ Update the keywords field. """
         fieldcontents = [dockeywords]
-        fieldcodes = self.conf.fieldcodes[8:9]
+        fieldcodes = self.conf.fieldcodes[7]
         
         # Choose action depending on filetype
         if docnamelist[-1] == "tex": 

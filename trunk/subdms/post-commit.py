@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Tue Apr 21 12:36:22 2009 on violator
-# update count: 255
+# Last modified Wed Apr 29 13:11:49 2009 on violator
+# update count: 257
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -62,10 +62,10 @@ def main():
   date = look.getdate()
   
   if newprojptrn.match(log_message):
-    description = newprojptrn.sub("",log_message)
+    projname = newprojptrn.sub("",log_message)
     category = look.getcategory()
     project = look.getproject()
-    writestr = [category, project, description, author, date]
+    writestr = [category, project, projname, author, date]
     db.writeprojlist(rvn, writestr)
 
   if newdoctptrn.match(log_message):

@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Fri Apr 24 15:23:50 2009 on violator
-# update count: 1105
+# Last modified Wed Apr 29 12:54:58 2009 on violator
+# update count: 1106
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -36,10 +36,10 @@ class project:
       """ Create category dir in repo. """
       self.svncmd.mkdir(self.link.const_caturl(category), "Created a category")
       
-   def createproject(self, category, project, description, doctypes):
+   def createproject(self, category, project, projname, doctypes):
       """ Create project dir in repo. """
       self.svncmd.mkdir(self.link.const_projurl(category, project), \
-                        self.conf.newproj+description)
+                        self.conf.newproj+projname)
       self.adddoctypes(category, project, doctypes)
 
    def adddoctypes(self, category, project, doctypes):
