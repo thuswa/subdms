@@ -1,12 +1,11 @@
 $Id$
-Last modified Fri Apr 24 12:43:51 2009 on violator
-update count: 40
-
+Last modified Sat May  2 12:05:59 2009 on violator
+update count: 45
 
 How to upgrade 
 ==============
 Due to internal changes made to version 0.2 of subdms, the server-side from a 
-previous version 0.1 install can not be used with the newer version, unless it 
+previous version 0.1 install can not be used with the new version, unless it 
 is upgraded. The upgrade of the repository and the database can be performed 
 using a script provided with the package. This script will copy the present 
 document tree in the repository to a new tree. Also, the data contained in the 
@@ -21,9 +20,12 @@ actions taken by the user, so:
  
 1. Make sure that all documents are checked-in.
 2. Close the subdms client window if it is open.
+3. Upgrade to the new 0.2 version if it is not already done. 
+   Follow the instructions given in the file INSTALL. 
 4. Make sure that the database path and repository path in 
-   /etc/subdms/subdms.cfg are correct.
-5. run "subdms-upgrade" from the command-line.
+   /etc/subdms/subdms.cfg are correct, i.e. that the paths point at where the
+   old database and repository are located.
+5. Run "subdms-upgrade" from the command-line.
 6. Check that the documents are correctly converted. 
 7. The old document tree is still present in the repository. 
    To remove this run the following command:

@@ -1,6 +1,6 @@
 $Id$
-Last modified Wed Apr 29 22:42:41 2009 on violator
-update count: 97
+Last modified Sat May  2 12:11:44 2009 on violator
+update count: 103
 
 Subdms - Subversion Based Document Management System
 ####################################################
@@ -26,9 +26,9 @@ II. How to set-up Subdms
 
 2.  Have a look in the config file /etc/subdms/subdms.cfg to see where the stuff
     gets installed, and change that if you like. Also you might want to change 
-    the default editors for the different filetypes. 
+    the default editors for the different file types. 
 
-3a. If you have used version 0.1 of subdms to store a larger amount of docments
+3a. If you have used version 0.1 of subdms to store a larger amount of documents
     you might want to upgrade to the newer 0.2 version, see UPGRADE file for 
     details.  
 
@@ -50,8 +50,10 @@ Using the graphical user interface:
 Note: There is a Right-click menu available that corresponds to the "Tools" 
       menu in the menubar.
 
- 1. Start by adding a new project using the Menu entry 
-    "Create" -> "New Project".  
+ 1. Start by adding a new project using the menu entry 
+    "Create" -> "New Project". Note that the "Project Acronym" field must be
+    filled in. The acronym would usually be a three letter abbreviation of the 
+    full project name. The full name can be entered in the "Project name" field.
 
  2. Creating a Document can be done in three ways using the Menu entry
     "Create" -> "New Document". 
@@ -77,10 +79,11 @@ Note: There is a Right-click menu available that corresponds to the "Tools"
     Use menu entry "Tools" -> "Edit Document"
     This will launch an editor defined in /etc/subdms/sumbdms.cfg.
 
- 8. Commit Changes. As with other version control systems, local changes made 
-    to the document can be committed to the central repository. 
-    Select the document in the list and use "Tools" -> "Commit Changes", 
-    this will launch a dialog where a commit message can be entered.
+ 8. Commit Changes. As with subversion or any other version control systems, 
+    local changes made to the document can be committed to the central 
+    repository. Select the document in the list and use 
+    "Tools" -> "Commit Changes", this will launch a dialog where a 
+    commit message can be entered.
 
  9. Check-in document. To remove the local copy of the document, select the 
     document in the list and use "Tools" -> "Check-in Document". 
@@ -152,12 +155,13 @@ new commands in the top of your document, as seen below:
 Subdms will insert the values between the empty curly brackets to define the 
 fields. 
 
-When you edit the document you can use position these fields where you want to 
-have them, most commonly to define the frontpage of your document/report. For
-instance to use the title field to define the document title:
+When you edit the document you can use and position these fields where you 
+want to have them, most commonly to define the frontpage of your 
+document/report. For instance to use the title field to define the 
+project name:
 
-\bf \Large \subdmstitle \\
+{\Large \subdmsproj}\\
 
-This would give you the document title in a large bold faced font.  
+This would give you the project name in a large text.  
 
 See the "default.tex" template for an example how the fields have been used. 
