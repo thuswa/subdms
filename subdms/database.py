@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Wed Apr 29 13:08:36 2009 on violator
-# update count: 595
+# Last modified Sat May  2 12:17:12 2009 on violator
+# update count: 596
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -283,7 +283,7 @@ class sqlitedb:
             writestr = ["P", projname.upper(), projname.capitalize(), author, \
                         ddate, doctypes.upper()]
             db_str="insert into projlist(revnum, category, acronym, " \
-                    "projname author, date, doctypes) " \
+                    "projname, author, date, doctypes) " \
                     "values(\"%s\", \"%s\")" \
                     % (rvn, string.join(writestr, "\",\""))
             # Excecute sql command
