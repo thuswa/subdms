@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Wed Apr 29 13:01:43 2009 on violator
-# update count: 487
+# Last modified Sat May  2 12:53:56 2009 on violator
+# update count: 495
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -90,7 +90,7 @@ class docinteg:
     def obsoleteupdate(self, docnamelist):
         """ Update the release date and status field. """
         fieldcontents = [self.conf.statuslist[5]+" "+self.dt.datestamp()] 
-        fieldcodes = self.conf.fieldcodes[3]
+        fieldcodes = self.conf.fieldcodes[3:4]
         # Choose action depending on filetype
         if docnamelist[-1] == "tex": 
             self.texfieldupdate(docnamelist, fieldcodes, fieldcontents)
