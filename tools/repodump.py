@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Wed Apr 29 14:27:30 2009 on violator
-# update count: 137
+# Last modified Sat May  2 12:23:40 2009 on violator
+# update count: 138
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -26,6 +26,7 @@ svncmd = lowlevel.svncmd()
 conf = lowlevel.config()
 
 # Dump database
-print svncmd.recursivels(conf.repourl)
+for item in svncmd.recursivels(conf.repourl):
+    print item["name"]
 
 
