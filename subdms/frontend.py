@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Wed Apr 29 12:54:58 2009 on violator
-# update count: 1106
+# Last modified Fri May  1 22:10:11 2009 on violator
+# update count: 1127
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -184,20 +184,23 @@ class document:
       if current_issue > 1:
          old_issue = str(current_issue - 1)
          old_docnamelist = self.setissueno(docnamelist, old_issue)
-         old_docpath = self.link.const_docpath(old_docnamelist)
-         old_docurl = self.link.const_docurl(old_docnamelist)
-         self.svncmd.checkout(old_docurl, \
-                              self.link.const_checkoutpath(old_docnamelist))
-         self.status.setobsolete(old_docpath)
+         self.obsolete(old_docnamelist)           
+      return message
 
-         # Document integration
-         if self.integ.dodocinteg(docnamelist):
-            self.integ.obsoleteupdate(old_docnamelist)
-
-         self.commit(old_docnamelist, \
-                     self.conf.obsolete+"Status set to obsolete")
+   def obsolete(self, docnamelist):
+      """ Obsolete the document. """
+      docpath = self.link.const_docpath(docnamelist)
+      docurl = self.link.const_docurl(docnamelist)
+      self.svncmd.checkout(docurl, self.link.const_checkoutpath(docnamelist))
+      self.status.setobsolete(docpath)
+      message = "Status set to obsolete"
+      
+      # Document integration
+      if self.integ.dodocinteg(docnamelist):
+         self.integ.obsoleteupdate(docnamelist)
+         self.commit(docnamelist, self.conf.obsolete+"Status set to obsolete")
          # Remove file from workspace
-         self.cmd.rmtree(self.link.const_checkoutpath(old_docnamelist))
+         self.cmd.rmtree(self.link.const_checkoutpath(docnamelist))
       return message
 
    def editdocument(self, docnamelist):
@@ -220,7 +223,7 @@ class document:
       docfileurl=self.link.const_docfileurl(new_docnamelist)
       docpath = self.link.const_docpath(new_docnamelist)
       checkoutpath=self.link.const_checkoutpath(new_docnamelist)
-      message = " Created "+docname
+      message = "New issue created."
 
       # Create document url in repository
       self.svncmd.mkdir(docurl, "Document directory created")
