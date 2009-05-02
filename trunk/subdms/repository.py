@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Wed Apr 29 22:35:03 2009 on violator
-# update count: 601
+# Last modified Sat May  2 12:23:08 2009 on violator
+# update count: 602
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -92,7 +92,7 @@ class repository:
         return filenamelist   
 
     def walkreponodes(self, path):
-        """ Walk the repo aand list all paths. """
+        """ Walk the repo and list all paths. """
         pathnamelist = []
         for p in self.svncmd.recursivels(path):
             if p["kind"] != self.svncmd.filekind:
