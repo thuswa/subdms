@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Sat May  2 12:53:56 2009 on violator
-# update count: 495
+# Last modified Wed May  6 11:52:06 2009 on violator
+# update count: 509
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -109,9 +109,15 @@ class docinteg:
             for code, content in map(None, fieldcodes, fieldcontents):
                 fieldptrn = self.texfieldpattern(code)
                 if fieldptrn.match(line):
+                    old_line = line
                     line = self.texfieldcode(code, content.replace("\n", r"\\"))
-            print line.replace("\n","")
-
+            # Fix for un-codeble characters        
+            try:                
+                print line.replace("\n","")
+            except:
+                print old_line.replace("\n","")
+                
+            
     def dodocinteg(self, docnamelist):
         """ Check if document integration should be done. """
         if docnamelist[-1] in self.conf.integtypes \
