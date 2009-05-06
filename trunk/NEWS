@@ -1,6 +1,6 @@
 $Id$
-Last modified Fri May  1 00:05:27 2009 on violator
-update count: 20
+Last modified Wed May  6 11:59:27 2009 on violator
+update count: 24
 
 *2009-04-XX* Version 0.2.0 Released!
 
@@ -20,12 +20,20 @@ This version includes the following improvements:
  * Improved the "Commit Changes" dialog
  * Included upgrade script
 
-The most exciting feature is the document integration, for now only .tex files 
-support these feature, to see how it works base a document on the default.tex 
-template and edit it to  see what happens, pretty close to magic if you ask me!
+*Known problems: *
+ * Document integration does not work for non us-ascii characters. So 
+   avoid using non us-ascii in title, project name, document types and 
+   keywords.
 
-The default .tex template sort of sucks though, so if have any ideas on how to
-improve it, do not hesitate to contact me.  
+Notes:
+ * The most exciting feature is the document integration, for now only .tex 
+   files support these feature, to see how it works base a document on the 
+   default.tex template and edit it to  see what happens, pretty close to 
+   magic if you ask me!
+ * The default .tex template sort of sucks though, so if have any ideas on 
+   how to improve it, do not hesitate to contact me.  
+ * If you have installed and used the previous 0.1.0 version you might want 
+   to upgrade the subdms-server side, see the documentation for details.
 
 *2009-04-02* Version 0.1.0 Released!
 
