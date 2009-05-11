@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Wed Apr 29 20:48:55 2009 on violator
-# update count: 1165
+# Last modified Mon May 11 23:44:45 2009 on violator
+# update count: 1199
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -494,12 +494,23 @@ class documentInfoDialog(QtGui.QDialog):
         QtGui.QDialog.__init__(self, parent)
         self.ui = Ui_Document_Info_Dialog()
         self.ui.setupUi(self)
+
+        self.ui.historylist.verticalHeader().hide()
+        self.ui.historylist.setColumnWidth(0, 60)
+        self.ui.historylist.setColumnWidth(1, 250)
+        self.ui.historylist.setColumnWidth(2, 100)
+        self.ui.historylist.setColumnWidth(3, 180)        
         self.addbuttons()
 
         # Connect save button
         # the rest are set in main window class
         self.connect(self.ui.save, QtCore.SIGNAL("clicked()"), \
                      self.savechanges)
+
+        # Set change tab action 
+        self.connect(self.ui.Info_tabs, \
+                     QtCore.SIGNAL("currentChanged(int)"), \
+                     self.changedtab)
 
     def addbuttons(self):
         self.ui.view = self.ui.Document_Info_Confirm.addButton("View" , 3)
@@ -539,6 +550,17 @@ class documentInfoDialog(QtGui.QDialog):
         self.doc.changetitle(doclist, doctitle) 
         self.doc.changekeywords(doclist, dockeywords) 
         
+    def changedtab(self, selectedtab):
+        """ Changed tab. """
+        if selectedtab == 0:  #General 
+            pass
+        elif selectedtab == 1: #History
+            self.sethistory()
+
+    def sethistory(self):
+        """ Set revision history list. """
+        print "HISTORY"
+    
 ################################################################################
 
 class commitDialog(QtGui.QDialog):
