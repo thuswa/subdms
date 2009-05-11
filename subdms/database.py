@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Sat May  2 12:17:12 2009 on violator
-# update count: 596
+# Last modified Mon May 11 23:59:11 2009 on violator
+# update count: 604
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -241,6 +241,15 @@ class sqlitedb:
                             (d[0], d[1], d[2], d[3], d[4] ))
         return self.cursor.fetchall()[0]
     
+    def getdocrev(self, docnamelist):
+        """ Get revision table for document. """
+        d = docnamelist
+        self.cursor.execute("select * from revlist " \
+                            "where category=? and project=? and doctype=? " \
+                            "and docno=? and issue=?" , \
+                            (d[0], d[1], d[2], d[3], d[4] ))
+        return self.cursor.fetchall()
+
     def upgradedoclist(self, doclist):
         """ Upgrade doclist table and revlist. """
 
