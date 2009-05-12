@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Mon May 11 23:44:45 2009 on violator
-# update count: 1199
+# Last modified Tue May 12 13:47:33 2009 on violator
+# update count: 1256
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -159,6 +159,8 @@ class ClientUi(QtGui.QMainWindow):
         docnamelist = self.getselecteddoc()
         self.docinfodialog.show()
         self.docinfodialog.setdocinfo(docnamelist)
+        self.docinfodialog.ui.historylist.clearContents()
+        self.docinfodialog.ui.Info_tabs.setCurrentIndex(0)
         
     def showrightclickmenu(self):
         self.ui.menuTools.popup(QtGui.QCursor.pos())
@@ -495,11 +497,14 @@ class documentInfoDialog(QtGui.QDialog):
         self.ui = Ui_Document_Info_Dialog()
         self.ui.setupUi(self)
 
+        # Set dimensions of history list
         self.ui.historylist.verticalHeader().hide()
         self.ui.historylist.setColumnWidth(0, 60)
-        self.ui.historylist.setColumnWidth(1, 250)
-        self.ui.historylist.setColumnWidth(2, 100)
-        self.ui.historylist.setColumnWidth(3, 180)        
+        self.ui.historylist.setColumnWidth(1, 300)
+        self.ui.historylist.setColumnWidth(2, 90)
+        self.ui.historylist.setColumnWidth(3, 160)        
+
+        # add the buttons
         self.addbuttons()
 
         # Connect save button
@@ -559,7 +564,23 @@ class documentInfoDialog(QtGui.QDialog):
 
     def sethistory(self):
         """ Set revision history list. """
-        print "HISTORY"
+        docid = unicode(self.ui.document_id.text())
+        issue = unicode(self.ui.issue.text())
+        docnamelist = self.link.deconst_docfname(docid)
+        docnamelist.append(issue) 
+        docrevlist = db.getdocrev(docnamelist)
+        docrevlist.reverse()
+        n = 0
+        for docrev in docrevlist:
+            rvn = QtGui.QTableWidgetItem(str(docrev[0]))
+            log_message = QtGui.QTableWidgetItem(docrev[8])
+            author = QtGui.QTableWidgetItem(docrev[7])
+            revdate = QtGui.QTableWidgetItem(docrev[6][0:19])
+            self.ui.historylist.setItem(n, 0, rvn) 
+            self.ui.historylist.setItem(n, 1, log_message)
+            self.ui.historylist.setItem(n, 2, author)
+            self.ui.historylist.setItem(n, 3, revdate)        
+            n += 1
     
 ################################################################################
 
