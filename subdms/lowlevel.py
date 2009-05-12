@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Wed Apr 29 12:59:47 2009 on violator
-# update count: 567
+# Last modified Tue May 12 23:10:42 2009 on violator
+# update count: 582
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -193,11 +193,35 @@ class command:
         """ Initialize command class """
         self.conf = config()
         self.link = linkname()
-        
+    
     def command_output(self, cmd):
         """ Capture a command's standard output. """
         return subprocess.Popen(
             cmd.split(), stdout=subprocess.PIPE).communicate()[0]
+
+    def copyfile(self, frompath, topath):
+        """ Copy file. """
+        shutil.copyfile(frompath, topath)
+
+    def exists(self, path):
+        """ Check if path exists. """
+        return os.path.exists(path)
+        
+    def rm(self, path):
+        """ Delete file. """
+        os.remove(path)
+
+    def rmtree(self, path):
+        """ Delete directory tree recursively. """
+        shutil.rmtree(path)
+
+    def setreadonly(self, filepath):
+        """ Set file to read-only. """
+        os.chmod(filepath, 0444)
+
+    def setexecutable(self, filepath):
+        """ Set file to executable. """
+        os.chmod(filepath, 0755)
 
     def launch_editor(self, docnamelist):
         """ Launch appropriate editor. """
@@ -213,23 +237,16 @@ class command:
 
     def workingcopyexists(self, docnamelist):
         """ Check if working copy exists. """
-        if os.path.exists(os.path.join( \
-            self.link.const_checkoutpath(docnamelist), '.svn')):
-            return True
-        else:
-            return False
-    
-    def rm(self, path):
-        """ Delete file. """
-        os.remove(path)
+        return self.exists(os.path.join( \
+            self.link.const_checkoutpath(docnamelist), '.svn'))
 
-    def rmtree(self, path):
-        """ Delete directory tree recursively. """
-        shutil.rmtree(path)
+    def repoexists(self):
+        """ Check if repo exists. """
+        return self.exists(self.conf.repopath)
 
-    def copyfile(self, frompath, topath):
-        """ Copy file. """
-        shutil.copyfile(frompath, topath)
+    def dbexists(self):
+        """ Check if database exists. """
+        return self.exists(self.conf.dbpath)
 
     def createworkspace(self):
         """ Create workspace directory. """
@@ -249,14 +266,6 @@ class command:
         if not os.path.isdir(repobasedir):
             os.makedirs(repobasedir)
         subprocess.call(['svnadmin','create', repopath])
-
-    def setreadonly(self, filepath):
-        """ Set file to read-only. """
-        os.chmod(filepath, 0444)
-
-    def setexecutable(self, filepath):
-        """ Set file to executable. """
-        os.chmod(filepath, 0755)
 
 ################################################################################
         
