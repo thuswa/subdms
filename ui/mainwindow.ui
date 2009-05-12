@@ -190,6 +190,7 @@
     <addaction name="actionCheck_in_Document" />
     <addaction name="actionCommit_Changes" />
     <addaction name="actionRelease_Document" />
+    <addaction name="actionObsolete_Document" />
    </widget>
    <widget class="QMenu" name="menuView" >
     <property name="title" >
@@ -273,6 +274,11 @@
   <action name="actionView_Document" >
    <property name="text" >
     <string>View Document</string>
+   </property>
+  </action>
+  <action name="actionObsolete_Document" >
+   <property name="text" >
+    <string>Obsolete Document</string>
    </property>
   </action>
  </widget>

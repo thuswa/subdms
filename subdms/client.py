@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Tue May 12 13:47:33 2009 on violator
-# update count: 1256
+# Last modified Wed May 13 00:02:30 2009 on violator
+# update count: 1267
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -56,13 +56,17 @@ class ClientUi(QtGui.QMainWindow):
 
         # Widget state lists
         self.noselectedlist = [False, False, False, False, False, False, \
-                               False, False, False, False, False, True, True] 
+                               False, False, False, False, False, False, \
+                               True, True] 
         self.releasedlist = [True, True, True, False, False, False, \
-                             False, False, False, False, False, True, True] 
+                             False, True, False, False, False, False, \
+                             True, True] 
         self.obsoletelist = [False, True, True, False, False, False, \
-                             False, False, False, False, False, True, True] 
+                             False, False, False, False, False, False, \
+                             True, True] 
         self.preliminarylist = [False, True, True, True, True, True, \
-                               True, True, True, True, True, False, False] 
+                               True, True, True, True, True, True, \
+                                False, False] 
 
         # start with most actions disabled
         self.disableactions(self.noselectedlist)
@@ -107,6 +111,9 @@ class ClientUi(QtGui.QMainWindow):
                      QtCore.SIGNAL("activated()"), self.showcommitdialog)
         self.connect(self.ui.actionRelease_Document, \
                      QtCore.SIGNAL("activated()"), self.releasedoc)
+        self.connect(self.ui.actionObsolete_Document, \
+                     QtCore.SIGNAL("activated()"), self.obsoletedoc)
+
         # Help menu
         self.connect(self.ui.actionAbout, QtCore.SIGNAL("activated()"), \
                      self.showaboutdialog)
@@ -146,6 +153,7 @@ class ClientUi(QtGui.QMainWindow):
         self.ui.actionCheck_in_Document.setEnabled(statuslist[4])
         self.ui.actionCommit_Changes.setEnabled(statuslist[5])
         self.ui.actionRelease_Document.setEnabled(statuslist[6])
+        self.ui.actionObsolete_Document.setEnabled(statuslist[7])
         # Buttons in document info dialog
         self.docinfodialog.ui.edit.setEnabled(statuslist[7])
         self.docinfodialog.ui.checkin.setEnabled(statuslist[8])
@@ -262,6 +270,13 @@ class ClientUi(QtGui.QMainWindow):
         docnamelist = self.getselecteddoc()
         if docnamelist:
             message = self.doc.release(docnamelist)
+            self.ui.statusbar.showMessage(message, 1500)
+
+    def obsoletedoc(self):     
+        """ Obsolete the document action. """
+        docnamelist = self.getselecteddoc()
+        if docnamelist:
+            message = self.doc.obsolete(docnamelist)
             self.ui.statusbar.showMessage(message, 1500)
 
     def newissue(self):     
