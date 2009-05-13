@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Wed May  6 11:52:06 2009 on violator
-# update count: 509
+# Last modified Thu May 14 00:16:10 2009 on violator
+# update count: 510
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -24,9 +24,15 @@ import fileinput
 import string
 import re
 
+from ooopy.OOoPy import OOoPy
+from ooopy.Transformer import Transformer
+import ooopy.Transforms as Transforms
+
+
 import database
 import epoch
 import lowlevel
+
 
 """
 Document integration class. 
