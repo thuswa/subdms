@@ -1,6 +1,6 @@
 $Id$
-Last modified Thu Feb 19 23:41:18 2009 on violator
-update count: 18
+Last modified Wed May 13 23:43:19 2009 on violator
+update count: 21
 
 Subdms - Subversion Based Document Management System
 ####################################################
@@ -103,7 +103,11 @@ Just to  get the system up an running, we aim for a minimum amount of features, 
 5. Internet search keywords:
 ========================
 search/index FSFS
+ooopy:
+http://packages.opensuse-community.org/index.jsp?searchTerm=ooopy&distro=openSUSE_110
 
+odfpy
+http://packages.opensuse-community.org/index.jsp?distro=openSUSE_110&searchTerm=odfpy
 
 first attempt
 -------------
