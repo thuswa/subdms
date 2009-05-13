@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Tue May 12 23:10:42 2009 on violator
-# update count: 582
+# Last modified Thu May 14 00:08:31 2009 on violator
+# update count: 585
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -58,9 +58,9 @@ class config:
 
         # DMS Lists
         self.categories = ['P','T']
-        self.filetypes = ['pdf','tex','txt','zip']
-        self.tmpltypes = ['tex','txt']
-        self.integtypes = ['tex']
+        self.filetypes = ['odf','odp','ods','pdf','tex','txt','zip']
+        self.tmpltypes = ['odf','tex','txt']
+        self.integtypes = ['odf','tex']
         self.proplist = ['title', 'status', 'svn:keywords', 'keywords']
         self.statuslist = ['preliminary', 'in-review' ,'rejected', 'approved', \
                            'released', 'obsolete'] 
