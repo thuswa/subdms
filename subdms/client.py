@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Wed May 13 00:02:30 2009 on violator
-# update count: 1267
+# Last modified Wed May 13 22:36:25 2009 on violator
+# update count: 1281
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -269,15 +269,27 @@ class ClientUi(QtGui.QMainWindow):
         """ Release the document action. """
         docnamelist = self.getselecteddoc()
         if docnamelist:
-            message = self.doc.release(docnamelist)
-            self.ui.statusbar.showMessage(message, 1500)
+            confirm = QtGui.QMessageBox.question (None, \
+                                            'Confirm status change', \
+                                            'Really release this document?', \
+                                            QtGui.QMessageBox.Yes, \
+                                            QtGui.QMessageBox.No)
+            if confirm:
+                message = self.doc.release(docnamelist)
+                self.ui.statusbar.showMessage(message, 1500)
 
     def obsoletedoc(self):     
         """ Obsolete the document action. """
         docnamelist = self.getselecteddoc()
         if docnamelist:
-            message = self.doc.obsolete(docnamelist)
-            self.ui.statusbar.showMessage(message, 1500)
+            confirm = QtGui.QMessageBox.question (None, \
+                                            'Confirm status change', \
+                                            'Really obsolete this document?', \
+                                            QtGui.QMessageBox.Yes, \
+                                            QtGui.QMessageBox.No)
+            if confirm == QtGui.QMessageBox.Yes:                
+                message = self.doc.obsolete(docnamelist)
+                self.ui.statusbar.showMessage(message, 1500)
 
     def newissue(self):     
         """ Create a new issue. """
@@ -289,7 +301,7 @@ class ClientUi(QtGui.QMainWindow):
                                        "not be created unless the current "\
                                        "issue has first been released.")
         else:
-            if docnamelist:
+            if confirm == QtGui.QMessageBox.Yes:
                 message = self.doc.newissue(docnamelist)
                 self.ui.statusbar.showMessage(message, 1500)
 
