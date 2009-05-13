@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Thu May 14 00:16:10 2009 on violator
-# update count: 510
+# Last modified Thu May 14 00:20:08 2009 on violator
+# update count: 516
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -109,7 +109,7 @@ class docinteg:
         return "\\newcommand {\\"+fieldcode+"} {"+fieldcontent+"}"
 
     def texfieldupdate(self, docnamelist, fieldcodes, fieldcontents):
-        """ Update field codes in document. """
+        """ Update field codes in tex document. """
         docpath = self.link.const_docpath(docnamelist)
         for line in fileinput.FileInput(docpath, inplace=1):
             for code, content in map(None, fieldcodes, fieldcontents):
@@ -122,8 +122,11 @@ class docinteg:
                 print line.replace("\n","")
             except:
                 print old_line.replace("\n","")
-                
-            
+
+    def odffieldupdate(self, docnamelist, fieldcodes, fieldcontents):           
+        """ Update field codes in odf document. """
+        pass
+    
     def dodocinteg(self, docnamelist):
         """ Check if document integration should be done. """
         if docnamelist[-1] in self.conf.integtypes \
