@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Mon May 18 23:50:07 2009 on violator
-# update count: 1302
+# Last modified Tue May 19 00:18:01 2009 on violator
+# update count: 1303
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -155,13 +155,13 @@ class ClientUi(QtGui.QMainWindow):
         self.ui.actionRelease_Document.setEnabled(statuslist[6])
         self.ui.actionObsolete_Document.setEnabled(statuslist[7])
         # Buttons in document info dialog
-        self.docinfodialog.ui.edit.setEnabled(statuslist[7])
-        self.docinfodialog.ui.checkin.setEnabled(statuslist[8])
-        self.docinfodialog.ui.commit.setEnabled(statuslist[9])
-        self.docinfodialog.ui.save.setEnabled(statuslist[10])
+        self.docinfodialog.ui.edit.setEnabled(statuslist[8])
+        self.docinfodialog.ui.checkin.setEnabled(statuslist[9])
+        self.docinfodialog.ui.commit.setEnabled(statuslist[10])
+        self.docinfodialog.ui.save.setEnabled(statuslist[11])
         # Fields in document info dialog 
-        self.docinfodialog.ui.document_title.setReadOnly(statuslist[11])
-        self.docinfodialog.ui.document_keywords.setReadOnly(statuslist[12])
+        self.docinfodialog.ui.document_title.setReadOnly(statuslist[12])
+        self.docinfodialog.ui.document_keywords.setReadOnly(statuslist[13])
          
     def showdocinfo(self):
         docnamelist = self.getselecteddoc()
