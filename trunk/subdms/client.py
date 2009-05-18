@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Thu May 14 00:19:39 2009 on violator
-# update count: 1282
+# Last modified Mon May 18 23:50:07 2009 on violator
+# update count: 1302
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -507,13 +507,14 @@ class addFileDialog(QtGui.QFileDialog):
         QtGui.QFileDialog.__init__(self, parent)
 
     def getfilename(self):
-        # fixme 
-        self.setFilters(["Text (*.txt *.tex)", "Compressed (*.zip)", \
-                         "Portable (*.pdf)"]) #fixme
-        self.setFilter("Text (*.txt *.tex)")
         return self.getOpenFileName(self, 'Select file to add',
                                     '/home', \
-                                    "Supported (*.pdf *.txt *.tex *.zip)")
+                                    "Open Document Format " \
+                                    "(*.odp *.ods *.odt);;" \
+                                    "Text (*.txt *.tex);;" \
+                                    "Portable (*.pdf);;" \
+                                    "Compressed(zip) (*.zip);;")
+
         
 ################################################################################
 
