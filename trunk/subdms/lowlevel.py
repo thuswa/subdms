@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Tue May 19 14:46:37 2009 on violator
-# update count: 587
+# Last modified Tue May 19 14:54:35 2009 on violator
+# update count: 589
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -377,6 +377,10 @@ class svncmd:
     def propset(self, property, propvalue, path):
         """ Set property. """
         self.client.propset(property, propvalue, path)
+
+    def revert(self, path):
+        """ Discard any changes in the working copy at path. """
+        self.client.revert(path)
 
     def recursivels(self, path):
         """ Return resursive listing of repourl. """ 
