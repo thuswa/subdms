@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Thu May 14 22:27:33 2009 on violator
-# update count: 1129
+# Last modified Tue May 19 22:10:36 2009 on violator
+# update count: 1157
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -57,6 +57,7 @@ class document:
       self.conf = lowlevel.config()
       self.integ = integration.docinteg()
       self.link = lowlevel.linkname()
+      self.state = docstate()
       self.status = docstatus()
       self.svncmd = lowlevel.svncmd()
 
@@ -166,7 +167,7 @@ class document:
       docname = self.link.const_docname(docnamelist)
       message = "Release "+docname
 
-      if not self.ischeckedout(docnamelist):
+      if not self.state.ischeckedout(docnamelist):
          self.checkout(docnamelist)
 
       # Document integration
@@ -205,7 +206,7 @@ class document:
 
    def editdocument(self, docnamelist):
       """ Edit the document. """
-      if not self.ischeckedout(docnamelist):
+      if not self.state.ischeckedout(docnamelist):
          self.checkout(docnamelist)
       self.cmd.launch_editor(docnamelist)   
 
@@ -252,7 +253,7 @@ class document:
       wascheckedout = True
       docpath = self.link.const_docpath(docnamelist)
       
-      if not self.ischeckedout(docnamelist):
+      if not self.state.ischeckedout(docnamelist):
          self.checkout(docnamelist)
          wascheckedout = False
 
@@ -272,7 +273,7 @@ class document:
       wascheckedout = True
       docpath = self.link.const_docpath(docnamelist)
       
-      if not self.ischeckedout(docnamelist):
+      if not self.state.ischeckedout(docnamelist):
          self.checkout(docnamelist)
          wascheckedout = False
 
@@ -327,27 +328,12 @@ class document:
    def setkeywords(self, docpath, dockeywords):
       """ Set document keywords. """ 
       self.svncmd.propset(self.conf.proplist[3], dockeywords, docpath)
-
-   def ischeckedout(self, docnamelist):
-      """ Return true if docname is checked out. """
-      return self.cmd.workingcopyexists(docnamelist)
-
-   def getstate(self, docnamelist):
-      """ Get document state. """
-      if self.ischeckedout(docnamelist):
-         docpath = self.link.const_docpath(docnamelist)
-         state = self.svncmd.status(docpath)
-         return_state = ['O', 'Checked Out']
-         if state.text_status == self.svncmd.modified:
-            return_state = ['M', 'Modified']
-         if state.text_status == self.svncmd.conflicted:
-            return_state = ['C', 'Conflict'] 
-      else:
-         return_state = ['I', 'Checked In']
-      return return_state
    
    def reverttohead(self, docnamelist):
       """ Revert to head revision undo local changes. """
+      if self.state.ischeckedout(docnamelist):
+         
+         self.svncmd.revert(docpath)
       return None #fixme
    
    def reverttoprerev(self, docnamelist):
@@ -414,3 +400,47 @@ class docstatus:
          return True
       else:
          return False
+
+################################################################################
+
+class docstate:
+   def __init__(self):
+      """ Initialize document state class. """
+      self.cmd = lowlevel.command()
+      #self.conf = lowlevel.config()
+      self.link = lowlevel.linkname()
+      self.svncmd = lowlevel.svncmd()
+
+   def ischeckedout(self, docnamelist):
+      """ Return true if docname is checked out. """
+      return self.cmd.workingcopyexists(docnamelist)
+
+   def ismodified(self, docnamelist):
+      """ Return true if docname is modified. """
+      docpath = self.link.const_docpath(docnamelist)
+      state = self.svncmd.status(docpath)
+      if state.text_status == self.svncmd.modified:
+         return True
+      else:
+         return False
+
+   def isconflicted(self, docnamelist):
+      """ Return true if docname is conflicted. """
+      docpath = self.link.const_docpath(docnamelist)
+      state = self.svncmd.status(docpath)
+      if state.text_status == self.svncmd.conflicted:
+         return True
+      else:
+         return False
+
+   def getstate(self, docnamelist):
+      """ Get document state. """
+      if self.ischeckedout(docnamelist):
+         return_state = ['O', 'Checked Out']
+         if self.ismodified(docnamelist):
+            return_state = ['M', 'Modified']
+         elif self.isconflicted(docnamelist):
+            return_state = ['C', 'Conflict'] 
+      else:
+         return_state = ['I', 'Checked In']
+      return return_state
