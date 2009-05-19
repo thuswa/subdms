@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Tue May 19 22:29:11 2009 on violator
-# update count: 1159
+# Last modified Tue May 19 23:30:33 2009 on violator
+# update count: 1162
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -334,7 +334,12 @@ class document:
       if self.state.ischeckedout(docnamelist):
          if self.state.ismodified(docnamelist):
             self.svncmd.revert(self.link.const_docpath(docnamelist))
-   
+
+   def undocheckout(self, docnamelist):
+      """ undo checkout. """
+      # Remove file from workspace
+      self.cmd.rmtree(self.link.const_checkoutpath(docnamelist))
+      
    def reverttoprerev(self, docnamelist):
       """ Revert to previous revision. """
       return None #fixme
