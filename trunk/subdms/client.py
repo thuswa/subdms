@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Tue May 19 00:18:01 2009 on violator
-# update count: 1303
+# Last modified Tue May 19 22:08:26 2009 on violator
+# update count: 1309
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -42,6 +42,7 @@ db = database.sqlitedb()
 class ClientUi(QtGui.QMainWindow):
     def __init__(self, parent=None):
         self.doc = frontend.document()
+        self.state = frontend.docstate()
         self.link = lowlevel.linkname()
         self.status = frontend.docstatus()
         QtGui.QWidget.__init__(self, parent)
@@ -219,7 +220,7 @@ class ClientUi(QtGui.QMainWindow):
         n = 0
         for doc in docs:
             docnamelist = list(doc[1:7])
-            state = QtGui.QTableWidgetItem(self.doc.getstate(docnamelist)[0])
+            state = QtGui.QTableWidgetItem(self.state.getstate(docnamelist)[0])
             docid = QtGui.QTableWidgetItem(self.link.const_docid(docnamelist))
             title = QtGui.QTableWidgetItem(doc[7].replace(u"\n" , u" || "))
             doctype = QtGui.QTableWidgetItem(doc[6])
@@ -521,6 +522,7 @@ class addFileDialog(QtGui.QFileDialog):
 class documentInfoDialog(QtGui.QDialog):
     def __init__(self, parent=None):
         self.doc = frontend.document()
+        self.state = frontend.docstate()
         self.link = lowlevel.linkname()
         QtGui.QDialog.__init__(self, parent)
         self.ui = Ui_Document_Info_Dialog()
@@ -559,7 +561,7 @@ class documentInfoDialog(QtGui.QDialog):
     def setdocinfo(self, docnamelist):
         """ Set document info. """
         info = db.getdocumentinfo(docnamelist)
-        self.ui.state.setText(self.doc.getstate(docnamelist)[1])
+        self.ui.state.setText(self.state.getstate(docnamelist)[1])
         self.ui.document_id.setText(self.link.const_docid(docnamelist))
         self.ui.issue.setText(str(self.doc.getissueno(docnamelist)))
         self.ui.status.setText(info[8])
