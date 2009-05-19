@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Fri May  1 22:10:11 2009 on violator
-# update count: 1127
+# Last modified Thu May 14 22:27:33 2009 on violator
+# update count: 1129
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -141,7 +141,7 @@ class document:
       """ Check-in file from workspace. """
       docname = self.link.const_docname(docnamelist)
       message = "Checking in: "+docname
-      self.commit(docnamelist, message) 
+      self.commit(docnamelist, "Checked-in") 
       # Remove file from workspace
       self.cmd.rmtree(self.link.const_checkoutpath(docnamelist))
       return message
