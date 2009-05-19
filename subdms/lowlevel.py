@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Thu May 14 21:13:31 2009 on violator
-# update count: 586
+# Last modified Tue May 19 14:46:37 2009 on violator
+# update count: 587
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -29,7 +29,7 @@ import subprocess
 
 import database
 
-""" Low-level classes.  """
+""" Low-level classes. """
 
 class config:    
     def __init__(self):
