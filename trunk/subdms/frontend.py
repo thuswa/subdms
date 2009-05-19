@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Tue May 19 22:10:36 2009 on violator
-# update count: 1157
+# Last modified Tue May 19 22:29:11 2009 on violator
+# update count: 1159
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -332,9 +332,8 @@ class document:
    def reverttohead(self, docnamelist):
       """ Revert to head revision undo local changes. """
       if self.state.ischeckedout(docnamelist):
-         
-         self.svncmd.revert(docpath)
-      return None #fixme
+         if self.state.ismodified(docnamelist):
+            self.svncmd.revert(self.link.const_docpath(docnamelist))
    
    def reverttoprerev(self, docnamelist):
       """ Revert to previous revision. """
