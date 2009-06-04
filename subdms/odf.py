@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Fri Jun  5 00:31:03 2009 on violator
-# update count: 523
+# Last modified Fri Jun  5 00:45:31 2009 on violator
+# update count: 543
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -24,8 +24,6 @@ import string
 import re
 import zipfiles
 
-import database
-import epoch
 import lowlevel
 
 """
@@ -36,95 +34,15 @@ class odfuserfields:
     def __init__(self):
         """ Initialize odfuserfield class """
         self.conf = lowlevel.config()
-        self.db = database.sqlitedb()
-        self.dt = epoch.dtime()
-        self.link = lowlevel.linkname()
 
-    def setallfields(self, docnamelist, doctitle, dockeywords, author, status):
-        """ Update all document fields. """
-        # Name the document info
-        cat = docnamelist[0]
-        proj = docnamelist[1]
-        issue = docnamelist[-2]
-        rdate = ""
-        docid = self.link.const_docid(docnamelist)
+    def openfile(self, docpath):
+        """ Read odf file and extract contents.xml file. """
+        self.file = zipfile.ZipFile(docpath, "r")
 
-        # Get the project name
-        projname = self.db.getprojname(cat, proj)
-        
-        # Create fieldcontents list
-        fieldcontents =[doctitle, docid, issue, status, rdate, author, \
-                        projname, dockeywords]
-        
-        # Choose action depending on filetype
-        if docnamelist[-1] == "tex": 
-            self.texfieldupdate(docnamelist, self.conf.fieldcodes, \
-                                    fieldcontents)
 
-    def updatetitle(self, docnamelist, doctitle):
-        """ Update the title field. """
-        fieldcontents = [doctitle]
-        fieldcodes = self.conf.fieldcodes[0:1]
+    def updatefields(self):
+        """ Update user fields and write back contents.xml file. """
 
-        # Choose action depending on filetype
-        if docnamelist[-1] == "tex": 
-            self.texfieldupdate(docnamelist, fieldcodes, fieldcontents)
-        
-    def updatekeywords(self, docnamelist, dockeywords):
-        """ Update the keywords field. """
-        fieldcontents = [dockeywords]
-        fieldcodes = self.conf.fieldcodes[7]
-        
-        # Choose action depending on filetype
-        if docnamelist[-1] == "tex": 
-            self.texfieldupdate(docnamelist, fieldcodes, fieldcontents)
-        
-    def releaseupdate(self, docnamelist):
-        """ Update the release date and status field. """
-        fieldcontents = [self.conf.statuslist[4], self.dt.datestamp()]
-        fieldcodes = self.conf.fieldcodes[3:5]
-        # Choose action depending on filetype
-        if docnamelist[-1] == "tex": 
-            self.texfieldupdate(docnamelist, fieldcodes, fieldcontents)
-
-    def obsoleteupdate(self, docnamelist):
-        """ Update the release date and status field. """
-        fieldcontents = [self.conf.statuslist[5]+" "+self.dt.datestamp()] 
-        fieldcodes = self.conf.fieldcodes[3:4]
-        # Choose action depending on filetype
-        if docnamelist[-1] == "tex": 
-            self.texfieldupdate(docnamelist, fieldcodes, fieldcontents)
-    
-    def texfieldpattern(self, fieldcode, fieldcontent=".*"):
-        """ return field code string for tex file. """
-        return re.compile(".newcommand .."+fieldcode+". ."+fieldcontent+".")
-
-    def texfieldcode(self, fieldcode, fieldcontent):
-        return "\\newcommand {\\"+fieldcode+"} {"+fieldcontent+"}"
-
-    def texfieldupdate(self, docnamelist, fieldcodes, fieldcontents):
-        """ Update field codes in tex document. """
-        docpath = self.link.const_docpath(docnamelist)
-        for line in fileinput.FileInput(docpath, inplace=1):
-            for code, content in map(None, fieldcodes, fieldcontents):
-                fieldptrn = self.texfieldpattern(code)
-                if fieldptrn.match(line):
-                    old_line = line
-                    line = self.texfieldcode(code, content.replace("\n", r"\\"))
-            # Fix for un-codeble characters        
-            try:                
-                print line.replace("\n","")
-            except:
-                print old_line.replace("\n","")
-
-    def odffieldupdate(self, docnamelist, fieldcodes, fieldcontents):           
-        """ Update field codes in odf document. """
-        pass
-    
-    def dodocinteg(self, docnamelist):
-        """ Check if document integration should be done. """
-        if docnamelist[-1] in self.conf.integtypes \
-               and docnamelist[0] != self.conf.categories[1]:
-            return True
-        else:
-            return False
+    def closefile()
+        """ Close odf file. """   
+        self.file.close()
