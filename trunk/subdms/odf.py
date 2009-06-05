@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Fri Jun  5 00:45:31 2009 on violator
-# update count: 543
+# Last modified Sat Jun  6 00:27:36 2009 on violator
+# update count: 554
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -22,7 +22,8 @@
 
 import string
 import re
-import zipfiles
+import xml.dom.minidom
+import zipfile
 
 import lowlevel
 
@@ -38,11 +39,13 @@ class odfuserfields:
     def openfile(self, docpath):
         """ Read odf file and extract contents.xml file. """
         self.file = zipfile.ZipFile(docpath, "r")
+        return self.file.read(self.conf.odfcontent)
 
-
-    def updatefields(self):
+    def updatefields(self, contentstr):
         """ Update user fields and write back contents.xml file. """
-
-    def closefile()
+        doc = xml.dom.minidom.parseString(contentstr)
+        print doc
+        
+    def closefile(self):
         """ Close odf file. """   
         self.file.close()

@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Tue May 19 14:54:35 2009 on violator
-# update count: 589
+# Last modified Sat Jun  6 00:08:48 2009 on violator
+# update count: 592
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -70,7 +70,9 @@ class config:
         self.fieldcodes =['subdmstitle', 'subdmsdocid', 'subdmsissue', \
                          'subdmsstatus', 'subdmsrdate', 'subdmsauthor', \
                          'subdmsproj', 'subdmskeyw']
-        
+
+        self.odfcontent = "content.xml"
+
         self.vc = ['view', 'copy']
         self.ro = ['read', 'only']
         
