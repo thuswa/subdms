@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Sat Jun  6 01:10:12 2009 on violator
-# update count: 582
+# Last modified Sun Jun  7 23:56:04 2009 on violator
+# update count: 618
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -38,27 +38,32 @@ class odfuserfields:
 
     def extractcontent(self, docpath):
         """ Read odf file and extract contents.xml file. """
-        self.file = zipfile.ZipFile(docpath, "r")
+        self.infile = zipfile.ZipFile(docpath, "r")
         contentstr = self.file.read(self.conf.odfcontent)
-        self.closefile()
         return contentstr
 
     def writecontent(self, docpath, contentstr):
-        """ Write content.xml to odf file. """
-        self.file = zipfile.ZipFile(docpath, "w", zipfile.ZIP_DEFLATED)
-        self.file.writestr(self.conf.odfcontent, contentstr)
-        self.closefile()
+        """ Write content back to odf file. """
+        self.outfile = zipfile.ZipFile(docpath, "w", zipfile.ZIP_DEFLATED)
+        for item in self.infile.infolist():
+            buffer = self.infile.read(item.filename)
+            if item.filename  == self.conf.odfcontent:
+                self.outfile.writestr(item, contentstr)
+            else:
+                self.outfile.writestr(item, buffer)
         
     def updatefields(self, docpath):
         """ Update user fields and write back contents.xml file. """
-        #contentstr = self.extractcontent(docpath)
+
+
         #doc = xml.dom.minidom.parseString(contentstr)
-        #
 
         # write back file contents of content.xml
-        self.writecontent(docpath)
+        self.writecontent(docpath, contentstr)
         #print doc
         
-    def closefile(self):
-        """ Close odf file. """   
-        self.file.close()
+    def closefiles(self):
+        """ Close odf files. """   
+        self.infile.close()
+        self.outfile.close()
+        
