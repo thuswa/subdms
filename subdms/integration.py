@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Sun Jun  7 21:23:47 2009 on violator
-# update count: 528
+# Last modified Mon Jun  8 00:07:00 2009 on violator
+# update count: 552
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -78,9 +78,11 @@ class docinteg:
         fieldcodes = self.conf.fieldcodes[7]
         
         # Choose action depending on filetype
-        if docnamelist[-1] == "tex": 
+        if self.conf.istex: 
             self.texfieldupdate(docnamelist, fieldcodes, fieldcontents)
-        
+        if self.conf.isodf:
+            self.odffieldupdate(docnamelist, fieldcodes, fieldcontents)
+            
     def releaseupdate(self, docnamelist):
         """ Update the release date and status field. """
         fieldcontents = [self.conf.statuslist[4], self.dt.datestamp()]
@@ -122,12 +124,19 @@ class docinteg:
     def odffieldupdate(self, docnamelist, fieldcodes, fieldcontents):           
         """ Update field codes in odf document. """
         docpath = self.link.const_docpath(docnamelist)
-        doczip =  self.link.const_doczippath(docnamelist)
+        doczippath = self.link.const_doczippath(docnamelist)
 
-        # Rename odt file
-        self.cmd.movefile(docpath, doczip)
+        # Rename odf file
+        self.cmd.movefile(docpath, doczippath)
+
+        # Write contents back to odf file
+        contentstr = self.ouf.extractcontent(doczippath)
+        self.ouf.writecontent(docpath, contentstr)
+
+        # Close files and delete zip file
+        self.ouf.closefiles()
+        self.cmd.rm(doczippath)
         
-
     
     def dodocinteg(self, docnamelist):
         """ Check if document integration should be done. """
