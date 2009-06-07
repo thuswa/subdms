@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Fri Jun  5 00:28:55 2009 on violator
-# update count: 517
+# Last modified Sun Jun  7 21:23:47 2009 on violator
+# update count: 528
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -40,7 +40,8 @@ class docinteg:
         self.db = database.sqlitedb()
         self.dt = epoch.dtime()
         self.link = lowlevel.linkname()
-
+        self.ouf = odfuserfields()
+        
     def setallfields(self, docnamelist, doctitle, dockeywords, author, status):
         """ Update all document fields. """
         # Name the document info
@@ -120,7 +121,13 @@ class docinteg:
 
     def odffieldupdate(self, docnamelist, fieldcodes, fieldcontents):           
         """ Update field codes in odf document. """
-        pass
+        docpath = self.link.const_docpath(docnamelist)
+        doczip =  self.link.const_doczippath(docnamelist)
+
+        # Rename odt file
+        self.cmd.movefile(docpath, doczip)
+        
+
     
     def dodocinteg(self, docnamelist):
         """ Check if document integration should be done. """
