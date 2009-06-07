@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Sun Jun  7 20:59:07 2009 on violator
-# update count: 604
+# Last modified Mon Jun  8 00:05:50 2009 on violator
+# update count: 619
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -60,7 +60,8 @@ class config:
         self.categories = ['P','T']
         self.filetypes = ['odp','ods','odt','pdf','tex','txt','zip']
         self.tmpltypes = ['odt','tex','txt']
-        self.integtypes = ['odt','tex']
+        self.odftypes = ['odp','ods,','odt']
+        self.integtypes = ['odp','ods,','odt','tex']
         self.proplist = ['title', 'status', 'svn:keywords', 'keywords']
         self.statuslist = ['preliminary', 'in-review' ,'rejected', 'approved', \
                            'released', 'obsolete'] 
@@ -86,7 +87,20 @@ class config:
         self.release = 'release'.encode("hex")
         self.obsolete = 'obsolete'.encode("hex")
 
+    def isodf(self, docnamelist):
+        """ Is a odf file. """
+        if docnamelist[-1] in self.odftypes: 
+            return True
+        else:
+            return False
 
+    def istex(self, docnamelist):
+        """ Is a tex file. """
+        if docnamelist[-1] == "tex": 
+            return True
+        else:
+            return False
+        
     def geteditor(self, filetype):
         """ Get appropriate editor for filetype. """
         return self.conf.get("Editor", filetype)
