@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Tue May 19 23:30:33 2009 on violator
-# update count: 1162
+# Last modified Thu Jun 11 22:37:51 2009 on violator
+# update count: 1163
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -52,7 +52,7 @@ class project:
 
 class document:
    def __init__(self):
-      """ Initialize project class """
+      """ Initialize document class """
       self.cmd = lowlevel.command()
       self.conf = lowlevel.config()
       self.integ = integration.docinteg()
