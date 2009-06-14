@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Sun Jun 14 23:26:54 2009 on violator
-# update count: 606
+# Last modified Mon Jun 15 00:26:04 2009 on violator
+# update count: 609
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -124,8 +124,10 @@ class docinteg:
         # Rename odf file
         self.cmd.renamefile(docpath, doczippath)
 
-        # Write contents back to odf file
+        # Update fields and write contents back to odf file
         contentstr = self.ouf.extractcontent(doczippath)
+        contentstr = self.ouf.updatefields(contentstr, fieldcodes, \
+                                           fieldcontents)
         self.ouf.writecontent(docpath, contentstr)
 
         # Close files and delete zip file
