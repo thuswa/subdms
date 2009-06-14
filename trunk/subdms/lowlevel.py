@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Mon Jun  8 00:05:50 2009 on violator
-# update count: 619
+# Last modified Tue Jun  9 22:52:03 2009 on violator
+# update count: 624
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -228,6 +228,10 @@ class command:
     def movefile(self, frompath, topath):
         """ Move file. """
         shutil.move(frompath, topath)
+
+    def renamefile(self, frompath, topath):
+        """ Rename file. """
+        os.rename(frompath, topath)
 
     def exists(self, path):
         """ Check if path exists. """
