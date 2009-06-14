@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Mon Jun  8 00:07:00 2009 on violator
-# update count: 552
+# Last modified Sun Jun 14 23:06:35 2009 on violator
+# update count: 602
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -27,7 +27,7 @@ import re
 import database
 import epoch
 import lowlevel
-
+import odf
 
 """
 Document integration class. 
@@ -36,11 +36,12 @@ Document integration class.
 class docinteg:
     def __init__(self):
         """ Initialize docinteg """
+        self.cmd = lowlevel.command()
         self.conf = lowlevel.config()
         self.db = database.sqlitedb()
         self.dt = epoch.dtime()
         self.link = lowlevel.linkname()
-        self.ouf = odfuserfields()
+        self.ouf = odf.odfuserfields()
         
     def setallfields(self, docnamelist, doctitle, dockeywords, author, status):
         """ Update all document fields. """
@@ -59,18 +60,15 @@ class docinteg:
                         projname, dockeywords]
         
         # Choose action depending on filetype
-        if docnamelist[-1] == "tex": 
-            self.texfieldupdate(docnamelist, self.conf.fieldcodes, \
-                                    fieldcontents)
-
+        self.filetypechooser(docnamelist, self.conf.fieldcodes, fieldcontents)
+            
     def updatetitle(self, docnamelist, doctitle):
         """ Update the title field. """
         fieldcontents = [doctitle]
         fieldcodes = self.conf.fieldcodes[0:1]
 
         # Choose action depending on filetype
-        if docnamelist[-1] == "tex": 
-            self.texfieldupdate(docnamelist, fieldcodes, fieldcontents)
+        self.filetypechooser(docnamelist, fieldcodes, fieldcontents)
         
     def updatekeywords(self, docnamelist, dockeywords):
         """ Update the keywords field. """
@@ -78,26 +76,23 @@ class docinteg:
         fieldcodes = self.conf.fieldcodes[7]
         
         # Choose action depending on filetype
-        if self.conf.istex: 
-            self.texfieldupdate(docnamelist, fieldcodes, fieldcontents)
-        if self.conf.isodf:
-            self.odffieldupdate(docnamelist, fieldcodes, fieldcontents)
+        self.filetypechooser(docnamelist, fieldcodes, fieldcontents)
             
     def releaseupdate(self, docnamelist):
         """ Update the release date and status field. """
         fieldcontents = [self.conf.statuslist[4], self.dt.datestamp()]
         fieldcodes = self.conf.fieldcodes[3:5]
+
         # Choose action depending on filetype
-        if docnamelist[-1] == "tex": 
-            self.texfieldupdate(docnamelist, fieldcodes, fieldcontents)
+        self.filetypechooser(docnamelist, fieldcodes, fieldcontents)
 
     def obsoleteupdate(self, docnamelist):
         """ Update the release date and status field. """
         fieldcontents = [self.conf.statuslist[5]+" "+self.dt.datestamp()] 
         fieldcodes = self.conf.fieldcodes[3:4]
+
         # Choose action depending on filetype
-        if docnamelist[-1] == "tex": 
-            self.texfieldupdate(docnamelist, fieldcodes, fieldcontents)
+        self.filetypechooser(docnamelist, fieldcodes, fieldcontents)
     
     def texfieldpattern(self, fieldcode, fieldcontent=".*"):
         """ return field code string for tex file. """
@@ -127,17 +122,16 @@ class docinteg:
         doczippath = self.link.const_doczippath(docnamelist)
 
         # Rename odf file
-        self.cmd.movefile(docpath, doczippath)
+ #       self.cmd.renamefile(docpath, doczippath)
 
         # Write contents back to odf file
-        contentstr = self.ouf.extractcontent(doczippath)
-        self.ouf.writecontent(docpath, contentstr)
+        self.ouf.extractcontent(docpath)
+#        self.ouf.writecontent(docpath, contentstr)
 
         # Close files and delete zip file
         self.ouf.closefiles()
-        self.cmd.rm(doczippath)
+#        self.cmd.rm(doczippath)
         
-    
     def dodocinteg(self, docnamelist):
         """ Check if document integration should be done. """
         if docnamelist[-1] in self.conf.integtypes \
@@ -145,3 +139,14 @@ class docinteg:
             return True
         else:
             return False
+        
+    def filetypechooser(self, docnamelist, fieldcodes, fieldcontents):
+        """ Call function depending on file type. """
+        if self.conf.isodf(docnamelist):
+            print "odf: ", docnamelist[-1]
+            self.odffieldupdate(docnamelist, self.conf.fieldcodes, \
+                                fieldcontents)
+        elif self.conf.istex(docnamelist):
+            print "tex: ", docnamelist[-1]
+            self.texfieldupdate(docnamelist, self.conf.fieldcodes, \
+                                fieldcontents)
