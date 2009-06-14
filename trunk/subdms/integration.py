@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Sun Jun 14 23:06:35 2009 on violator
-# update count: 602
+# Last modified Sun Jun 14 23:26:54 2009 on violator
+# update count: 606
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -122,15 +122,15 @@ class docinteg:
         doczippath = self.link.const_doczippath(docnamelist)
 
         # Rename odf file
- #       self.cmd.renamefile(docpath, doczippath)
+        self.cmd.renamefile(docpath, doczippath)
 
         # Write contents back to odf file
-        self.ouf.extractcontent(docpath)
-#        self.ouf.writecontent(docpath, contentstr)
+        contentstr = self.ouf.extractcontent(doczippath)
+        self.ouf.writecontent(docpath, contentstr)
 
         # Close files and delete zip file
         self.ouf.closefiles()
-#        self.cmd.rm(doczippath)
+        self.cmd.rm(doczippath)
         
     def dodocinteg(self, docnamelist):
         """ Check if document integration should be done. """
