@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Mon Jun 15 22:21:26 2009 on violator
-# update count: 151
+# Last modified Mon Jun 15 22:33:23 2009 on violator
+# update count: 165
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -26,8 +26,26 @@ from subdms import lowlevel
 ouf = odf.odfuserfields()
 cmd = lowlevel.command()
 link = lowlevel.linkname()
+conf = lowlevel.config()
 
 docnamelist = ['P','DDF','SPEC','0002','1','odt'] 
+
+author = "jondoe"
+status = "preliminary"
+doctitle = "Test document title"
+dockeywords ="Test, document, odf, integration"
+
+cat = docnamelist[0]
+proj = docnamelist[1]
+issue = docnamelist[-2]
+rdate = ""
+docid = link.const_docid(docnamelist)
+projname = "Duck Degree Factory"
+
+# Create fieldcontents list
+fieldcontents =[doctitle, docid, issue, status, rdate, author, \
+                projname, dockeywords]
+
 
 docpath = link.const_docpath(docnamelist)
 doczippath = link.const_doczippath(docnamelist)
@@ -37,7 +55,7 @@ cmd.renamefile(docpath, doczippath)
 
 # Update fields and write contents back to odf file
 contentstr = ouf.extractcontent(doczippath)
-contentstr = ouf.updatefields(contentstr, fieldcodes, \
+contentstr = ouf.updatefields(contentstr, conf.fieldcodes, \
                                    fieldcontents)
 ouf.writecontent(docpath, contentstr)
 
