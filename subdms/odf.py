@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Mon Jun 15 00:31:09 2009 on violator
-# update count: 636
+# Last modified Mon Jun 15 14:24:03 2009 on violator
+# update count: 648
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -53,12 +53,25 @@ class odfuserfields:
         
     def updatefields(self, contentstr, fieldcodes, fieldcontents):
         """ Update user fields. """
-        print contentstr
         doc = xml.dom.minidom.parseString(contentstr)
+        print doc.toprettyxml()
+        #print self.getText(doc)
         for code, content in map(None, fieldcodes, fieldcontents):
             print code," : ", content
+        contentstr = doc.toxml()
+        doc.unlink()
+        #print contentstr
+
         return contentstr
-    
+
+    def getText(self, nodelist):
+        rc = ""
+        for node in nodelist:
+            if node.nodeType == node.TEXT_NODE:
+                rc = rc + node.data
+        return rc
+            
+
     def closefiles(self):
         """ Close odf files. """   
         self.infile.close()
