@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Mon Jun 15 21:58:15 2009 on violator
-# update count: 139
+# Last modified Mon Jun 15 22:21:26 2009 on violator
+# update count: 151
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -21,3 +21,26 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from subdms import odf
+from subdms import lowlevel
+
+ouf = odf.odfuserfields()
+cmd = lowlevel.command()
+link = lowlevel.linkname()
+
+docnamelist = ['P','DDF','SPEC','0002','1','odt'] 
+
+docpath = link.const_docpath(docnamelist)
+doczippath = link.const_doczippath(docnamelist)
+
+# Rename odf file
+cmd.renamefile(docpath, doczippath)
+
+# Update fields and write contents back to odf file
+contentstr = ouf.extractcontent(doczippath)
+contentstr = ouf.updatefields(contentstr, fieldcodes, \
+                                   fieldcontents)
+ouf.writecontent(docpath, contentstr)
+
+# Close files and delete zip file
+ouf.closefiles()
+cmd.rm(doczippath)
