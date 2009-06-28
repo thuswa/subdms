@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Mon Jun 15 00:26:04 2009 on violator
-# update count: 609
+# Last modified Mon Jun 29 00:36:47 2009 on violator
+# update count: 674
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -45,78 +45,71 @@ class docinteg:
         
     def setallfields(self, docnamelist, doctitle, dockeywords, author, status):
         """ Update all document fields. """
-        # Name the document info
-        cat = docnamelist[0]
-        proj = docnamelist[1]
-        issue = docnamelist[-2]
-        rdate = ""
-        docid = self.link.const_docid(docnamelist)
-
-        # Get the project name
-        projname = self.db.getprojname(cat, proj)
-        
-        # Create fieldcontents list
-        fieldcontents =[doctitle, docid, issue, status, rdate, author, \
-                        projname, dockeywords]
-        
+        fields = const_fields(docnamelist, doctitle, dockeywords, author, \
+                              status)
         # Choose action depending on filetype
-        self.filetypechooser(docnamelist, self.conf.fieldcodes, fieldcontents)
+        self.filetypechooser(docnamelist, fields)
             
     def updatetitle(self, docnamelist, doctitle):
         """ Update the title field. """
-        fieldcontents = [doctitle]
-        fieldcodes = self.conf.fieldcodes[0:1]
+        keys = self.conf.fields.keys()
+        keys.sort()
+        fields = {keys[7] : doctitle}
 
         # Choose action depending on filetype
-        self.filetypechooser(docnamelist, fieldcodes, fieldcontents)
+        self.filetypechooser(docnamelist, fields)
         
     def updatekeywords(self, docnamelist, dockeywords):
         """ Update the keywords field. """
-        fieldcontents = [dockeywords]
-        fieldcodes = self.conf.fieldcodes[7]
+        keys = self.conf.fields.keys() 
+        keys.sort()
+        fields = {keys[3] : dockeywords}
         
         # Choose action depending on filetype
-        self.filetypechooser(docnamelist, fieldcodes, fieldcontents)
+        self.filetypechooser(docnamelist, fields)
             
     def releaseupdate(self, docnamelist):
         """ Update the release date and status field. """
-        fieldcontents = [self.conf.statuslist[4], self.dt.datestamp()]
-        fieldcodes = self.conf.fieldcodes[3:5]
+        keys = self.conf.fields.keys() 
+        keys.sort()
+        fields = {keys[6] : self.conf.statuslist[4], \
+                  keys[5] : self.dt.datestamp()}
 
         # Choose action depending on filetype
-        self.filetypechooser(docnamelist, fieldcodes, fieldcontents)
+        self.filetypechooser(docnamelist, fields)
 
     def obsoleteupdate(self, docnamelist):
         """ Update the release date and status field. """
-        fieldcontents = [self.conf.statuslist[5]+" "+self.dt.datestamp()] 
-        fieldcodes = self.conf.fieldcodes[3:4]
+        keys = self.conf.fields.keys() 
+        keys.sort()
+        fields = {keys[6] : self.conf.statuslist[5]+" "+self.dt.datestamp()}
 
         # Choose action depending on filetype
-        self.filetypechooser(docnamelist, fieldcodes, fieldcontents)
+        self.filetypechooser(docnamelist, fields)
     
-    def texfieldpattern(self, fieldcode, fieldcontent=".*"):
+    def texfieldpattern(self, fieldkey, fieldcontent=".*"):
         """ return field code string for tex file. """
         return re.compile(".newcommand .."+fieldcode+". ."+fieldcontent+".")
 
-    def texfieldcode(self, fieldcode, fieldcontent):
-        return "\\newcommand {\\"+fieldcode+"} {"+fieldcontent+"}"
+    def texfieldcode(self, fieldkey, fieldcontent):
+        return "\\newcommand {\\"+fieldkey+"} {"+fieldcontent+"}"
 
-    def texfieldupdate(self, docnamelist, fieldcodes, fieldcontents):
+    def texfieldupdate(self, docnamelist, fields):
         """ Update field codes in tex document. """
         docpath = self.link.const_docpath(docnamelist)
         for line in fileinput.FileInput(docpath, inplace=1):
-            for code, content in map(None, fieldcodes, fieldcontents):
-                fieldptrn = self.texfieldpattern(code)
+            for key,value in fields.iteritems():
+                fieldptrn = self.texfieldpattern(key)
                 if fieldptrn.match(line):
                     old_line = line
-                    line = self.texfieldcode(code, content.replace("\n", r"\\"))
+                    line = self.texfieldcode(key, value.replace("\n", r"\\"))
             # Fix for un-codeble characters        
             try:                
                 print line.replace("\n","")
             except:
                 print old_line.replace("\n","")
 
-    def odffieldupdate(self, docnamelist, fieldcodes, fieldcontents):           
+    def odffieldupdate(self, docnamelist, fields):           
         """ Update field codes in odf document. """
         docpath = self.link.const_docpath(docnamelist)
         doczippath = self.link.const_doczippath(docnamelist)
@@ -126,8 +119,7 @@ class docinteg:
 
         # Update fields and write contents back to odf file
         contentstr = self.ouf.extractcontent(doczippath)
-        contentstr = self.ouf.updatefields(contentstr, fieldcodes, \
-                                           fieldcontents)
+        contentstr = self.ouf.updatefields(contentstr, fields)
         self.ouf.writecontent(docpath, contentstr)
 
         # Close files and delete zip file
@@ -142,13 +134,34 @@ class docinteg:
         else:
             return False
         
-    def filetypechooser(self, docnamelist, fieldcodes, fieldcontents):
+    def filetypechooser(self, docnamelist, fields):
         """ Call function depending on file type. """
         if self.conf.isodf(docnamelist):
             print "odf: ", docnamelist[-1]
-            self.odffieldupdate(docnamelist, self.conf.fieldcodes, \
-                                fieldcontents)
+            self.odffieldupdate(docnamelist, fields)
         elif self.conf.istex(docnamelist):
             print "tex: ", docnamelist[-1]
-            self.texfieldupdate(docnamelist, self.conf.fieldcodes, \
-                                fieldcontents)
+            self.texfieldupdate(docnamelist, fields)
+
+    def const_fields(self, docnamelist, doctitle, dockeywords, author, status):
+        """ Constuct the fields dictionary. """
+        keys = self.conf.fields.keys()
+        keys.sort() 
+        rdict = {}
+        print keys
+        # Name the document info
+        cat = docnamelist[0]
+        proj = docnamelist[1]
+
+        # Populate the fields dictionary
+        rdict[keys[0]] = author
+        rdict[keys[1]] = self.link.const_docid(docnamelist)
+        rdict[keys[2]] = docnamelist[-2]
+        rdict[keys[3]] = dockeywords
+        rdict[keys[4]] = self.db.getprojname(cat, proj)
+        rdict[keys[5]] = ""
+        rdict[keys[6]] = status
+        rdict[keys[7]] = doctitle
+
+
+        return rdict

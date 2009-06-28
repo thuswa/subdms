@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Mon Jun 15 14:24:03 2009 on violator
-# update count: 648
+# Last modified Mon Jun 29 00:41:51 2009 on violator
+# update count: 718
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -51,26 +51,33 @@ class odfuserfields:
             else:
                 self.outfile.writestr(item, buffer)
         
-    def updatefields(self, contentstr, fieldcodes, fieldcontents):
-        """ Update user fields. """
+    def getuserfields(self, contentstr):
+        """ Just read the user fields from an XML file."""
         doc = xml.dom.minidom.parseString(contentstr)
-        print doc.toprettyxml()
-        #print self.getText(doc)
-        for code, content in map(None, fieldcodes, fieldcontents):
-            print code," : ", content
+        ufds = doc.getElementsByTagName('text:user-field-decls')
+        fieldlist = []
+        for fields in ufds:
+            for field in fields.childNodes:
+                fieldlist.append(field.attributes.items())
+        return fieldlist            
+
+    def setuserfields(self, contentstr, fields):
+        """ Set the user fields in content file."""
+        # Parse xml string to dom doc
+        doc = xml.dom.minidom.parseString(contentstr)
+
+        # Get user field declarations and loop through them
+        ufds = doc.getElementsByTagName('text:user-field-decls')
+        for userfields in ufds:
+            for userfield in userfields.childNodes:
+                userkey = userfield.attributes.getNamedItem('text:name').value
+                userfield.setAttribute('office:value',fields[userkey])
+                userfield.setAttribute('office:value-type', 'string')
+
+        # Write back dom tree to string and unlink        
         contentstr = doc.toxml()
         doc.unlink()
-        #print contentstr
-
-        return contentstr
-
-    def getText(self, nodelist):
-        rc = ""
-        for node in nodelist:
-            if node.nodeType == node.TEXT_NODE:
-                rc = rc + node.data
-        return rc
-            
+        return contentstr            
 
     def closefiles(self):
         """ Close odf files. """   
