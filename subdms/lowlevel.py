@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Tue Jun  9 22:52:03 2009 on violator
-# update count: 624
+# Last modified Sun Jun 28 00:30:52 2009 on violator
+# update count: 625
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -68,9 +68,10 @@ class config:
         self.svnkeywords=string.join(["LastChangedDate", \
                                       "LastChangedRevision", "Id", \
                                       "Author"])
-        self.fieldcodes =['subdmstitle', 'subdmsdocid', 'subdmsissue', \
-                         'subdmsstatus', 'subdmsrdate', 'subdmsauthor', \
-                         'subdmsproj', 'subdmskeyw']
+        self.fields = {'subdmstitle' : "", 'subdmsdocid' : "", \
+                       'subdmsissue' : "", 'subdmsstatus' : "", \
+                       'subdmsrdate' : "", 'subdmsauthor' : "", \
+                       'subdmsproj'  : "", 'subdmskeyw' : ""}
 
         self.odfcontent = "content.xml"
 
