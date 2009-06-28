@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Mon Jun 29 00:36:47 2009 on violator
-# update count: 674
+# Last modified Mon Jun 29 00:51:57 2009 on violator
+# update count: 677
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -45,8 +45,8 @@ class docinteg:
         
     def setallfields(self, docnamelist, doctitle, dockeywords, author, status):
         """ Update all document fields. """
-        fields = const_fields(docnamelist, doctitle, dockeywords, author, \
-                              status)
+        fields = self.const_fields(docnamelist, doctitle, dockeywords, author, \
+                                   status)
         # Choose action depending on filetype
         self.filetypechooser(docnamelist, fields)
             
@@ -119,7 +119,7 @@ class docinteg:
 
         # Update fields and write contents back to odf file
         contentstr = self.ouf.extractcontent(doczippath)
-        contentstr = self.ouf.updatefields(contentstr, fields)
+        contentstr = self.ouf.setuserfields(contentstr, fields)
         self.ouf.writecontent(docpath, contentstr)
 
         # Close files and delete zip file
