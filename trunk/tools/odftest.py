@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Mon Jun 29 00:39:24 2009 on violator
-# update count: 197
+# Last modified Mon Jun 29 21:30:55 2009 on violator
+# update count: 201
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -51,7 +51,7 @@ cmd.renamefile(docpath, doczippath)
 contentstr = ouf.extractcontent(doczippath)
 contentstr = ouf.setuserfields(contentstr, fields)
 
-#print ouf.getfields(contentstr)
+print ouf.getuserfields(contentstr)
 
 ouf.writecontent(docpath, contentstr)
 
