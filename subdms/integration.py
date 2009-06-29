@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Mon Jun 29 21:51:17 2009 on violator
-# update count: 679
+# Last modified Mon Jun 29 22:32:19 2009 on violator
+# update count: 680
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -89,7 +89,7 @@ class docinteg:
     
     def texfieldpattern(self, fieldkey, fieldcontent=".*"):
         """ return field code string for tex file. """
-        return re.compile(".newcommand .."+fieldcode+". ."+fieldcontent+".")
+        return re.compile(".newcommand .."+fieldkey+". ."+fieldcontent+".")
 
     def texfieldcode(self, fieldkey, fieldcontent):
         return "\\newcommand {\\"+fieldkey+"} {"+fieldcontent+"}"
