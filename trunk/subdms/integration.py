@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Mon Jun 29 00:51:57 2009 on violator
-# update count: 677
+# Last modified Mon Jun 29 21:51:17 2009 on violator
+# update count: 679
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -137,10 +137,8 @@ class docinteg:
     def filetypechooser(self, docnamelist, fields):
         """ Call function depending on file type. """
         if self.conf.isodf(docnamelist):
-            print "odf: ", docnamelist[-1]
             self.odffieldupdate(docnamelist, fields)
         elif self.conf.istex(docnamelist):
-            print "tex: ", docnamelist[-1]
             self.texfieldupdate(docnamelist, fields)
 
     def const_fields(self, docnamelist, doctitle, dockeywords, author, status):
@@ -148,7 +146,6 @@ class docinteg:
         keys = self.conf.fields.keys()
         keys.sort() 
         rdict = {}
-        print keys
         # Name the document info
         cat = docnamelist[0]
         proj = docnamelist[1]
