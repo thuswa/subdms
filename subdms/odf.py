@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Mon Jun 29 00:41:51 2009 on violator
-# update count: 718
+# Last modified Mon Jun 29 21:30:01 2009 on violator
+# update count: 725
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -71,7 +71,7 @@ class odfuserfields:
         for userfields in ufds:
             for userfield in userfields.childNodes:
                 userkey = userfield.attributes.getNamedItem('text:name').value
-                userfield.setAttribute('office:value',fields[userkey])
+                userfield.setAttribute('office:string-value',fields[userkey])
                 userfield.setAttribute('office:value-type', 'string')
 
         # Write back dom tree to string and unlink        
