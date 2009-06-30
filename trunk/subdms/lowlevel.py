@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Sun Jun 28 00:30:52 2009 on violator
-# update count: 625
+# Last modified Tue Jun 30 13:34:43 2009 on violator
+# update count: 653
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -68,16 +68,15 @@ class config:
         self.svnkeywords=string.join(["LastChangedDate", \
                                       "LastChangedRevision", "Id", \
                                       "Author"])
-        self.fields = {'subdmstitle' : "", 'subdmsdocid' : "", \
-                       'subdmsissue' : "", 'subdmsstatus' : "", \
-                       'subdmsrdate' : "", 'subdmsauthor' : "", \
-                       'subdmsproj'  : "", 'subdmskeyw' : ""}
+        self.fields = ['subdmsauthor', 'subdmsdocid', 'subdmsissue', \
+                       'subdmskeyw', 'subdmsproj', 'subdmsrdate', \
+                       'subdmsstatus', 'subdmstitle']
 
         self.odfcontent = "content.xml"
 
         self.vc = ['view', 'copy']
         self.ro = ['read', 'only']
-        
+
         # Internal Trigger patterns
         self.statchg = 'statuschange'.encode("hex")
         self.newdoc = 'newdocument'.encode("hex")
@@ -108,8 +107,29 @@ class config:
 
     def gettemplate(self, tmpltype):
         """ Get default template. """
-        return self.conf.get("Template", tmpltype)
+        tmpls = {'odt' : 'default.odt', 'txt' : 'default.txt', \
+                 'tex' : 'default.tex' }
+        return tmpls[tmpltype]
 
+    def getfilefilter(self):
+        """ Get file filter for file dialog. """
+        # define filter strings
+        usrfilterstr = self.conf.get("User Defined", "filetypes")
+        stdfilterstr = "Open Document Format (.odp, .ods, .odt)" \
+                       "(*.odp *.ods *.odt);;" \
+                       "Text (.txt, .tex) (*.txt *.tex);;" \
+                       "Portable Document Format (pdf) (*.pdf);;" \
+                       "Compressed (zip) (*.zip);;"
+
+        # if no user defined file types return standard filter string
+        if not usrfilterstr:
+            return stdfilterstr
+        else:
+            usrdisp = "." + usrfilterstr.replace(" "," .")
+            usrfilter = "*" + usrdisp.replace(" "," *")
+            return stdfilterstr + "User Defined (%s) (%s);;" % \
+                   (usrdisp, usrfilter)
+        
 ################################################################################
 
 class linkname:
