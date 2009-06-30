@@ -1,17 +1,22 @@
 $Id$
-Last modified Tue Jun 30 23:16:06 2009 on violator
-update count: 34
+Last modified Tue Jun 30 23:24:49 2009 on violator
+update count: 35
 
 *2009-06-30* Version 0.3.0 Released!
   * ODF-support!!! Subdms now supports the Open Document Format.
-  * User can define additional file formats to be handeld by Subdms.  
+  * User can define additional file formats to be handled by Subdms.  
   * Included check of server-side at client start-up.	     
   * Added a tab in the document info dialog where the revision history is shown.
   * Added set document to obsolete option.    
 
 "Mom, it supports ODF!!!" Yes the ODF-support is really something to write 
 home about and is the big thing in this release. The default .odt template
-shows what is possible in terms of how ODF-documents are integrated ith Subdms.
+shows what is possible in terms of how ODF-documents are integrated with Subdms.
+
+*Known problems: *
+ * Tex-file document integration does not work for non us-ascii characters. So 
+   avoid using non us-ascii in title, project name, document types and 
+   keywords for now.
 
 *2009-05-06* Version 0.2.0 Released!
 
