@@ -1,8 +1,8 @@
 $Id$
-Last modified Tue Jun 30 23:24:49 2009 on violator
-update count: 35
+Last modified Wed Jul  1 01:19:32 2009 on violator
+update count: 36
 
-*2009-06-30* Version 0.3.0 Released!
+*2009-07-01* Version 0.3.0 Released!
   * ODF-support!!! Subdms now supports the Open Document Format.
   * User can define additional file formats to be handled by Subdms.  
   * Included check of server-side at client start-up.	     
