@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Tue Jun 30 12:53:47 2009 on violator
-# update count: 687
+# Last modified Tue Jun 30 14:23:15 2009 on violator
+# update count: 689
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -144,14 +144,13 @@ class docinteg:
         proj = docnamelist[1]
 
         # Populate the fields dictionary
-        rdict[keys[0]] = author
-        rdict[keys[1]] = self.link.const_docid(docnamelist)
-        rdict[keys[2]] = docnamelist[-2]
-        rdict[keys[3]] = dockeywords
-        rdict[keys[4]] = self.db.getprojname(cat, proj)
-        rdict[keys[5]] = ""
-        rdict[keys[6]] = status
-        rdict[keys[7]] = doctitle
-
+        rdict[self.keys[0]] = author
+        rdict[self.keys[1]] = self.link.const_docid(docnamelist)
+        rdict[self.keys[2]] = docnamelist[-2]
+        rdict[self.keys[3]] = dockeywords
+        rdict[self.keys[4]] = self.db.getprojname(cat, proj)
+        rdict[self.keys[5]] = ""
+        rdict[self.keys[6]] = status
+        rdict[self.keys[7]] = doctitle
 
         return rdict
