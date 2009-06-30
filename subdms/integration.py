@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Mon Jun 29 22:32:19 2009 on violator
-# update count: 680
+# Last modified Tue Jun 30 12:53:47 2009 on violator
+# update count: 687
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -42,6 +42,7 @@ class docinteg:
         self.dt = epoch.dtime()
         self.link = lowlevel.linkname()
         self.ouf = odf.odfuserfields()
+        self.keys = self.conf.fields 
         
     def setallfields(self, docnamelist, doctitle, dockeywords, author, status):
         """ Update all document fields. """
@@ -52,37 +53,30 @@ class docinteg:
             
     def updatetitle(self, docnamelist, doctitle):
         """ Update the title field. """
-        keys = self.conf.fields.keys()
-        keys.sort()
-        fields = {keys[7] : doctitle}
+        fields = {self.keys[7] : doctitle}
 
         # Choose action depending on filetype
         self.filetypechooser(docnamelist, fields)
         
     def updatekeywords(self, docnamelist, dockeywords):
         """ Update the keywords field. """
-        keys = self.conf.fields.keys() 
-        keys.sort()
-        fields = {keys[3] : dockeywords}
+        fields = {self.keys[3] : dockeywords}
         
         # Choose action depending on filetype
         self.filetypechooser(docnamelist, fields)
             
     def releaseupdate(self, docnamelist):
         """ Update the release date and status field. """
-        keys = self.conf.fields.keys() 
-        keys.sort()
-        fields = {keys[6] : self.conf.statuslist[4], \
-                  keys[5] : self.dt.datestamp()}
+        fields = {self.keys[6] : self.conf.statuslist[4], \
+                  self.keys[5] : self.dt.datestamp()}
 
         # Choose action depending on filetype
         self.filetypechooser(docnamelist, fields)
 
     def obsoleteupdate(self, docnamelist):
         """ Update the release date and status field. """
-        keys = self.conf.fields.keys() 
-        keys.sort()
-        fields = {keys[6] : self.conf.statuslist[5]+" "+self.dt.datestamp()}
+        fields = {self.keys[6] : self.conf.statuslist[5]+" "+ \
+                  self.dt.datestamp()}
 
         # Choose action depending on filetype
         self.filetypechooser(docnamelist, fields)
@@ -143,8 +137,7 @@ class docinteg:
 
     def const_fields(self, docnamelist, doctitle, dockeywords, author, status):
         """ Constuct the fields dictionary. """
-        keys = self.conf.fields.keys()
-        keys.sort() 
+ 
         rdict = {}
         # Name the document info
         cat = docnamelist[0]
