@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Tue Jun 30 13:34:43 2009 on violator
-# update count: 653
+# Last modified Tue Jun 30 14:20:04 2009 on violator
+# update count: 654
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -103,8 +103,13 @@ class config:
         
     def geteditor(self, filetype):
         """ Get appropriate editor for filetype. """
-        return self.conf.get("Editor", filetype)
-
+        try:
+            editor = self.conf.get("Editor", filetype)
+        except:
+            editor = self.conf.get("Editor", "default")
+        finally:
+            return editor
+    
     def gettemplate(self, tmpltype):
         """ Get default template. """
         tmpls = {'odt' : 'default.odt', 'txt' : 'default.txt', \
