@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Tue Jun 30 13:31:51 2009 on violator
-# update count: 1318
+# Last modified Tue Jun 30 23:53:37 2009 on violator
+# update count: 1319
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -302,6 +302,13 @@ class ClientUi(QtGui.QMainWindow):
                                        "not be created unless the current "\
                                        "issue has first been released.")
         else:
+            confirm = QtGui.QMessageBox.question (None, \
+                                            'Confirm New Issue', \
+                                            'Really create a new issue of ' \
+                                            'this document?', \
+                                            QtGui.QMessageBox.Yes, \
+                                            QtGui.QMessageBox.No)
+
             if confirm == QtGui.QMessageBox.Yes:
                 message = self.doc.newissue(docnamelist)
                 self.ui.statusbar.showMessage(message, 1500)
