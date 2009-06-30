@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Tue Jun 30 14:20:04 2009 on violator
-# update count: 654
+# Last modified Wed Jul  1 01:15:46 2009 on violator
+# update count: 659
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -192,9 +192,10 @@ class linkname:
 
     def const_doczippath(self, docnamelist):
         """ Construct the path to the zip document. """
-        docnamelist[-1] = 'zip'
-        return os.path.join(self.const_checkoutpath(docnamelist), \
-                                self.const_docfname(docnamelist))
+        tmplist = docnamelist[:]
+        tmplist[-1]= 'zip'
+        return os.path.join(self.const_checkoutpath(tmplist), \
+                                self.const_docfname(tmplist))
 
     def const_caturl(self, category):
         """ Construct the category url. """
