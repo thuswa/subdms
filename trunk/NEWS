@@ -1,6 +1,9 @@
 $Id$
-Last modified Wed Jul  1 13:16:31 2009 on violator
-update count: 37
+Last modified Wed Jul  1 22:54:47 2009 on violator
+update count: 39
+
+*2009-07-01* Version 0.3.1 Released! 
+  * Fixed documentation
 
 *2009-07-01* Version 0.3.0 Released!
   * ODF-support!!! Subdms now supports the Open Document Format.
