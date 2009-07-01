@@ -1,0 +1,86 @@
+<ui version="4.0" >
+ <class>Commit_Dialog</class>
+ <widget class="QDialog" name="Commit_Dialog" >
+  <property name="windowModality" >
+   <enum>Qt::ApplicationModal</enum>
+  </property>
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>362</width>
+    <height>175</height>
+   </rect>
+  </property>
+  <property name="focusPolicy" >
+   <enum>Qt::ClickFocus</enum>
+  </property>
+  <property name="windowTitle" >
+   <string>Commit Changes</string>
+  </property>
+  <property name="modal" >
+   <bool>true</bool>
+  </property>
+  <widget class="QDialogButtonBox" name="Commit_Changes_Confirm" >
+   <property name="geometry" >
+    <rect>
+     <x>10</x>
+     <y>140</y>
+     <width>341</width>
+     <height>32</height>
+    </rect>
+   </property>
+   <property name="orientation" >
+    <enum>Qt::Horizontal</enum>
+   </property>
+   <property name="standardButtons" >
+    <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_2" >
+   <property name="geometry" >
+    <rect>
+     <x>10</x>
+     <y>20</y>
+     <width>141</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text" >
+    <string>Commit Message:</string>
+   </property>
+  </widget>
+  <widget class="QPlainTextEdit" name="commit_message" >
+   <property name="geometry" >
+    <rect>
+     <x>10</x>
+     <y>40</y>
+     <width>341</width>
+     <height>81</height>
+    </rect>
+   </property>
+  </widget>
+ </widget>
+ <tabstops>
+  <tabstop>Commit_Changes_Confirm</tabstop>
+ </tabstops>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>Commit_Changes_Confirm</sender>
+   <signal>rejected()</signal>
+   <receiver>Commit_Dialog</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>180</x>
+     <y>115</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>180</x>
+     <y>68</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>
