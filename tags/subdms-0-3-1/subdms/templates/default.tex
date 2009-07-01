@@ -1,0 +1,119 @@
+% $Id$
+% Last modified Fri May  1 00:01:22 2009 on violator
+% update count: 230
+
+\newcommand {\subdmstitle} {} 
+\newcommand {\subdmsdocid} {} 
+\newcommand {\subdmsissue} {} 
+\newcommand {\subdmsstatus} {} 
+\newcommand {\subdmsrdate} {}
+\newcommand {\subdmsauthor}  {}
+\newcommand {\subdmsproj} {}
+\newcommand {\subdmskeyw} {}
+
+\documentclass[11pt,a4paper]{report}
+\usepackage[latin1]{inputenc}
+% allows for temporary adjustment of side margins
+\usepackage{chngpage}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+
+\addtolength{\oddsidemargin}{-1.5cm}
+\addtolength{\textwidth}{3cm}
+\addtolength{\topmargin}{-3cm}
+%%%\addtolength{\hoffset}{-1cm}
+\addtolength{\textheight}{3cm}
+
+\begin{document}
+\pagestyle{empty}
+%Header
+\begin{adjustwidth}[]{-0.5cm}{0cm}
+  \begin{tabular*}{1.1\textwidth}{@{\extracolsep{\fill}} l l l l}
+    Document Id:                &              &   & \\
+    \subdmsdocid                &              &   & \\ 
+    Release date:               & Issue:       & Status:                   & \\
+    \subdmsrdate                & \subdmsissue & \subdmsstatus             & \\
+    \hline \\
+  \end{tabular*}\\
+\end{adjustwidth}
+\bigskip
+\bigskip
+\bigskip
+\bigskip
+\bigskip
+\bigskip
+\begin{adjustwidth}[]{-0.5cm}{0cm}
+  {\Large
+    \begin{tabular*}{1.1\textwidth}{@{\extracolsep{\fill}} l }
+      \textsf{\textbf{PROJECT}}\\
+      \subdmsproj\\
+    \end{tabular*}\\
+  }
+\end{adjustwidth}
+\bigskip
+\bigskip
+\bigskip
+\bigskip
+\bigskip
+\bigskip
+\bigskip
+\bigskip
+\bigskip
+\bigskip
+\bigskip
+\bigskip
+\bigskip
+\bigskip
+\bigskip
+\bigskip
+\bigskip
+\bigskip
+\begin{adjustwidth}[]{-0.5cm}{0cm}
+  {\Large
+    \begin{tabular*}{1.1\textwidth}{@{\extracolsep{\fill}} l }
+      \textsf{\textbf{TITLE}}\\
+      \subdmstitle\\
+    \end{tabular*}\\
+  }
+\end{adjustwidth}
+\bigskip
+\bigskip
+\bigskip
+\bigskip
+\bigskip
+\bigskip
+\bigskip
+\bigskip
+\bigskip
+\bigskip
+\bigskip
+\bigskip
+\bigskip
+\bigskip
+\begin{adjustwidth}[]{-0.5cm}{0cm}
+  \begin{tabular*}{1.1\textwidth}{@{\extracolsep{\fill}} l }
+    \textsf{\textbf{AUTHOR}}\\
+    \subdmsauthor\\
+  \end{tabular*}\\
+\end{adjustwidth}
+\bigskip
+\bigskip
+\bigskip
+\bigskip
+\bigskip
+\bigskip
+\bigskip
+\bigskip
+\bigskip
+\begin{adjustwidth}[]{-0.5cm}{0cm}
+  \begin{tabular*}{1.1\textwidth}{@{\extracolsep{\fill}} l }
+    \normalsize{\textsf{\textbf{Keywords}}}\\
+    \subdmskeyw\\
+  \end{tabular*}\\
+\end{adjustwidth}
+
+%\cc{Cclist} 
+%\ps{adding a postscript} 
+%\encl{list of enclosed material} 
+\end{document}
