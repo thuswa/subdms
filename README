@@ -1,6 +1,6 @@
 $Id$
-Last modified Sat May  2 12:11:44 2009 on violator
-update count: 103
+Last modified Wed Jul  1 22:51:17 2009 on violator
+update count: 106
 
 Subdms - Subversion Based Document Management System
 ####################################################
@@ -140,8 +140,21 @@ subdmsauthor	  Author
 subdmsproj	  Project name
 subdmskeyws	  Document keywords
 
-For now only .tex files are supported. For .tex files you define the fields as 
-new commands in the top of your document, as seen below: 
+ODF-Files
+---------
+Document integration for ODF-files i.e. .odt, .ods, and .odp files is done by 
+Subdms setting the above fields. See the default .odt template document for an 
+example. If you want document integration to work with your existing documents 
+that that you add to the DMS you have to manually define these fields in your 
+document before you add them. 
+
+Once you have defined the fields you can use them as normal fields, inserting 
+them wherever you like in the document. 
+
+TeX-Files
+---------
+For .tex files you define the fields as new commands in the top of your 
+document, as seen below: 
 
 \newcommand {\subdmstitle} {} 
 \newcommand {\subdmsdocid} {} 
