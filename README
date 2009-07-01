@@ -1,6 +1,6 @@
 $Id$
-Last modified Wed Jul  1 22:51:17 2009 on violator
-update count: 106
+Last modified Wed Jul  1 23:05:04 2009 on violator
+update count: 108
 
 Subdms - Subversion Based Document Management System
 ####################################################
@@ -101,6 +101,15 @@ Note: There is a Right-click menu available that corresponds to the "Tools"
     menu as "New issue". As with the other actions, the document in question 
     must be selected in the document list. Note that this action only works on 
     documents with status "released".  
+
+12. Obsolete Document. The last entry in the "Tools" menu is this option. 
+    Whatever the current status of the document, the user can always choose to
+    set the document status to obsolete. To be on the safe side the user has to
+    confirm this action via a pop-up dialog box pressing the "Yes" button.
+    Hopefully the concept of and obsolete document is obvious to everyone. 
+    It means that the vaildity of the document and the information within it 
+    has expired. Its the final destination for a document, you can not change
+    the status of an obsolete document nor can you base a new issue on it.
 
 IV. Document list
 -----------------
