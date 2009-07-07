@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # $Id$
-# Last modified Wed Jul  1 01:15:46 2009 on violator
-# update count: 659
+# Last modified Tue Jul  7 20:00:26 2009 on violator
+# update count: 668
 # -*- coding:  utf-8 -*-
 #
 # subdms - A document management system based on subversion.
@@ -26,6 +26,8 @@ import pysvn
 import shutil
 import string
 import subprocess
+#import win32api
+#import win32con
 
 import database
 
@@ -271,6 +273,22 @@ class command:
     def rmtree(self, path):
         """ Delete directory tree recursively. """
         shutil.rmtree(path)
+
+#    def rmtree(self, path):
+#        """
+#        Delete directory tree recursively.
+#        Windows OS version, checks if file is read-only 
+#        """
+#        retry = True
+#        while retry:
+#            retry = False
+#            try:
+#                shutil.rmtree(path)
+#            except exceptions.WindowsError, e:
+#                if e.winerror == 5: # No write permission
+#                    win32api.SetFileAttributes(path, \
+#                                               win32con.FILE_ATTRIBUTE_NORMAL)
+#                    retry = True
 
     def setreadonly(self, filepath):
         """ Set file to read-only. """
