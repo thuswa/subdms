@@ -1,8 +1,8 @@
 #!/usr/bin/env python
-# $Id$
-# Last modified Sat May  2 12:23:08 2009 on violator
-# update count: 602
 # -*- coding:  utf-8 -*-
+# $Id$
+# Last modified Wed Jul  8 22:46:56 2009 on violator
+# update count: 603
 #
 # subdms - A document management system based on subversion.
 # Copyright (C) 2009  Albert Thuswaldner
