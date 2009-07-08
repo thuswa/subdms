@@ -1,8 +1,8 @@
 #!/bin/bash
 # -*- coding:  utf-8 -*-
 # $Id$
-# Last modified Wed Jul  8 22:50:37 2009 on violator
-# Update count: 115
+# Last modified Wed Jul  8 23:21:08 2009 on violator
+# Update count: 140
 #
 # subdms - A document management system based on subversion.
 # Copyright (C) 2009  Albert Thuswaldner
@@ -20,9 +20,12 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-pyuic4 ../ui/about.ui > ../subdms/aboutui.py
-pyuic4 ../ui/commit.ui > ../subdms/commitui.py
-pyuic4 ../ui/createdocument.ui > ../subdms/createdocumentui.py
-pyuic4 ../ui/createproj.ui > ../subdms/createprojui.py
-pyuic4 ../ui/documentinfo.ui > ../subdms/documentinfoui.py
-pyuic4 ../ui/mainwindow.ui > ../subdms/mainwindow.py
+SCRIPT=`which $0`
+CWD=`dirname $SCRIPT`/..
+ 
+pyuic4 $CWD/ui/about.ui > $CWD/subdms/aboutui.py
+pyuic4 $CWD/ui/commit.ui > $CWD/subdms/commitui.py
+pyuic4 $CWD/ui/createdocument.ui > $CWD/subdms/createdocumentui.py
+pyuic4 $CWD/ui/createproj.ui > $CWD/subdms/createprojui.py
+pyuic4 $CWD/ui/documentinfo.ui > $CWD/subdms/documentinfoui.py
+pyuic4 $CWD/ui/mainwindow.ui > $CWD/subdms/mainwindow.py
