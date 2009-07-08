@@ -1,7 +1,7 @@
 #!/bin/bash
 # $Id$
-# Last modified Tue Apr 28 13:37:21 2009 on violator
-# Update count: 108
+# Last modified Tue Jul  7 21:56:36 2009 on violator
+# Update count: 110
 #
 # Created 2009-01-29, Albert Thuswaldner
 
@@ -47,6 +47,9 @@ while true; do
 	  
 	  # Tagging version
 	  svn copy $REPODIR $TAGDIR -m "$MESSAGE"
+
+	  # Regenerate ui
+	  tools/generateui
 
 	  # bulid source distribution and register 
 	  python ./setup.py sdist
