@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 # -*- coding:  utf-8 -*-
 # $Id$
-# Last modified Wed Jul  8 22:42:36 2009 on violator
-# update count: 690
+# Last modified Fri Jul 10 00:00:25 2009 on violator
+# update count: 722
 #
 # subdms - A document management system based on subversion.
 # Copyright (C) 2009  Albert Thuswaldner
@@ -20,7 +20,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import fileinput
+import codecs
 import string
 import re
 
@@ -86,39 +86,47 @@ class docinteg:
         return re.compile(".newcommand .."+fieldkey+". ."+fieldcontent+".")
 
     def texfieldcode(self, fieldkey, fieldcontent):
-        return "\\newcommand {\\"+fieldkey+"} {"+fieldcontent+"}"
+        return "newcommand {\\"+fieldkey+"} {"+fieldcontent+"}"
 
-    def texfieldupdate(self, docnamelist, fields):
+    def texfieldupdate(self, docnamelist, fields):           
         """ Update field codes in tex document. """
         docpath = self.link.const_docpath(docnamelist)
-        for line in fileinput.FileInput(docpath, inplace=1):
-            for key,value in fields.iteritems():
-                fieldptrn = self.texfieldpattern(key)
-                if fieldptrn.match(line):
-                    old_line = line
-                    line = self.texfieldcode(key, value.replace("\n", r"\\"))
-            # Fix for un-codeble characters        
-            try:                
-                print line.replace("\n","")
-            except:
-                print old_line.replace("\n","")
+        doctmppath = self.link.const_doctmppath(docnamelist)
+
+        # Rename tex file
+        self.cmd.renamefile(docpath, doctmppath)
+
+        # Update fields and write contents back to tex file
+        outfile = codecs.open(docpath, encoding='utf-8', mode='w')
+        contentstr = open(doctmppath).read()
+        for key,value in fields.iteritems():
+            fieldptrn = self.texfieldpattern(key)
+            newfield = self.texfieldcode(key, value.replace("\n", r"\\"))
+            contentstr = re.sub(fieldptrn, newfield, contentstr)
+
+        outfile.write(contentstr)
+
+        # Close files and delete tmp file
+        outfile.close()
+        self.cmd.rm(doctmppath)
+
 
     def odffieldupdate(self, docnamelist, fields):           
         """ Update field codes in odf document. """
         docpath = self.link.const_docpath(docnamelist)
-        doczippath = self.link.const_doczippath(docnamelist)
+        doctmppath = self.link.const_doctmppath(docnamelist)
 
         # Rename odf file
-        self.cmd.renamefile(docpath, doczippath)
+        self.cmd.renamefile(docpath, doctmppath)
 
         # Update fields and write contents back to odf file
-        contentstr = self.ouf.extractcontent(doczippath)
+        contentstr = self.ouf.extractcontent(doctmppath)
         contentstr = self.ouf.setuserfields(contentstr, fields)
         self.ouf.writecontent(docpath, contentstr)
 
-        # Close files and delete zip file
+        # Close files and delete tmp file
         self.ouf.closefiles()
-        self.cmd.rm(doczippath)
+        self.cmd.rm(doctmppath)
         
     def dodocinteg(self, docnamelist):
         """ Check if document integration should be done. """

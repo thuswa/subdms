@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 # -*- coding:  utf-8 -*-
 # $Id$
-# Last modified Wed Jul  8 22:43:59 2009 on violator
-# update count: 669
+# Last modified Thu Jul  9 21:24:10 2009 on violator
+# update count: 672
 #
 # subdms - A document management system based on subversion.
 # Copyright (C) 2009  Albert Thuswaldner
@@ -192,10 +192,10 @@ class linkname:
         return os.path.join(self.const_checkoutpath(docnamelist), \
                                 self.const_docfname(docnamelist))
 
-    def const_doczippath(self, docnamelist):
-        """ Construct the path to the zip document. """
+    def const_doctmppath(self, docnamelist):
+        """ Construct the path to the tmp document. """
         tmplist = docnamelist[:]
-        tmplist[-1]= 'zip'
+        tmplist[-1]= 'tmp'
         return os.path.join(self.const_checkoutpath(tmplist), \
                                 self.const_docfname(tmplist))
 
