@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 # -*- coding:  utf-8 -*-
 # $Id$
-# Last modified Wed Jul  8 22:42:50 2009 on violator
-# update count: 1320
+# Last modified Thu Jul 16 01:10:55 2009 on violator
+# update count: 1331
 #
 # subdms - A document management system based on subversion.
 # Copyright (C) 2009  Albert Thuswaldner
@@ -387,7 +387,8 @@ class documentDialog(QtGui.QDialog):
         self.doc = frontend.document()
         self.link = lowlevel.linkname()
         self.conf = lowlevel.config()
-        self.addfile = addFileDialog()
+        self.addfile = addFileDialog(self.conf.getfilefilter())
+
         QtGui.QDialog.__init__(self, parent)
         self.ui = Ui_New_Document_Dialog()
         self.ui.setupUi(self)
@@ -511,13 +512,15 @@ class documentDialog(QtGui.QDialog):
 ################################################################################
         
 class addFileDialog(QtGui.QFileDialog):
-    def __init__(self, parent=None):
-        self.conf = lowlevel.config()
+    def __init__(self, filterstr, parent=None):
+        """ initialize the File dialog
+        filterstr is the string defining the file types that are supported."""  
+        self.filter = filterstr
         QtGui.QFileDialog.__init__(self, parent)
-
+        
     def getfilename(self):
         return self.getOpenFileName(self, 'Select file to add',
-                                    '/home', self.conf.getfilefilter())
+                                    '/home', self.filter)
 
         
 ################################################################################
