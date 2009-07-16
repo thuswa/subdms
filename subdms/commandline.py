@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 # -*- coding:  utf-8 -*-
 # $Id$
-# Last modified Wed Jul  8 22:43:05 2009 on violator
-# update count: 64
+# Last modified Thu Jul 16 13:25:10 2009 on violator
+# update count: 92
 #
 # subdms - A document management system based on subversion.
 # Copyright (C) 2009  Albert Thuswaldner
@@ -38,6 +38,7 @@ class cli:
         self.db = database.sqlitedb()
         self.doc = frontend.document()
         self.link = lowlevel.linkname()
+        self.category = self.conf.categories[0]
         
     def parseargs(self, args):
         """ Parse the args list and start actions accordingly."""
@@ -64,18 +65,20 @@ class cli:
             
             # Get file extension and check if it is supported 
             filetype = addfilepath.rsplit('.')[-1]
-            if not filetype in self.conf.filetypes:
-                sys.exit("File extension ."+filetype+" is not supported.")
+            if not filetype in self.conf.getsupportedfiletypes():
+                sys.exit("Error: File extension ."+filetype+" is not " \
+                         "supported. \n See documentation on supported " \
+                         "file types.")
             
             # Get project and check if it exists
-            project = args[3]
-            if not self.db.projexists(project):
-                sys.exit("Project "+project+" does not exist.")
+            project = args[3].upper()
+            if not self.db.projexists(self.category, project):
+                sys.exit("Error: Project "+project+" does not exist.")
 
             # Get doctype and check if it exists
-            doctype = args[4]
-            if not doctype in self.db.getdoctypes(project):
-                sys.exit("Doctype "+doctype+" does not exist for "\
+            doctype = args[4].upper()
+            if not doctype in self.db.getdoctypes(self.category, project):
+                sys.exit("Error: Doctype "+doctype+" does not exist for "\
                          "project "+project)
 
             # Check if title is given as argument 
@@ -86,6 +89,20 @@ class cli:
 
             # Finally call adddocument     
             self.adddocument(addfilepath, filetype, project, doctype, title)
+
+        # Check if "create" is given as argument 
+#        elif args[1] == "create":
+#            acronym = args[1].upper()
+#            name = args[2]
+#            doctypes = args[3].upper().replace(" ","").rsplit(",")
+#
+#            if not acronym:
+#                sys.exit("Error: Project acronym must be given as input.")
+#            elif db.projexists(self.category, acronym):
+#                sys.exit("Error: Project "+acronym+" already exists " \
+#                         "in category "+self.category)
+#            else:
+#                self.proj.createproject(category, acronym, name, doctypes)
         else:
             print shorthelp
             
@@ -113,8 +130,8 @@ class cli:
         
         issue = '1'
         dockeywords=""
-        docnamelist = self.link.const_docnamelist(project.upper(), \
-                                                  doctype.upper(), issue, \
+        docnamelist = self.link.const_docnamelist(self.category, project, \
+                                                  doctype, issue, \
                                                  filetype)
         self.doc.adddocument(addfilepath, docnamelist, doctitle, dockeywords)
             
