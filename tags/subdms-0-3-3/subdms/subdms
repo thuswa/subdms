@@ -1,0 +1,61 @@
+#!/usr/bin/env python
+# -*- coding:  utf-8 -*-
+# $Id$
+# Last modified Wed Jul  8 22:47:15 2009 on violator
+# update count: 323
+#
+# subdms - A document management system based on subversion.
+# Copyright (C) 2009  Albert Thuswaldner
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+import sys
+from PyQt4 import QtGui
+
+from subdms import client
+from subdms import commandline
+from subdms import lowlevel
+
+if __name__ == "__main__":
+    if len(sys.argv) < 2:
+        cmd = lowlevel.command()
+        runclient = 0
+        
+        if cmd.dbexists():
+            runclient += 1
+        else:    
+            print "Error: The database file does not exist."
+
+        if cmd.repoexists():
+            runclient += 1
+        else:    
+            print "Error: The document repository does not exist."
+
+        if runclient == 2:    
+            # Start GUI
+            app = QtGui.QApplication(sys.argv)
+            clientapp = client.ClientUi()
+            clientapp.show()
+        else:
+            print "       Check the config file."   
+            print "       Initialize the server-side of subdms if this has " \
+                  "not been done." 
+            
+        sys.exit(app.exec_())
+    else:
+        # Start CLI
+        cli = commandline.cli()
+        cli.parseargs(sys.argv)
+
+        
