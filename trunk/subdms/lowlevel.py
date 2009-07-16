@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 # -*- coding:  utf-8 -*-
 # $Id$
-# Last modified Thu Jul 16 14:15:23 2009 on violator
-# update count: 686
+# Last modified Thu Jul 16 23:07:31 2009 on violator
+# update count: 687
 #
 # subdms - A document management system based on subversion.
 # Copyright (C) 2009  Albert Thuswaldner
@@ -141,10 +141,6 @@ class config:
 
     def getsupportedfiletypes(self):
         """ define the supported fileypes."""
-        print self.filetypes
-        print self.userfiletypes.split(" ")
-
-        print self.filetypes.extend(self.userfiletypes.split(" "))
         returnlist = self.filetypes
         if self.userfiletypes:
            returnlist.extend(self.userfiletypes.split(" ")) 
