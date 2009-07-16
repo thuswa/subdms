@@ -1,6 +1,13 @@
 $Id$
-Last modified Fri Jul 10 00:16:58 2009 on violator
-update count: 44
+Last modified Thu Jul 16 14:33:26 2009 on violator
+update count: 49
+
+*2009-07-16* Version 0.3.4 Released! 
+  * Updated documentation 
+
+*2009-07-16* Version 0.3.3 Released! 
+  * Fixed command-line interface regression bug
+  * Fix user defined file types option bug
 
 *2009-07-09* Version 0.3.2 Released! 
   * Fixed encoding problem with non us-ascii characters in document integration of tex-files.
