@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 # -*- coding:  utf-8 -*-
 # $Id$
-# Last modified Thu Jul  9 21:24:10 2009 on violator
-# update count: 672
+# Last modified Thu Jul 16 14:15:23 2009 on violator
+# update count: 686
 #
 # subdms - A document management system based on subversion.
 # Copyright (C) 2009  Albert Thuswaldner
@@ -57,6 +57,8 @@ class config:
         self.workpath = self.conf.get("Path", "workspace")
         self.dbpath = self.conf.get("Path", "database")
         self.doctypes = self.conf.get("Document", "type").replace(" ",",")
+
+        self.userfiletypes = self.conf.get("User Defined", "filetypes")
 
         # DMS Lists
         self.categories = ['P','T']
@@ -121,7 +123,7 @@ class config:
     def getfilefilter(self):
         """ Get file filter for file dialog. """
         # define filter strings
-        usrfilterstr = self.conf.get("User Defined", "filetypes")
+        usrfilterstr = self.userfiletypes 
         stdfilterstr = "Open Document Format (.odp, .ods, .odt)" \
                        "(*.odp *.ods *.odt);;" \
                        "Text (.txt, .tex) (*.txt *.tex);;" \
@@ -136,7 +138,18 @@ class config:
             usrfilter = "*" + usrdisp.replace(" "," *")
             return stdfilterstr + "User Defined (%s) (%s);;" % \
                    (usrdisp, usrfilter)
-        
+
+    def getsupportedfiletypes(self):
+        """ define the supported fileypes."""
+        print self.filetypes
+        print self.userfiletypes.split(" ")
+
+        print self.filetypes.extend(self.userfiletypes.split(" "))
+        returnlist = self.filetypes
+        if self.userfiletypes:
+           returnlist.extend(self.userfiletypes.split(" ")) 
+        return returnlist
+
 ################################################################################
 
 class linkname:
