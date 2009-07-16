@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 # -*- coding:  utf-8 -*-
 # $Id$
-# Last modified Thu Jul 16 23:01:37 2009 on violator
-# update count: 187
+# Last modified Fri Jul 17 00:48:30 2009 on violator
+# update count: 249
 #
 # subdms - A document management system based on subversion.
 # Copyright (C) 2009  Albert Thuswaldner
@@ -40,6 +40,7 @@ class cli:
         self.db = database.sqlitedb()
         self.doc = frontend.document()
         self.proj = frontend.project()
+        self.state = frontend.docstate()
         self.link = lowlevel.linkname()
         self.category = self.conf.categories[0]
 
@@ -59,12 +60,14 @@ class cli:
         elif args[1] == "create":
             self.createaction(args)
         elif args[1] == "list":
+            # Check no of arguments
+            self.checknoarg(args, 3, 3)
             if args[2] == "d":
-                print "d"
+                self.listdocaction()
             elif args[2] == "p":
                 print "p"
             elif args[2] == "t":
-                print "t"
+                self.listtmplaction()
         else:
             print self.shorthelp
             
@@ -185,12 +188,31 @@ class cli:
             print doctypes
             self.proj.createproject(self.category, acronym, name, doctypes)
 
-    def listdocaction(self, args):
+    def listdocaction(self):
+        """ List the existing documents. """
+        self.doclistheader()
+        self.listdocuments(self.db.getalldocs())
+
+    def listprojaction(self):
         return 0
-    def listprojaction(self, args):
-        return 0
-    def listtmplaction(self, args):
-        return 0
+
+    def listtmplaction(self):
+        """ List the existing templates. """
+        self.doclistheader()
+        self.listdocuments(self.db.getalltmpls())        
+
+    def listdocuments(self, docs):
+        """ List the existing documents. """
+        for doc in docs:
+            docnamelist = list(doc[1:7])
+            state = self.state.getstate(docnamelist)[0]
+            docid = self.link.const_docid(docnamelist)
+            title = doc[7].replace(u"\n" , u" || ")
+            doctype = doc[6]
+            issue = doc[5]
+            status = doc[8]
+            print "%2s, %23s, %37s, %5s, %6s, %9s" % (state, docid, title, \
+                  doctype, issue, status)
 
     def checknoarg(self, args, minarg, maxarg):
         """Check for valid number of arguments.  """
@@ -199,3 +221,18 @@ class cli:
         
         if len(args) < minarg:
             sys.exit("To few arguments. "+self.shorthelp)  
+
+    def doclistheader(self):
+        """ header for document list print out. """
+        print " S       Document Id                    Document Title       " \
+              "       Type   Issue     Status   "
+        print "-- ------------------------ ---------------------------------" \
+              "----- ------ ------- ------------"
+
+    def projlistheader(self):
+        """ header for project list print out. """
+        print " S       Document Id                    Document Title       " \
+              "       Type   Issue     Status   "
+        print "-- ------------------------ ---------------------------------" \
+              "----- ------ ------- ------------"
+
