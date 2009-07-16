@@ -1,6 +1,6 @@
 $Id$
-Last modified Wed Jul  1 23:05:04 2009 on violator
-update count: 108
+Last modified Thu Jul 16 13:23:45 2009 on violator
+update count: 117
 
 Subdms - Subversion Based Document Management System
 ####################################################
@@ -12,7 +12,8 @@ II.  How to set-up Subdms
 III. How to use
 IV.  Document list
 V.   Command-line usage
-VI.  Document Integration
+VI.  Supported File types
+VII.  Document Integration
 
 I. Goals
 --------
@@ -107,7 +108,7 @@ Note: There is a Right-click menu available that corresponds to the "Tools"
     set the document status to obsolete. To be on the safe side the user has to
     confirm this action via a pop-up dialog box pressing the "Yes" button.
     Hopefully the concept of and obsolete document is obvious to everyone. 
-    It means that the vaildity of the document and the information within it 
+    It means that the validity of the document and the information within it 
     has expired. Its the final destination for a document, you can not change
     the status of an obsolete document nor can you base a new issue on it.
 
@@ -134,8 +135,40 @@ And opens for the possibility to write scripts to automate the adding of files.
 If you enter a title, make sure the title is a string.
 If no title is given the filename without extension is set as title.
 
-VI. Document Integration
+VI. Supported file types
 ------------------------
+The following file types are supported by default:
+
+.odp  - open document presentation  
+.ods  - open document spread sheet
+.odt  - open document text
+.pdf  - portable document format
+.tex  - latex 
+.txt  - plain text
+.zip  - compressed archive	  
+
+Also if you want to define other file types which you want Subdms to handle
+add the file extensions separated with blanks in the configuration file 
+/etc/subdms/subdms.cfg:
+
+[User Defined]
+filetypes: jpg gif py 
+
+In connection to adding additional file types you might also add an appropriate
+editor/viewer for each of these types:
+
+[Editor]
+default: /usr/bin/emacs --file
+jpg: /usr/bin/gwenview
+gif: /usr/bin/krita
+py: /usr/bin/eric4
+
+If you do not specify a editor/viewer for a file type that you have added, 
+subdms will revert to trying to open the document with the default 
+viewer/editor which bin the above example means emacs. 
+
+VII. Document Integration
+-------------------------
 Subdms integrates with your documents by setting values on a number fields: 
 
 Field name        Description  
