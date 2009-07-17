@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 # -*- coding:  utf-8 -*-
 # $Id$
-# Last modified Wed Jul  8 22:43:17 2009 on violator
-# update count: 605
+# Last modified Fri Jul 17 22:14:57 2009 on violator
+# update count: 606
 #
 # subdms - A document management system based on subversion.
 # Copyright (C) 2009  Albert Thuswaldner
@@ -138,7 +138,7 @@ class sqlitedb:
     def getallprojs(self):
         """ Get complete projects table from database. """
         self.cursor.execute("select * from projlist " \
-                            "where acronym != \"TMPL\"")
+                            "where category = \"P\"")
         return self.cursor.fetchall()
 
     def getallrev(self):
