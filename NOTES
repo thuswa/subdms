@@ -1,6 +1,6 @@
 $Id$
-Last modified Wed May 13 23:43:19 2009 on violator
-update count: 21
+Last modified Fri Jul 17 12:33:51 2009 on violator
+update count: 22
 
 Subdms - Subversion Based Document Management System
 ####################################################
@@ -108,6 +108,9 @@ http://packages.opensuse-community.org/index.jsp?searchTerm=ooopy&distro=openSUS
 
 odfpy
 http://packages.opensuse-community.org/index.jsp?distro=openSUSE_110&searchTerm=odfpy
+
+pyqt apps
+http://diotavelli.net/PyQtWiki/SomeExistingApplications
 
 first attempt
 -------------
