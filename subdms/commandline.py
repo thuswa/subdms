@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 # -*- coding:  utf-8 -*-
 # $Id$
-# Last modified Fri Jul 17 00:48:30 2009 on violator
-# update count: 249
+# Last modified Fri Jul 17 23:11:51 2009 on violator
+# update count: 284
 #
 # subdms - A document management system based on subversion.
 # Copyright (C) 2009  Albert Thuswaldner
@@ -62,11 +62,11 @@ class cli:
         elif args[1] == "list":
             # Check no of arguments
             self.checknoarg(args, 3, 3)
-            if args[2] == "d":
+            if args[2] == "documents":
                 self.listdocaction()
-            elif args[2] == "p":
-                print "p"
-            elif args[2] == "t":
+            elif args[2] == "projects":
+                self.listprojaction()
+            elif args[2] == "templates":
                 self.listtmplaction()
         else:
             print self.shorthelp
@@ -105,9 +105,11 @@ class cli:
                   "of document types." 
             print
         elif args[2] == "list":
-            print "list: List projects, documents or templates."
-            print "Usage: subdms create acronym projectname doctype [title]"
-            print
+            print "list: List documents, projects or templates."
+            print "Usage:"
+            print "       1. subdms list documents"
+            print "       2. subdms list projects"
+            print "       3. subdms list templates"
             print
         else:
             """ Display help text. """
@@ -194,7 +196,11 @@ class cli:
         self.listdocuments(self.db.getalldocs())
 
     def listprojaction(self):
-        return 0
+        """ List the existing projects. """
+        self.projlistheader()
+        for proj in self.db.getallprojs():
+            print "%7s, %22s, %12s, %20s, %s" \
+                  % (proj[2], proj[3], proj[4], proj[5][0:19], proj[6])
 
     def listtmplaction(self):
         """ List the existing templates. """
@@ -223,16 +229,16 @@ class cli:
             sys.exit("To few arguments. "+self.shorthelp)  
 
     def doclistheader(self):
-        """ header for document list print out. """
+        """ Header for document list print out. """
         print " S       Document Id                    Document Title       " \
               "       Type   Issue     Status   "
         print "-- ------------------------ ---------------------------------" \
               "----- ------ ------- ------------"
 
     def projlistheader(self):
-        """ header for project list print out. """
-        print " S       Document Id                    Document Title       " \
-              "       Type   Issue     Status   "
-        print "-- ------------------------ ---------------------------------" \
-              "----- ------ ------- ------------"
+        """ Header for project list print out. """
+        print "Acronym        Description        Created by       " \
+              "Date Created           Document types"
+        print "-------  ----------------------  ------------  " \
+              "--------------------  ------------------------"
 
