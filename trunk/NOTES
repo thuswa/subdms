@@ -1,6 +1,6 @@
 $Id$
-Last modified Fri Jul 17 12:33:51 2009 on violator
-update count: 22
+Last modified Mon Jul 20 14:25:09 2009 on violator
+update count: 23
 
 Subdms - Subversion Based Document Management System
 ####################################################
@@ -97,10 +97,12 @@ title
 4.2 Simplifications
 Just to  get the system up an running, we aim for a minimum amount of features, this includes:
 - Limiting the file type to only plain text files.
-- 
+
+5. Access control
+================= 
 
 
-5. Internet search keywords:
+6. Internet search keywords:
 ========================
 search/index FSFS
 ooopy:
