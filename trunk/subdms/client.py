@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 # -*- coding:  utf-8 -*-
 # $Id$
-# Last modified Thu Jul 16 01:28:29 2009 on violator
-# update count: 1332
+# Last modified Sat Aug  1 00:50:31 2009 on violator
+# update count: 1372
 #
 # subdms - A document management system based on subversion.
 # Copyright (C) 2009  Albert Thuswaldner
@@ -72,13 +72,20 @@ class ClientUi(QtGui.QMainWindow):
         # start with most actions disabled
         self.disableactions(self.noselectedlist)
         
-        # Set column width on list object
+        # Set column width on document list 
         self.ui.documentlist.setColumnWidth(0, 40)
         self.ui.documentlist.setColumnWidth(1, 200)
         self.ui.documentlist.setColumnWidth(2, 420)
         self.ui.documentlist.setColumnWidth(3, 60)
         self.ui.documentlist.setColumnWidth(4, 60)
         self.ui.documentlist.setColumnWidth(5, 100)
+
+        # Set column width on project list 
+        self.ui.projectlist.setColumnWidth(0,  80)
+        self.ui.projectlist.setColumnWidth(1, 340)
+        self.ui.projectlist.setColumnWidth(2, 100)
+        self.ui.projectlist.setColumnWidth(3, 160)
+        self.ui.projectlist.setColumnWidth(4, 240)
 
         # Connect selection change signal to docselected action
         self.connect(self.ui.documentlist, \
@@ -99,6 +106,9 @@ class ClientUi(QtGui.QMainWindow):
                      QtCore.SIGNAL("activated()"), self.setdocumentlist)
         self.connect(self.ui.actionList_Templates, \
                      QtCore.SIGNAL("activated()"), self.settemplatelist)
+        self.connect(self.ui.actionList_Projects, \
+                     QtCore.SIGNAL("activated()"), self.setprojectlist)
+
         # Tools menu
         self.connect(self.ui.actionDocument_Info, \
                      QtCore.SIGNAL("activated()"), self.showdocinfo)
@@ -232,6 +242,23 @@ class ClientUi(QtGui.QMainWindow):
             self.ui.documentlist.setItem(n, 3, doctype)
             self.ui.documentlist.setItem(n, 4, issue)
             self.ui.documentlist.setItem(n, 5, status)
+            n += 1        
+
+    def setprojectlist(self):
+        """ List the existing projects. """
+        self.ui.projectlist.clearContents()
+        n = 0
+        for proj in db.getallprojs():
+            acronym = QtGui.QTableWidgetItem(proj[2])      
+            description = QtGui.QTableWidgetItem(proj[3])      
+            author = QtGui.QTableWidgetItem(proj[4])      
+            date = QtGui.QTableWidgetItem(proj[5][0:19])
+            doctypes = QtGui.QTableWidgetItem(proj[6])
+            self.ui.projectlist.setItem(n, 0, acronym)
+            self.ui.projectlist.setItem(n, 1, description) 
+            self.ui.projectlist.setItem(n, 2, author)
+            self.ui.projectlist.setItem(n, 3, date)
+            self.ui.projectlist.setItem(n, 4, doctypes)
             n += 1        
 
     def getselecteddoc(self):
