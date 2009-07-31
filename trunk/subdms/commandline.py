@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 # -*- coding:  utf-8 -*-
 # $Id$
-# Last modified Fri Jul 17 23:11:51 2009 on violator
-# update count: 284
+# Last modified Fri Jul 31 14:17:03 2009 on violator
+# update count: 290
 #
 # subdms - A document management system based on subversion.
 # Copyright (C) 2009  Albert Thuswaldner
@@ -49,7 +49,6 @@ class cli:
     def parseargs(self, args):
         """ Parse the args list and start actions accordingly."""
 
-
         # Display help 
         if args[1] == "help" or args[1] == "--help" or args[1] == "-h":
             self.displayhelp(args)
@@ -72,8 +71,10 @@ class cli:
             print self.shorthelp
             
     def displayhelp(self, args):
-
-        if args[2] == "add":
+        """ Display help text. """
+        if len(args) < 3:
+            self.disptophelp()
+        elif args[2] == "add":
             print "add: Add document files to the DMS."
             print "Usage: subdms add filename project doctype [title]"
             print
@@ -112,16 +113,20 @@ class cli:
             print "       3. subdms list templates"
             print
         else:
-            """ Display help text. """
-            print "usage: subdms <subcommand> [options]"
-            print "Subdms command-line client, version "+__version__
-            print "Type 'svn help <subcommand>' for help on a specific " \
-                  "subcommand."
-            print
-            print "Available subcommands:"
-            print "   add"
-            print "   create"
-            print "   list"
+            self.disptophelp()
+            
+    def disptophelp(self):
+        """ Display help about available subcommands."""
+        print "usage: subdms <subcommand> [options]"
+        print "Subdms command-line client, version "+__version__
+        print "Type 'svn help <subcommand>' for help on a specific " \
+              "subcommand."
+        print
+        print "Available subcommands:"
+        print "   add"
+        print "   create"
+        print "   list"
+
         
     def addaction(self, args):
         """ Add document from command line. """
