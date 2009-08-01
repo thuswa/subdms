@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 # -*- coding:  utf-8 -*-
 # $Id$
-# Last modified Sat Aug  1 01:43:22 2009 on violator
-# update count: 1171
+# Last modified Sat Aug  1 01:50:37 2009 on violator
+# update count: 1172
 #
 # subdms - A document management system based on subversion.
 # Copyright (C) 2009  Albert Thuswaldner
@@ -25,7 +25,7 @@ import sys
 import webbrowser
 from PyQt4 import QtCore, QtGui
 
-class Ui_HelpView(QtGui.QMainWindow):
+class helpView(QtGui.QMainWindow):
     """Window for viewing an html help file"""
 
     def __init__(self, path, caption, icons, parent=None):
