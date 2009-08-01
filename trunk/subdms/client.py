@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 # -*- coding:  utf-8 -*-
 # $Id$
-# Last modified Sat Aug  1 15:39:09 2009 on violator
-# update count: 1392
+# Last modified Sat Aug  1 20:04:15 2009 on violator
+# update count: 1393
 #
 # subdms - A document management system based on subversion.
 # Copyright (C) 2009  Albert Thuswaldner
@@ -54,7 +54,7 @@ class ClientUi(QtGui.QMainWindow):
         self.aboutdialog = aboutDialog()
         self.icons = icondict.iconDict()
         self.icons.addIconPath(self.conf.iconpath)
-        self.helpview = helpView(self.conf.helppath, 'Subdms Documentaion', \
+        self.helpview = helpView(self.conf.helppath, 'Subdms Documentation', \
                                  self.icons)
 
         self.commitdialog = commitDialog()
