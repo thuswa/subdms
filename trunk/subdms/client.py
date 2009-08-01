@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 # -*- coding:  utf-8 -*-
 # $Id$
-# Last modified Sat Aug  1 00:50:31 2009 on violator
-# update count: 1372
+# Last modified Sat Aug  1 15:39:09 2009 on violator
+# update count: 1392
 #
 # subdms - A document management system based on subversion.
 # Copyright (C) 2009  Albert Thuswaldner
@@ -24,6 +24,7 @@ from PyQt4 import QtGui
 from PyQt4 import QtCore
 
 import database
+import icondict
 import frontend 
 import lowlevel
 
@@ -33,6 +34,7 @@ from commitui import Ui_Commit_Dialog
 from createdocumentui import Ui_New_Document_Dialog
 from createprojui import Ui_New_Project_Dialog
 from documentinfoui import Ui_Document_Info_Dialog
+from helpviewui import helpView
 from mainwindow import Ui_MainWindow
 
 db = database.sqlitedb()
@@ -43,12 +45,18 @@ class ClientUi(QtGui.QMainWindow):
     def __init__(self, parent=None):
         self.doc = frontend.document()
         self.state = frontend.docstate()
+        self.conf = lowlevel.config()
         self.link = lowlevel.linkname()
         self.status = frontend.docstatus()
         QtGui.QWidget.__init__(self, parent)
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
         self.aboutdialog = aboutDialog()
+        self.icons = icondict.iconDict()
+        self.icons.addIconPath(self.conf.iconpath)
+        self.helpview = helpView(self.conf.helppath, 'Subdms Documentaion', \
+                                 self.icons)
+
         self.commitdialog = commitDialog()
         self.projdialog = projectDialog()
         self.docdialog = documentDialog('P')
@@ -128,6 +136,8 @@ class ClientUi(QtGui.QMainWindow):
         # Help menu
         self.connect(self.ui.actionAbout, QtCore.SIGNAL("activated()"), \
                      self.showaboutdialog)
+        self.connect(self.ui.actionDocumentation, \
+                     QtCore.SIGNAL("activated()"), self.showhelpview)
 
         # Right-click menu = Tools
         self.connect(self.ui.documentlist, \
@@ -187,7 +197,11 @@ class ClientUi(QtGui.QMainWindow):
     def showaboutdialog(self):
         """ Show about dialog. """
         self.aboutdialog.show()
- 
+
+    def showhelpview(self):
+        """ Show documentation view. """
+        self.helpview.show()
+
     def showdocdialog(self):
         """ Show create document. """        
         # Check if at least one project exist

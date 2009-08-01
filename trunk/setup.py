@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 # -*- coding:  utf-8 -*-
 # $Id$
-# Last modified Wed Jul  8 22:48:24 2009 on violator
-# update count: 106
+# Last modified Sat Aug  1 14:37:10 2009 on violator
+# update count: 108
 #
 # subdms - A document management system based on subversion.
 # Copyright (C) 2009  Albert Thuswaldner
@@ -57,7 +57,7 @@ setup(name='subdms',
       """,
       url='http://subdms.googlecode.com',
       packages=['subdms'],
-      package_data = {'subdms' : ['templates/*'] },
+      package_data = {'subdms' : ['docs/*', 'icons/*', 'templates/*'] },
       data_files = [(confpath, ['subdms.cfg'])],
       scripts = ['subdms/subdms', 'subdms/subdms-server', \
                  'subdms/subdms-upgrade'],
