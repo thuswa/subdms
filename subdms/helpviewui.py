@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 # -*- coding:  utf-8 -*-
 # $Id$
-# Last modified Sat Aug  1 01:50:37 2009 on violator
-# update count: 1172
+# Last modified Sat Aug  1 21:33:51 2009 on violator
+# update count: 1173
 #
 # subdms - A document management system based on subversion.
 # Copyright (C) 2009  Albert Thuswaldner
@@ -51,7 +51,7 @@ class helpView(QtGui.QMainWindow):
 
         backAct = QtGui.QAction('&Back', self)
         try:
-            backAct.setIcon(icons['helpback'])
+            backAct.setIcon(icons['go-previous'])
         except KeyError:
             pass
         tools.addAction(backAct)
@@ -64,7 +64,7 @@ class helpView(QtGui.QMainWindow):
 
         forwardAct = QtGui.QAction('&Forward', self)
         try:
-            forwardAct.setIcon(icons['helpforward'])
+            forwardAct.setIcon(icons['go-next'])
         except KeyError:
             pass
         tools.addAction(forwardAct)
@@ -77,7 +77,7 @@ class helpView(QtGui.QMainWindow):
 
         homeAct = QtGui.QAction('&Home', self)
         try:
-            homeAct.setIcon(icons['helphome'])
+            homeAct.setIcon(icons['go-home'])
         except KeyError:
             pass
         tools.addAction(homeAct)
