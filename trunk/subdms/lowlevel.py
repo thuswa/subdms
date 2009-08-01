@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 # -*- coding:  utf-8 -*-
 # $Id$
-# Last modified Sat Aug  1 15:40:08 2009 on violator
-# update count: 690
+# Last modified Sat Aug  1 20:16:03 2009 on violator
+# update count: 691
 #
 # subdms - A document management system based on subversion.
 # Copyright (C) 2009  Albert Thuswaldner
@@ -51,7 +51,8 @@ class config:
         self.tmplpath = os.path.join(self.pkgpath, "templates")
         self.iconpath = os.path.join(self.pkgpath, "icons")
         self.helppath = os.path.join(self.pkgpath, "docs/README.html")
-        
+        #/usr/share/icons/oxygen/22x22/actions/go-
+
         # DMS paths
         self.repopath = self.conf.get("Path", "repository")
         self.hookspath = os.path.join(self.repopath,"hooks") 

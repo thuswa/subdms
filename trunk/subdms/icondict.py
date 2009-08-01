@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 # -*- coding:  utf-8 -*-
 # $Id$
-# Last modified Sat Aug  1 16:01:50 2009 on violator
-# update count: 1173
+# Last modified Sat Aug  1 21:23:42 2009 on violator
+# update count: 1174
 #
 # subdms - A document management system based on subversion.
 # Copyright (C) 2009  Albert Thuswaldner
@@ -74,7 +74,7 @@ class iconDict(dict):
         """Load icon from iconPath, add to dictionary and return the icon"""
         icon = QtGui.QIcon()
         for path in self.pathList:
-            for ext in IconDict.iconExt:
+            for ext in iconDict.iconExt:
                 fileName = iconName + ext
                 pixmap = QtGui.QPixmap(os.path.join(path, fileName))
                 if not pixmap.isNull():
