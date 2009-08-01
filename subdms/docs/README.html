@@ -1,0 +1,282 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<font size=2>
+$Id$ 
+Last modified Wed Jul 29 01:25:41 2009 on violator
+update count: 227 </font>
+<hr>
+<title>Subdms documentation</title>
+</head>
+<body>
+<center>
+<h1>Subdms Documentation</h1>
+<h2>Subversion Based Document Management System</h2>
+
+<p>Written by Albert Thuswaldner<br>
+</p>
+</center>
+
+<h2>Table of Contents</h2>
+<ul>
+<ol type="I" style="list-style-type='upper-roman'" start="1">
+<li><a href="#Goals">Goals</a></li>
+<!-- <li><a href="#sysreq">System Requirements</a> -->
+<li><a href="#Setup">How to set-up Subdms</a></li>
+<li><a href="#Howto">How to use</a>
+<li><a href="#Doclist">Document list</a>
+<li><a href="#Cmduse">Command-line usage</a>
+<li><a href="#Supfile">Supported File types</a>
+<li><a href="#Docinteg">Document Integration</a>
+</ul>
+
+<h2><a name="Goals"></a>I. Goals</h2>
+The goal with this project is to create a full-fledged DMS based on subversion 
+to handle the most common Office document file formats, 
+primarily Open Document Format (ODF).
+ 
+<h2><a name="Setup"></a>II. How to set-up Subdms</h2>
+<ol type="1" style="list-style-type='upper-roman'" start="1">
+<li>Install the subdms package, see INSTALL file for details.</li>
+
+<li>Have a look in the config file /etc/subdms/subdms.cfg to see where the stuff
+gets installed, and change that if you like. Also you might want to change 
+the default editors for the different file types.</li> 
+
+<li> <br>
+  <ol type="a" style="list-style-type='upper-roman'" start="1">
+    <li>If you have used version 0.1 of subdms to store a larger
+      amount of documents <br>
+      you might want to upgrade to the newer 0.2 version, see UPGRADE file for 
+      details.</li>  
+    
+    <li>With a new clean install, you have to initiate the server-side of subdms by 
+    running the following command in the terminal:<br>
+
+  <code>
+    > subdms-server<br> 
+  </code>
+    
+    This will setup the workspace directory, the database and the
+    repository.<br></li>
+</li>  
+</ol>
+<li>Run the client by typing: <br>
+  <code>
+    > subdms</li>     
+</code>
+</ol>
+
+<h2><a name="Howto"></a>III. How to use</h2>
+Using the graphical user interface:<br>
+
+Note: There is a Right-click menu available that corresponds to the "Tools" 
+      menu in the menubar.<br>
+
+<ol type="1" style="list-style-type='upper-roman'" start="1">
+<li>Start by adding a new project using the menu entry <br>
+    "Create" -> "New Project". Note that the "Project Acronym" field must be
+    filled in. The acronym would usually be a three letter abbreviation of the 
+    full project name. The full name can be entered in the "Project name" field.</li>
+
+<li> Creating a Document can be done in three ways using the Menu entry
+    "Create" -> "New Document".</li> 
+
+    a. From Template: Create document from a built-in template file
+    b. From File: adding a existing file to the DMS.
+    c. From Document: Base the document on an existing document in the DMS.
+
+<li> List all documents using Menu "View" -> "List Documents".</li> 
+
+<li> List all templates using Menu "View" -> "List Templates".</li> 
+
+<li> To get more information about a document use the "Tools" -> "Document Info".
+    In this dialog you can also edit the document title and the document 
+    keywords, Press the "Save" button to apply any changes.</li>
+
+<li> View document. Select document in the document list. 
+    Use menu entry "Tools" -> "View Document"
+    This will display a read-only copy of the document in a viewer/editor 
+    defined in: /etc/subdms/sumbdms.cfg	</li>
+   
+<li> Edit document. Select document in the document list. 
+    Use menu entry "Tools" -> "Edit Document"
+    This will launch an editor defined in /etc/subdms/sumbdms.cfg.</li>
+
+<li> Commit Changes. As with subversion or any other version control systems, 
+    local changes made to the document can be committed to the central 
+    repository. Select the document in the list and use 
+    "Tools" -> "Commit Changes", this will launch a dialog where a 
+    commit message can be entered.</li>
+
+<li> Check-in document. To remove the local copy of the document, select the 
+    document in the list and use "Tools" -> "Check-in Document". 
+    This will commit any local changes made to the document and remove 
+    the local copy from workspace.</li>
+
+<li> Release document. The "Release Document" action also resides in the "Tools"
+    Menu. Select the document you want to release in the document list. 
+    This action will check-in your document, set its to status "released", 
+    and any prior issues to status "obsolete". Both the status "released" and
+    "obsolete" means that a document issue with one of these status can only be 
+    checked out read-only, and no more changes can be made to those issues.</li>  
+ 
+<li> Create a new issue of the document. This action is found in the "Create" 
+    menu as "New issue". As with the other actions, the document in question 
+    must be selected in the document list. Note that this action only works on 
+    documents with status "released".</li>  
+
+<li> Obsolete Document. The last entry in the "Tools" menu is this option. 
+    Whatever the current status of the document, the user can always choose to
+    set the document status to obsolete. To be on the safe side the user has to
+    confirm this action via a pop-up dialog box pressing the "Yes" button.
+    Hopefully the concept of and obsolete document is obvious to everyone. 
+    It means that the validity of the document and the information within it 
+    has expired. Its the final destination for a document, you can not change
+    the status of an obsolete document nor can you base a new issue on it.</li>
+</ol>
+
+<h2><a name="Doclist"></a>IV. Document list</h2>
+The document list displays information of the created documents.<br> 
+The first unnamed column displays the state of the document as
+follows:<br>
+<ul type="None">
+<li>O = Document is Checked-out</li>    
+<li>I = Document is Checked-in </li>    
+<li>M = Document is locally modified</li>    
+</ul>
+
+<h2><a name="Cmduse"></a>V. Command-line usage</h2>
+Usage: subdms add filename project doctype [title] <br>
+<br>
+Example:<br>
+ > subdms add filename.txt myproject note "Technical note"<br>
+or:<br>
+ > subdms add "this project note.txt" myproject note<br>
+
+This command line interface makes it possible to add documents in the DMS.
+It is a compliment to add files via the graphical user interface.
+And opens for the possibility to write scripts to automate the adding of files. 
+If you enter a title, make sure the title is a string.
+If no title is given the filename without extension is set as title.
+
+<h2><a name="Supfile"></a>VI. Supported file types</h2>
+The following file types are supported by default:
+
+<ul type="None">
+  <li>.odp  - open document presentation  </li>    
+  <li>.ods  - open document spread sheet  </li>    
+  <li>.odt  - open document text          </li>    
+  <li>.pdf  - portable document format    </li> 
+  <li>.tex  - latex                       </li>    
+  <li>.txt  - plain text                  </li> 
+  <li>.zip  - compressed archive	  </li> 
+</ul>
+
+Also if you want to define other file types which you want Subdms to handle
+add the file extensions separated with blanks in the configuration file 
+/etc/subdms/subdms.cfg:<br><br>
+
+<code>
+[User Defined]<br>
+filetypes: jpg gif py<br>
+</code><br>
+In connection to adding additional file types you might also add an appropriate
+editor/viewer for each of these types:<br><br>
+
+<code>
+[Editor]<br>
+default: /usr/bin/emacs --file<br>
+jpg: /usr/bin/gwenview<br>
+gif: /usr/bin/krita<br>
+py: /usr/bin/eric4 <br> 
+</code><br>
+If you do not specify a editor/viewer for a file type that you have added, 
+subdms will revert to trying to open the document with the default 
+viewer/editor which bin the above example means emacs. 
+
+<h2><a name="Docinteg"></a>VII. Document Integration</h2>
+Subdms integrates with your documents by setting values on a number fields:<br>
+<br>
+<table width="" cellspacing="" cellpadding="" border="=">
+<tr>
+<th>Field name </th>        
+<th>Description</th>  
+</tr>
+<tr>
+<td>subdmstitle	  </td>
+<td>Document title</td>
+</tr>
+<tr>
+<td>subdmsdocid	</td>    
+<td>Document id </td>  
+</tr>
+<tr>
+<td>subdmsissue    </td>       
+<td>Document issue </td>  
+</tr>
+<tr>
+<td>subdmsstatus</td>    
+<td>Document Status</td>   
+</tr>
+<tr>
+<td>subdmsrdate  </td>          
+<td>Release date </td>  
+</tr>
+<tr>
+<td>subdmsauthor </td>	  
+<td>Author       </td>  
+</tr>
+<tr>
+<td>subdmsproj	 </td>     
+<td>Project name </td>  
+</tr>
+<tr>
+<td>subdmskeyws       </td>    
+<td>Document keywords </td>    
+</tr>
+</table> 
+<br>
+
+<h3>ODF-Files</h3>
+Document integration for ODF-files i.e. .odt, .ods, and .odp files is done by 
+Subdms setting the above fields. See the default .odt template document for an 
+example. If you want document integration to work with your existing documents 
+that that you add to the DMS you have to manually define these fields in your 
+document before you add them. 
+
+Once you have defined the fields you can use them as normal fields, inserting 
+them wherever you like in the document. 
+
+<h3>TeX-Files</h3>
+For .tex files you define the fields as new commands in the top of your 
+document, as seen below: 
+
+<ul type="None">
+  <li>\newcommand {\subdmstitle} {}  </li>    
+  <li>\newcommand {\subdmsdocid} {}  </li>    
+  <li>\newcommand {\subdmsissue} {}  </li>    
+  <li>\newcommand {\subdmsstatus} {} </li> 
+  <li>\newcommand {\subdmsrdate} {}  </li>    
+  <li>\newcommand {\subdmsauthor} {} </li> 
+  <li>\newcommand {\subdmsproj} {}   </li> 
+  <li>\newcommand {\subdmskeyw} {}   </li> 
+</ul>
+Subdms will insert the values between the empty curly brackets to define the 
+fields. <br>
+<br>
+When you edit the document you can use and position these fields where you 
+want to have them, most commonly to define the frontpage of your 
+document/report. For instance to use the title field to define the 
+project name: <br>
+<br>
+<code>
+{\Large \subdmsproj}\\  
+</code>
+<br>
+This would give you the project name in a large text.  <br>
+<br>
+See the "default.tex" template for an example how the fields have been used.<br>
+
+</body>
+</html>
