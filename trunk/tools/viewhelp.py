@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 # -*- coding:  utf-8 -*-
 # $Id$
-# Last modified Mon Aug  3 19:42:45 2009 on violator
-# update count: 135
+# Last modified Mon Aug  3 20:00:01 2009 on violator
+# update count: 145
 #
 # subdms - A document management system based on subversion.
 # Copyright (C) 2009  Albert Thuswaldner
@@ -20,5 +20,14 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from subdms import database
 
+from helpviewui import helpView
+from subdms import icondict
+from subdms import lowlevel
+
+conf = lowlevel.config()
+icons = icondict.iconDict()
+icons.addIconPath([conf.iconpath])
+helpview = helpView(conf.helppath, 'Subdms Documentation', icons)
+
+helpview.show()
