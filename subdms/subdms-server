@@ -29,6 +29,8 @@ repo = repository.repository()
 print "Initialize subdms server-side"
 print "-----------------------------"
 
+repo.checkrepotools()
+
 # create workspace directory
 cmd.createworkspace()
     

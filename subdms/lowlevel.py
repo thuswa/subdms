@@ -38,7 +38,7 @@ class config:
         """ set built-in and user defined configs """
         self.conf = ConfigParser.ConfigParser()
 
-        # Deterimine config file path dependent on which os
+        # Determine config file path dependent on which os
         if os.name == 'nt':
             conffilepath = 'c:\\Documents and Settings\\All Users\\' \
                 'Application Data\\subdms\\subdms.cfg'
@@ -62,6 +62,8 @@ class config:
         self.doctypes = self.conf.get("Document", "type").replace(" ",",")
 
         self.userfiletypes = self.conf.get("User Defined", "filetypes")
+        self.svnlook = self.conf.get("Cmd", "svnlook")
+        self.svnadmin = self.conf.get("Cmd", "svnadmin")
 
         # DMS Lists
         self.categories = ['P','T']
@@ -259,6 +261,7 @@ class command:
     
     def command_output(self, cmd):
         """ Capture a command's standard output. """
+        
         return subprocess.Popen(
             cmd.split(), stdout=subprocess.PIPE).communicate()[0]
 
@@ -277,7 +280,15 @@ class command:
     def exists(self, path):
         """ Check if path exists. """
         return os.path.exists(path)
-        
+
+    def whereis(self, program):
+        """ Check program location. """
+        for path in os.environ.get('PATH', '').split(':'):
+            if os.path.exists(os.path.join(path, program)) and \
+                    not os.path.isdir(os.path.join(path, program)):
+                return os.path.join(path, program)
+            return None        
+
     def rm(self, path):
         """ Delete file. """
         os.remove(path)
@@ -286,7 +297,7 @@ class command:
         """ Delete directory tree recursively. """
         shutil.rmtree(path)
 
-#    def rmtree(self, path):
+        #    def rmtree(self, path):
 #        """
 #        Delete directory tree recursively.
 #        Windows OS version, checks if file is read-only 
@@ -352,16 +363,16 @@ class command:
         repobasedir = os.path.dirname(self.conf.repopath)
         if not os.path.isdir(repobasedir):
             os.makedirs(repobasedir)
-        subprocess.call(['svnadmin','create', repopath])
+        subprocess.call([self.conf.svnadmin,'create', repopath])
 
 ################################################################################
         
 class svnlook:
-    def __init__(self, repo, rvn, option):
+    def __init__(self, svnlook, repo, rvn, option):
         self.cmd = command()
         self.repourl = repo
         self.revision = rvn 
-        self.svn_look = "/usr/bin/svnlook"
+        self.svn_look = svnlook
         self.option = option
         
     def svnlookcmd(self, command, repourl, option, option2):
