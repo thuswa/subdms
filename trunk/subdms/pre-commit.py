@@ -47,7 +47,7 @@ def main():
   (opts, (repos, txn)) = parser.parse_args()
 
   # Construct svnlook command
-  look = lowlevel.svnlook(repos, txn, "--transaction")      
+  look = lowlevel.svnlook(conf.svnlook, repos, txn, "--transaction")      
   # Get info about commit
   docfname = look.getdocfname()
 

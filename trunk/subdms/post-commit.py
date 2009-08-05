@@ -53,7 +53,7 @@ def main():
   statchgptrn = re.compile(conf.statchg)
   
   # Construct svnlook command 
-  look = lowlevel.svnlook(repos, rvn, "--revision")
+  look = lowlevel.svnlook(conf.svnlook, repos, rvn, "--revision")
   
   # Get info about commit
   log_message = look.getlogmsg()

@@ -20,6 +20,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import sys
+
 import lowlevel
 import frontend
 import string
@@ -32,6 +34,13 @@ class repository:
         self.proj = frontend.project()
         self.svncmd = lowlevel.svncmd()
         
+    def checkrepotools(self):
+        """Check if the needed repo tools exist."""
+        if not self.cmd.exists(self.conf.svnadmin):
+            sys.exit("Error: Can not find svnadmin command.")
+        if not self.cmd.exists(self.conf.svnlook):
+            sys.exit("Error: Can not find svnlook command.")
+
     def createrepo(self):
         """ create repsitory and layout """
         self.cmd.svncreaterepo(self.conf.repopath)            
