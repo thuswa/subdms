@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 # -*- coding:  utf-8 -*-
 # $Id$
-# Last modified Wed Jul  8 22:43:34 2009 on violator
-# update count: 1164
+# Last modified Sat Aug 15 13:42:26 2009 on violator
+# update count: 1189
 #
 # subdms - A document management system based on subversion.
 # Copyright (C) 2009  Albert Thuswaldner
@@ -81,7 +81,7 @@ class document:
       # Create document from template or existing document
       self.svncmd.server_side_copy(createfromurl, docfileurl, \
                                    "Document created")
-      self.svncmd.checkout(docurl, checkoutpath)
+      self.checkout(docnamelist)
 
       # Document integration
       if self.integ.dodocinteg(docnamelist):
@@ -98,16 +98,9 @@ class document:
                      "Commited document properties")
    
    def adddocument(self, addfilepath, docnamelist, doctitle, dockeywords):
-      """    
-      Add an existing document 
-
-      addfilepath: path to the file to be added.
-      docnamelist: list containing the building blocks of the document name
-      doctitle: document title string.
-      """
+      """ Add an existing document. """
       docname=self.link.const_docfname(docnamelist)
       docurl=self.link.const_docurl(docnamelist)
-      docfileurl=self.link.const_docfileurl(docnamelist)
       checkoutpath=self.link.const_checkoutpath(docnamelist)
       docpath=self.link.const_docpath(docnamelist)
 
@@ -133,6 +126,26 @@ class document:
 
       self.svncmd.checkin(docpath, self.conf.newdoc+ \
                           "Commited document properties.")
+
+   def addviewcopy(self, addvcpath, docnamelist):
+      """ Add a view-copy to an existing document. """
+      wascheckedout = True
+      docpath=self.link.const_docpath(docnamelist)
+      vcpath==self.link.const_viewcopyfilepath(docnamelist)
+
+      if not self.state.ischeckedout(docnamelist):
+         self.checkout(docnamelist)
+         wascheckedout = False
+
+      # Copy file to workspace
+      self.cmd.copyfile(addvcpath, vcpath)
+      self.svncmd.add(vcpath)
+
+      self.svncmd.checkin(vcpath, self.conf.newdoc+ \
+                          "Commited view-copy")
+
+      if not wascheckedout:
+         self.checkin(docnamelist)
 
    def commit(self, docnamelist, message):
       """ Commit changes on file. """
