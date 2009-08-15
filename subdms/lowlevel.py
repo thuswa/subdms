@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 # -*- coding:  utf-8 -*-
 # $Id$
-# Last modified Fri Aug 14 22:07:52 2009 on violator
-# update count: 694
+# Last modified Sat Aug 15 13:36:20 2009 on violator
+# update count: 700
 #
 # subdms - A document management system based on subversion.
 # Copyright (C) 2009  Albert Thuswaldner
@@ -169,22 +169,18 @@ class linkname:
         doclist.extend(docnamelist[-1:])
         return os.path.join(self.conf.workpath, self.const_docname(doclist))
 
-    def const_viewcopypath(self, docnamelist):
-        """ Construct the view-copy path """
-        doclist=docnamelist[:-1]
-        doclist.extend(self.conf.vc)
-        doclist.extend(docnamelist[-1:])
-        return os.path.join(self.conf.workpath, self.const_docname(doclist))
-
     def const_readonlyfilepath(self, docnamelist):
         """ Construct the read-only path """
         return os.path.join(self.const_readonlypath(docnamelist), \
                             self.const_docfname(docnamelist))
 
     def const_viewcopyfilepath(self, docnamelist):
-        """ Construct the view-copy path """
-        return os.path.join(self.const_viewcopypath(docnamelist), \
-                            self.const_docfname(docnamelist))
+        """ Construct the view-copy file path """
+        doclist=docnamelist[:-1]
+        doclist.extend(self.conf.vc)
+        doclist.extend(docnamelist[-1:])
+        return os.path.join(self.const_docpath(docnamelist), \
+                            self.const_docfname(doclist))
 
     def const_docname(self, docnamelist):
         """ Construct the document name. """
