@@ -305,6 +305,13 @@ class command:
         """ Delete directory tree recursively. """
         shutil.rmtree(path)
 
+#    def rmtree(self, path):
+#        """
+#        Delete directory tree recursively.
+#        Windows OS version
+#        """
+#        os.system("%s %s %s %s" % ("del", "/F", "/Q", path))
+
         #    def rmtree(self, path):
 #        """
 #        Delete directory tree recursively.
