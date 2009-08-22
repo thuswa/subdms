@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 # -*- coding:  utf-8 -*-
 # $Id$
-# Last modified Sat Aug 15 14:07:45 2009 on violator
-# update count: 161
+# Last modified Sat Aug 15 14:09:06 2009 on violator
+# update count: 162
 #
 # subdms - A document management system based on subversion.
 # Copyright (C) 2009  Albert Thuswaldner
@@ -19,6 +19,8 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+from subdms import repository
 
 repo = repository.repository()
 
