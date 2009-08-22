@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 # -*- coding:  utf-8 -*-
 # $Id$
-# Last modified Sat Aug 15 13:42:26 2009 on violator
-# update count: 1189
+# Last modified Sun Aug 16 12:06:33 2009 on violator
+# update count: 1190
 #
 # subdms - A document management system based on subversion.
 # Copyright (C) 2009  Albert Thuswaldner
@@ -131,7 +131,7 @@ class document:
       """ Add a view-copy to an existing document. """
       wascheckedout = True
       docpath=self.link.const_docpath(docnamelist)
-      vcpath==self.link.const_viewcopyfilepath(docnamelist)
+      vcpath=self.link.const_viewcopyfilepath(docnamelist)
 
       if not self.state.ischeckedout(docnamelist):
          self.checkout(docnamelist)
