@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 # -*- coding:  utf-8 -*-
 # $Id$
-# Last modified Sat Aug 15 22:03:59 2009 on violator
-# update count: 706
+# Last modified Sat Aug 22 12:35:20 2009 on violator
+# update count: 711
 #
 # subdms - A document management system based on subversion.
 # Copyright (C) 2009  Albert Thuswaldner
@@ -83,7 +83,7 @@ class config:
 
         self.odfcontent = "content.xml"
 
-        self.vc = ['view', 'copy']
+        self.vc = ['view', 'copy', 'pdf']
         self.ro = ['read', 'only']
 
         # Internal Trigger patterns
@@ -178,8 +178,7 @@ class linkname:
         """ Construct the view-copy file path """
         doclist=docnamelist[:-1]
         doclist.extend(self.conf.vc)
-        doclist.extend(docnamelist[-1:])
-        return os.path.join(self.const_docpath(docnamelist), \
+        return os.path.join(self.const_checkoutpath(docnamelist), \
                             self.const_docfname(doclist))
 
     def const_docname(self, docnamelist):
