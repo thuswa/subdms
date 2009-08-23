@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 # -*- coding:  utf-8 -*-
 # $Id$
-# Last modified Sat Aug 22 12:35:20 2009 on violator
-# update count: 711
+# Last modified Sun Aug 23 13:30:08 2009 on violator
+# update count: 712
 #
 # subdms - A document management system based on subversion.
 # Copyright (C) 2009  Albert Thuswaldner
@@ -471,9 +471,13 @@ class svncmd:
         self.client.checkout(url, path)
 
     def export(self, url, path):
-        """ Export form repository. """
+        """ Export from repository. """
         self.client.export(url, path, True)
 
+    def existinrepo(self, url):
+        """ Url exists. """
+        return self.client.is_url(url)
+    
     def info(self, path):
         """ return repository info. """
         return self.client.info(path)
