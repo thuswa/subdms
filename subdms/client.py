@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 # -*- coding:  utf-8 -*-
 # $Id$
-# Last modified Sat Aug  1 21:21:55 2009 on violator
-# update count: 1394
+# Last modified Sun Jun  6 10:02:19 2010 on stalker
+# update count: 1404
 #
 # subdms - A document management system based on subversion.
 # Copyright (C) 2009  Albert Thuswaldner
@@ -95,6 +95,8 @@ class ClientUi(QtGui.QMainWindow):
         self.ui.projectlist.setColumnWidth(3, 160)
         self.ui.projectlist.setColumnWidth(4, 240)
 
+        self.ui.documentlist.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
+
         # Connect selection change signal to docselected action
         self.connect(self.ui.documentlist, \
                      QtCore.SIGNAL("itemSelectionChanged()"), self.docselected)
@@ -140,9 +142,8 @@ class ClientUi(QtGui.QMainWindow):
                      QtCore.SIGNAL("activated()"), self.showhelpview)
 
         # Right-click menu = Tools
-        self.connect(self.ui.documentlist, \
-             QtCore.SIGNAL('customContextMenuRequested(const QPoint &)'), \
-                     self.showrightclickmenu)
+        self.ui.documentlist.customContextMenuRequested.connect(\
+            self.showrightclickmenu)
 
         # Connect buttons in document info dialog
         self.docinfodialog.connect(self.docinfodialog.ui.view, \
