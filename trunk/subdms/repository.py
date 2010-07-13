@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 # -*- coding:  utf-8 -*-
 # $Id$
-# Last modified Wed Jul  8 22:46:56 2009 on violator
-# update count: 603
+# Last modified Wed Jul  7 20:53:01 2010 on stalker
+# update count: 604
 #
 # subdms - A document management system based on subversion.
 # Copyright (C) 2009  Albert Thuswaldner
@@ -22,8 +22,11 @@
 
 import sys
 
-import lowlevel
+# from . import lowlevel # Python 3.X
+# from . import frontend # Python 3.X
+import lowlevel          
 import frontend
+
 import string
 
 class repository:
@@ -47,7 +50,7 @@ class repository:
         # Create category dirs in repo
         for cat in self.conf.categories:
             self.proj.createcategory(cat)
-        print "Create repository: "+self.conf.repopath
+        print("Create repository: "+self.conf.repopath)
 
     def installhooks(self):
         """ Install hooks in repository """
@@ -59,7 +62,7 @@ class repository:
             self.cmd.copyfile(self.link.const_hookfilepath(repohook), \
                               repohookpath)
             self.cmd.setexecutable(repohookpath)
-            print "Install hook: "+repohook+" ->  "+self.conf.hookspath
+            print("Install hook: "+repohook+" ->  "+self.conf.hookspath)
 
     def installtemplates(self):
         """ Install templates in repository """
@@ -83,7 +86,7 @@ class repository:
             keywords = "general, example, template"
             doc.adddocument(tmplpath, tmplnamelist, "default", keywords)
             doc.release(tmplnamelist)
-            print "Install template: "+tmplfname+" -> "+self.conf.repourl 
+            print("Install template: "+tmplfname+" -> "+self.conf.repourl) 
 
     def walkrepo(self, path):
         """ Walk the repo and list the content. """
@@ -120,7 +123,7 @@ class repository:
         
         for old_path in self.walkreponodes(trunkpath):
             new_path = projpath + old_path.rsplit(splitpath)[1].upper()
-            print new_path
+            print(new_path)
             self.svncmd.mkdir(new_path, "Upgrade document path")
 
     def upgradefilename(self):
@@ -137,7 +140,7 @@ class repository:
             new_path = string.join(new_baselist[:-1], "/")
             new_name = projpath + new_path + "/" + new_basename + \
                        "." + docext
-            print new_name
+            print(new_name)
             self.svncmd.server_side_copy(old_name, new_name, \
                                                "Upgrade document name")
             

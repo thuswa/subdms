@@ -27,6 +27,6 @@ conf = lowlevel.config()
 
 # Dump database
 for item in svncmd.recursivels(conf.repourl):
-    print item["name"]
+    print(item["name"])
 
 

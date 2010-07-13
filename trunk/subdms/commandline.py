@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 # -*- coding:  utf-8 -*-
 # $Id$
-# Last modified Fri Jul 31 14:17:03 2009 on violator
-# update count: 290
+# Last modified Wed Jul  7 19:07:47 2010 on stalker
+# update count: 291
 #
 # subdms - A document management system based on subversion.
 # Copyright (C) 2009  Albert Thuswaldner
@@ -23,9 +23,9 @@
 import os
 import sys
 
-import database
-import lowlevel
-import frontend
+from . import database
+from . import lowlevel
+from . import frontend
 
 from subdms import __version__
 
@@ -68,64 +68,64 @@ class cli:
             elif args[2] == "templates":
                 self.listtmplaction()
         else:
-            print self.shorthelp
+            print(self.shorthelp)
             
     def displayhelp(self, args):
         """ Display help text. """
         if len(args) < 3:
             self.disptophelp()
         elif args[2] == "add":
-            print "add: Add document files to the DMS."
-            print "Usage: subdms add filename project doctype [title]"
-            print
-            print "Example:"
-            print " > subdms add filename.txt myproject note \"Technical note\""
-            print "or:"
-            print " > subdms add \"this project note.txt\" myproject note"
-            print
-            print "This command-line interface makes it possible to add " \
-                  "documents in the DMS."
-            print "It is a complement to add files via the graphical "\
-                  "user interface,"
-            print "which opens for the possibility to write scripts to " \
-                  "automate this process."              
-            print "If you enter a title, make sure the title is a single " \
-                  "string i.e. put it within \"\""
-            print "If no title is given the file name without extension is "\
-                  "set as title."
-            print
+            print("add: Add document files to the DMS.")
+            print("Usage: subdms add filename project doctype [title]")
+            print()
+            print("Example:")
+            print(" > subdms add filename.txt myproject note \"Technical note\"")
+            print("or:")
+            print(" > subdms add \"this project note.txt\" myproject note")
+            print()
+            print("This command-line interface makes it possible to add " \
+                  "documents in the DMS.")
+            print("It is a complement to add files via the graphical "\
+                  "user interface,")
+            print("which opens for the possibility to write scripts to " \
+                  "automate this process.")              
+            print("If you enter a title, make sure the title is a single " \
+                  "string i.e. put it within \"\"")
+            print("If no title is given the file name without extension is "\
+                  "set as title.")
+            print()
         elif args[2] == "create":
-            print "create: Create a new project."
-            print "Usage: subdms create acronym projectname doctypes"
-            print
-            print "Example:"
-            print " > subdms create LTE \"Long Term Evolution\" " \
-                  "\"NOTE REPORT LIST SPEC\""
-            print
-            print "Note the \"\" around both the project name and the list " \
-                  "of document types." 
-            print
+            print("create: Create a new project.")
+            print("Usage: subdms create acronym projectname doctypes")
+            print()
+            print("Example:")
+            print(" > subdms create LTE \"Long Term Evolution\" " \
+                  "\"NOTE REPORT LIST SPEC\"")
+            print()
+            print("Note the \"\" around both the project name and the list " \
+                  "of document types.") 
+            print()
         elif args[2] == "list":
-            print "list: List documents, projects or templates."
-            print "Usage:"
-            print "       1. subdms list documents"
-            print "       2. subdms list projects"
-            print "       3. subdms list templates"
-            print
+            print("list: List documents, projects or templates.")
+            print("Usage:")
+            print("       1. subdms list documents")
+            print("       2. subdms list projects")
+            print("       3. subdms list templates")
+            print()
         else:
             self.disptophelp()
             
     def disptophelp(self):
         """ Display help about available subcommands."""
-        print "usage: subdms <subcommand> [options]"
-        print "Subdms command-line client, version "+__version__
-        print "Type 'svn help <subcommand>' for help on a specific " \
-              "subcommand."
-        print
-        print "Available subcommands:"
-        print "   add"
-        print "   create"
-        print "   list"
+        print("usage: subdms <subcommand> [options]")
+        print("Subdms command-line client, version "+__version__)
+        print("Type 'svn help <subcommand>' for help on a specific " \
+              "subcommand.")
+        print()
+        print("Available subcommands:")
+        print("   add")
+        print("   create")
+        print("   list")
 
         
     def addaction(self, args):
@@ -190,9 +190,9 @@ class cli:
             sys.exit("Error: Project "+acronym+" already exists " \
                      "in category "+self.category)
         else:
-            print acronym
-            print name
-            print doctypes
+            print(acronym)
+            print(name)
+            print(doctypes)
             self.proj.createproject(self.category, acronym, name, doctypes)
 
     def listdocaction(self):
@@ -204,8 +204,8 @@ class cli:
         """ List the existing projects. """
         self.projlistheader()
         for proj in self.db.getallprojs():
-            print "%7s, %22s, %12s, %20s, %s" \
-                  % (proj[2], proj[3], proj[4], proj[5][0:19], proj[6])
+            print("%7s, %22s, %12s, %20s, %s" \
+                  % (proj[2], proj[3], proj[4], proj[5][0:19], proj[6]))
 
     def listtmplaction(self):
         """ List the existing templates. """
@@ -218,12 +218,12 @@ class cli:
             docnamelist = list(doc[1:7])
             state = self.state.getstate(docnamelist)[0]
             docid = self.link.const_docid(docnamelist)
-            title = doc[7].replace(u"\n" , u" || ")
+            title = doc[7].replace("\n" , " || ")
             doctype = doc[6]
             issue = doc[5]
             status = doc[8]
-            print "%2s, %23s, %37s, %5s, %6s, %9s" % (state, docid, title, \
-                  doctype, issue, status)
+            print("%2s, %23s, %37s, %5s, %6s, %9s" % (state, docid, title, \
+                  doctype, issue, status))
 
     def checknoarg(self, args, minarg, maxarg):
         """Check for valid number of arguments.  """
@@ -235,15 +235,15 @@ class cli:
 
     def doclistheader(self):
         """ Header for document list print out. """
-        print " S       Document Id                    Document Title       " \
-              "       Type   Issue     Status   "
-        print "-- ------------------------ ---------------------------------" \
-              "----- ------ ------- ------------"
+        print(" S       Document Id                    Document Title       " \
+              "       Type   Issue     Status   ")
+        print("-- ------------------------ ---------------------------------" \
+              "----- ------ ------- ------------")
 
     def projlistheader(self):
         """ Header for project list print out. """
-        print "Acronym        Description        Created by       " \
-              "Date Created           Document types"
-        print "-------  ----------------------  ------------  " \
-              "--------------------  ------------------------"
+        print("Acronym        Description        Created by       " \
+              "Date Created           Document types")
+        print("-------  ----------------------  ------------  " \
+              "--------------------  ------------------------")
 

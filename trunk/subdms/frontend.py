@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 # -*- coding:  utf-8 -*-
 # $Id$
-# Last modified Sun Aug 16 12:06:33 2009 on violator
-# update count: 1190
+# Last modified Wed Jul  7 20:47:07 2010 on stalker
+# update count: 1192
 #
 # subdms - A document management system based on subversion.
 # Copyright (C) 2009  Albert Thuswaldner
@@ -20,6 +20,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+# from . import integration # Python 3.X 
+# from . import lowlevel    # Python 3.X   
 import integration
 import lowlevel
 

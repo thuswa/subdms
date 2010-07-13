@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 # -*- coding:  utf-8 -*-
 # $Id$
-# Last modified Sat Aug  1 14:37:10 2009 on violator
-# update count: 108
+# Last modified Wed Jul  7 20:57:40 2010 on stalker
+# update count: 111
 #
 # subdms - A document management system based on subversion.
 # Copyright (C) 2009  Albert Thuswaldner
@@ -63,4 +63,5 @@ setup(name='subdms',
                  'subdms/subdms-upgrade'],
       platforms='any',
       requires=['pysvn', 'pyqt4', 'pysqlite3', 'svn']
+#      build_requires=['pysvn', 'pyqt4', 'pysqlite3', 'svn']
       )

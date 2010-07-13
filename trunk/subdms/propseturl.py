@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 # -*- coding:  utf-8 -*-
 # $Id$
-# Last modified Wed Jul  8 22:46:41 2009 on violator
-# update count: 101
+# Last modified Wed Jul  7 20:51:13 2010 on stalker
+# update count: 102
 #
 # subdms - A document management system based on subversion.
 # Copyright (C) 2009  Albert Thuswaldner
@@ -22,6 +22,7 @@
 
 from svn import fs, repos, core
 
+# from . import lowlevel # Python 3.X
 import lowlevel
 
 conf = lowlevel.config()

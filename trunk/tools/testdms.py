@@ -41,7 +41,7 @@ doctitle3='Test list2'
 frontend.createdocument(docnamelist3, doctitle3)
 
 # Dump database
-print db.getalldocs()
-print db.getallprojs()
+print(db.getalldocs())
+print(db.getallprojs())
 
-print db.getdocno("test", "list")
+print(db.getdocno("test", "list"))

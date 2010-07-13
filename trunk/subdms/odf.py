@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 # -*- coding:  utf-8 -*-
 # $Id$
-# Last modified Wed Jul  8 22:44:12 2009 on violator
-# update count: 728
+# Last modified Wed Jul  7 20:50:24 2010 on stalker
+# update count: 729
 #
 # subdms - A document management system based on subversion.
 # Copyright (C) 2009  Albert Thuswaldner
@@ -25,6 +25,7 @@ import re
 import xml.dom.minidom
 import zipfile
 
+# from . import lowlevel # Python 3.X
 import lowlevel
 
 """
@@ -58,7 +59,7 @@ class odfuserfields:
         fieldlist = []
         for fields in ufds:
             for field in fields.childNodes:
-                fieldlist.append(field.attributes.items())
+                fieldlist.append(list(field.attributes.items()))
         return fieldlist            
 
     def setuserfields(self, contentstr, fields):

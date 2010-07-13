@@ -37,7 +37,7 @@ class dtime:
    
     def attime(self):
        """ Prints at timestamp to standard output. """
-       print 'At '+self.datetimestamp()  
+       print('At '+self.datetimestamp())  
 
     def unix2date(self, unixtime):
         """ Converts unix time to date string. """

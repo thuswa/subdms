@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 # -*- coding:  utf-8 -*-
 # $Id$
-# Last modified Sun Jun  6 10:02:19 2010 on stalker
-# update count: 1404
+# Last modified Wed Jul  7 20:45:09 2010 on stalker
+# update count: 1407
 #
 # subdms - A document management system based on subversion.
 # Copyright (C) 2009  Albert Thuswaldner
@@ -24,18 +24,22 @@ from PyQt4 import QtGui
 from PyQt4 import QtCore
 
 import database
+# from . import icondict # Python 3.X 
+# from . import frontend # Python 3.X 
+# from . import lowlevel # Python 3.X 
 import icondict
 import frontend 
 import lowlevel
 
+
 from subdms import __version__
-from aboutui import Ui_AboutDialog
-from commitui import Ui_Commit_Dialog
-from createdocumentui import Ui_New_Document_Dialog
-from createprojui import Ui_New_Project_Dialog
-from documentinfoui import Ui_Document_Info_Dialog
-from helpviewui import helpView
-from mainwindow import Ui_MainWindow
+from .aboutui import Ui_AboutDialog
+from .commitui import Ui_Commit_Dialog
+from .createdocumentui import Ui_New_Document_Dialog
+from .createprojui import Ui_New_Project_Dialog
+from .documentinfoui import Ui_Document_Info_Dialog
+from .helpviewui import helpView
+from .mainwindow import Ui_MainWindow
 
 db = database.sqlitedb()
 
@@ -247,7 +251,7 @@ class ClientUi(QtGui.QMainWindow):
             docnamelist = list(doc[1:7])
             state = QtGui.QTableWidgetItem(self.state.getstate(docnamelist)[0])
             docid = QtGui.QTableWidgetItem(self.link.const_docid(docnamelist))
-            title = QtGui.QTableWidgetItem(doc[7].replace(u"\n" , u" || "))
+            title = QtGui.QTableWidgetItem(doc[7].replace("\n" , " || "))
             doctype = QtGui.QTableWidgetItem(doc[6])
             issue =  QtGui.QTableWidgetItem(doc[5])
             status = QtGui.QTableWidgetItem(doc[8])
@@ -283,9 +287,9 @@ class ClientUi(QtGui.QMainWindow):
         typeitem = self.ui.documentlist.item(row, 3)
         issueitem = self.ui.documentlist.item(row, 4)
         if docitem:
-            return self.link.deconst_docfname(unicode(docitem.text())+'-'+ \
-                                              unicode(issueitem.text())+'.'+ \
-                                              unicode(typeitem.text()))
+            return self.link.deconst_docfname(str(docitem.text())+'-'+ \
+                                              str(issueitem.text())+'.'+ \
+                                              str(typeitem.text()))
         else:
             return None
 
@@ -403,10 +407,10 @@ class projectDialog(QtGui.QDialog):
         self.ui.doctypes.setText(self.conf.doctypes)       
             
     def okaction(self):
-        category = unicode(self.ui.Select_Category_Box.currentText())
-        acronym = unicode(self.ui.project_acronym.text()).upper()
-        name = unicode(self.ui.project_name.text())
-        doctypes = unicode(self.ui.doctypes.text()).upper().\
+        category = str(self.ui.Select_Category_Box.currentText())
+        acronym = str(self.ui.project_acronym.text()).upper()
+        name = str(self.ui.project_name.text())
+        doctypes = str(self.ui.doctypes.text()).upper().\
                    replace(" ","").rsplit(",")
 
         if not acronym:
@@ -454,13 +458,13 @@ class documentDialog(QtGui.QDialog):
 
     # Selected combobox item functions   
     def selectedproject(self):
-        return unicode(self.ui.Select_Project_Box.currentText())
+        return str(self.ui.Select_Project_Box.currentText())
 
     def selecteddoctype(self):
-        return unicode(self.ui.Select_Type_Box.currentText())
+        return str(self.ui.Select_Type_Box.currentText())
 
     def selectedfiletype(self):
-        return unicode(self.ui.File_Type_Box.currentText())
+        return str(self.ui.File_Type_Box.currentText())
 
     def selectedtemplate(self):
         n = self.ui.Template_Name_Box.currentIndex()
@@ -482,7 +486,7 @@ class documentDialog(QtGui.QDialog):
             
     def setdoctypelist(self, project):
         self.ui.Select_Type_Box.clear()
-        for doctype in db.getdoctypes(self.cat, unicode(project)).split(","):
+        for doctype in db.getdoctypes(self.cat, str(project)).split(","):
             self.ui.Select_Type_Box.addItem(doctype)
 
     def setfiletypelist(self):
@@ -494,7 +498,7 @@ class documentDialog(QtGui.QDialog):
     def settmplnamelist(self, filetype):
         n=0
         self.ui.Template_Name_Box.clear()
-        for tmpl in db.gettemplates(unicode(filetype)):
+        for tmpl in db.gettemplates(str(filetype)):
             self.tmpllist[n*6:n*6+6] = list(tmpl[1:7])
             self.ui.Template_Name_Box.addItem(tmpl[7])
             n += 1
@@ -505,8 +509,8 @@ class documentDialog(QtGui.QDialog):
         self.ui.Selected_File_Name.setText(filename)
         
     def okaction(self):
-        doctitle = unicode(self.ui.document_title.toPlainText())
-        dockeywords = unicode(self.ui.document_keywords.toPlainText())
+        doctitle = str(self.ui.document_title.toPlainText())
+        dockeywords = str(self.ui.document_keywords.toPlainText())
         project = self.selectedproject()
         doctype = self.selecteddoctype().upper()
         issue = "1"
@@ -520,13 +524,13 @@ class documentDialog(QtGui.QDialog):
             create = True
         if selectedtab == 1:
             # Create from File
-            addfilepath = unicode(self.ui.Selected_File_Name.text())
+            addfilepath = str(self.ui.Selected_File_Name.text())
             filetype = addfilepath.rsplit('.')[-1]
             create = False
         if selectedtab == 2:
             # Create from existing Document
-            basedocid = unicode(self.ui.Document_Id.text())
-            basedocissue = unicode(self.ui.Issue.text())
+            basedocid = str(self.ui.Document_Id.text())
+            basedocissue = str(self.ui.Issue.text())
 
             # Display error if file does not exist
             if not db.docexists(basedocid, basedocissue):
@@ -624,11 +628,11 @@ class documentInfoDialog(QtGui.QDialog):
     def savechanges(self):
         """ Save changes. """
         #if self.ui.document_title.textChanged():
-        doctitle = unicode(self.ui.document_title.toPlainText())
-        dockeywords = unicode(self.ui.document_keywords.toPlainText())
-        docid = unicode(self.ui.document_id.text())
-        issue = unicode(self.ui.issue.text())
-        filetype = unicode(self.ui.file_type.text())
+        doctitle = str(self.ui.document_title.toPlainText())
+        dockeywords = str(self.ui.document_keywords.toPlainText())
+        docid = str(self.ui.document_id.text())
+        issue = str(self.ui.issue.text())
+        filetype = str(self.ui.file_type.text())
         doclist = docid.split('-')
         doclist.extend([issue, filetype])
         self.doc.changetitle(doclist, doctitle) 
@@ -643,8 +647,8 @@ class documentInfoDialog(QtGui.QDialog):
 
     def sethistory(self):
         """ Set revision history list. """
-        docid = unicode(self.ui.document_id.text())
-        issue = unicode(self.ui.issue.text())
+        docid = str(self.ui.document_id.text())
+        issue = str(self.ui.issue.text())
         docnamelist = self.link.deconst_docfname(docid)
         docnamelist.append(issue) 
         docrevlist = db.getdocrev(docnamelist)
@@ -678,7 +682,7 @@ class commitDialog(QtGui.QDialog):
         self.show()
         
     def okaction(self):
-        dockeywords = unicode(self.ui.commit_message.toPlainText())
+        dockeywords = str(self.ui.commit_message.toPlainText())
         self.doc.commit(self.doclist, dockeywords)
         self.close()
 
