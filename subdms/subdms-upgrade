@@ -26,19 +26,19 @@ cmd = lowlevel.command()
 conf = lowlevel.config()
 repo = repository.repository()
 
-print "Upgrade subdms server-side"
-print "--------------------------"
+print("Upgrade subdms server-side")
+print("--------------------------")
 
 # Upgrade db
 db = database.sqlitedb()
 doclist = db.getallrev()
 projlist = db.dumpallprojs()
-print "Dump database."
+print("Dump database.")
 
 # Remove old database
 cmd.rm(conf.dbpath)
 
-print "Remove old database." 
+print("Remove old database.") 
 db2 = database.sqlitedb()
 db2.createdb()
 
@@ -47,9 +47,9 @@ db2.upgradeprojlist(projlist)
 
 # Upgrade subversion repository layout
 repo = repository.repository()
-print "Upgrade repository layout:"
+print("Upgrade repository layout:")
 repo.upgraderepo()
-print "Upgrade documents in repository:"
+print("Upgrade documents in repository:")
 repo.upgradefilename()
 
 

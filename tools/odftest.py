@@ -41,8 +41,8 @@ fields = integ.const_fields(docnamelist, doctitle, dockeywords, author, status)
 docpath = link.const_docpath(docnamelist)
 doczippath = link.const_doczippath(docnamelist)
 
-print docpath
-print doczippath
+print(docpath)
+print(doczippath)
 
 # Rename odf file
 cmd.renamefile(docpath, doczippath)
@@ -51,7 +51,7 @@ cmd.renamefile(docpath, doczippath)
 contentstr = ouf.extractcontent(doczippath)
 contentstr = ouf.setuserfields(contentstr, fields)
 
-print ouf.getuserfields(contentstr)
+print(ouf.getuserfields(contentstr))
 
 ouf.writecontent(docpath, contentstr)
 

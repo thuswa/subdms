@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 # -*- coding:  utf-8 -*-
 # $Id$
-# Last modified Sun Aug 23 13:30:08 2009 on violator
-# update count: 712
+# Last modified Wed Jul  7 20:49:42 2010 on stalker
+# update count: 719
 #
 # subdms - A document management system based on subversion.
 # Copyright (C) 2009  Albert Thuswaldner
@@ -20,7 +20,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import ConfigParser
+# import configparser  # Python 3.X
+import ConfigParser # Python 2.6 
 import os
 import pysvn
 import shutil
@@ -29,6 +30,7 @@ import subprocess
 #import win32api
 #import win32con
 
+# from . import database # Python 3.X
 import database
 
 """ Low-level classes. """
@@ -36,7 +38,8 @@ import database
 class config:    
     def __init__(self):
         """ set built-in and user defined configs """
-        self.conf = ConfigParser.ConfigParser()
+#        self.conf = configparser.ConfigParser() # Python 3.X
+        self.conf = ConfigParser.ConfigParser()  # Python 2.6
 
         # Determine config file path dependent on which os
         if os.name == 'nt':
@@ -329,11 +332,11 @@ class command:
 
     def setreadonly(self, filepath):
         """ Set file to read-only. """
-        os.chmod(filepath, 0444)
+        os.chmod(filepath, 0o444)
 
     def setexecutable(self, filepath):
         """ Set file to executable. """
-        os.chmod(filepath, 0755)
+        os.chmod(filepath, 0o755)
 
     def launch_editor(self, docnamelist):
         """ Launch appropriate editor. """
@@ -364,7 +367,7 @@ class command:
         """ Create workspace directory. """
         if not os.path.isdir(self.conf.workpath):
             os.makedirs(self.conf.workpath)
-            print "Create workspace: "+ self.conf.workpath
+            print("Create workspace: "+ self.conf.workpath)
 
     def createdbpath(self):
         """ Create database directory. """
@@ -488,7 +491,7 @@ class svncmd:
         
     def propget(self, property,  url):
         """ Get property. """
-        return self.client.propget(property, url).values().pop()
+        return list(self.client.propget(property, url).values()).pop()
 
     def propset(self, property, propvalue, path):
         """ Set property. """

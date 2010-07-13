@@ -63,7 +63,7 @@ def main():
            and not newdocptrn.match(log_message):
       if status in conf.statuslist[4:6]:
         errors = 1
-        print docfname+" is "+status+" and thus read-only." 
+        print(docfname+" is "+status+" and thus read-only.") 
   return errors
   
 if __name__ == "__main__":

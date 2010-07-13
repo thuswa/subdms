@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 # -*- coding:  utf-8 -*-
 # $Id$
-# Last modified Fri Jul 10 00:00:25 2009 on violator
-# update count: 722
+# Last modified Wed Jul  7 20:48:37 2010 on stalker
+# update count: 723
 #
 # subdms - A document management system based on subversion.
 # Copyright (C) 2009  Albert Thuswaldner
@@ -24,6 +24,10 @@ import codecs
 import string
 import re
 
+# from . import database # Python 3.X
+# from . import epoch    # Python 3.X
+# from . import lowlevel # Python 3.X
+# from . import odf      # Python 3.X
 import database
 import epoch
 import lowlevel
@@ -99,7 +103,7 @@ class docinteg:
         # Update fields and write contents back to tex file
         outfile = codecs.open(docpath, encoding='utf-8', mode='w')
         contentstr = open(doctmppath).read()
-        for key,value in fields.iteritems():
+        for key,value in fields.items():
             fieldptrn = self.texfieldpattern(key)
             newfield = self.texfieldcode(key, value.replace("\n", r"\\"))
             contentstr = re.sub(fieldptrn, newfield, contentstr)

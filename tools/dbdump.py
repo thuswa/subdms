@@ -25,16 +25,16 @@ from subdms import database
 db = database.sqlitedb()
 
 # Dump database
-print "Document list:"
+print("Document list:")
 for row in db.getalldocs():
-    print row
-print "Template list:"
+    print(row)
+print("Template list:")
 for row in db.getalltmpls():
-    print row
-print "Project list:"
+    print(row)
+print("Project list:")
 for row in db.dumpallprojs(): 
-    print row
-print "Revision list:"
+    print(row)
+print("Revision list:")
 for row in db.getallrev():
-    print row 
+    print(row) 
 

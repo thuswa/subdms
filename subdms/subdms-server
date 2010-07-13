@@ -26,8 +26,8 @@ cmd = lowlevel.command()
 conf = lowlevel.config()
 repo = repository.repository()
 
-print "Initialize subdms server-side"
-print "-----------------------------"
+print("Initialize subdms server-side")
+print("-----------------------------")
 
 repo.checkrepotools()
 

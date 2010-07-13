@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 # -*- coding:  utf-8 -*-
 # $Id$
-# Last modified Fri Jul 17 22:14:57 2009 on violator
-# update count: 606
+# Last modified Wed Jul  7 20:42:49 2010 on stalker
+# update count: 610
 #
 # subdms - A document management system based on subversion.
 # Copyright (C) 2009  Albert Thuswaldner
@@ -23,6 +23,8 @@
 from pysqlite2 import dbapi2 as sqlite
 import string
 
+# from . import epoch    # Python 3.X
+# from . import lowlevel # Python 3.X
 import epoch
 import lowlevel
 
@@ -56,7 +58,7 @@ class sqlitedb:
                             "category, acronym, projname, author, date, " \
                             "doctypes TEXT)")
 
-        print "Create database: "+self.conf.dbpath
+        print("Create database: "+self.conf.dbpath)
 
     def writedoclist(self, rvn, writestr):
         """ Write to documents table in database. """

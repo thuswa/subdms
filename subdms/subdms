@@ -35,12 +35,12 @@ if __name__ == "__main__":
         if cmd.dbexists():
             runclient += 1
         else:    
-            print "Error: The database file does not exist."
+            print("Error: The database file does not exist.")
 
         if cmd.repoexists():
             runclient += 1
         else:    
-            print "Error: The document repository does not exist."
+            print("Error: The document repository does not exist.")
 
         if runclient == 2:    
             # Start GUI
@@ -48,9 +48,9 @@ if __name__ == "__main__":
             clientapp = client.ClientUi()
             clientapp.show()
         else:
-            print "       Check the config file."   
-            print "       Initialize the server-side of subdms if this has " \
-                  "not been done." 
+            print("       Check the config file.")   
+            print("       Initialize the server-side of subdms if this has " \
+                  "not been done.") 
             
         sys.exit(app.exec_())
     else:
