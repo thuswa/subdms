@@ -1,0 +1,101 @@
+A document management system (dms) based on subversion.
+
+See [NOTES](http://code.google.com/p/subdms/source/browse/trunk/NOTES) file for details about the implementation.
+
+## Requires ##
+
+  * python:     http://www.python.org
+  * pysvn:      http://pysvn.tigris.org
+  * pyQt4:      http://www.riverbankcomputing.com/software/pyqt/
+  * pysqlite:   http://oss.itsystementwicklung.de/trac/pysqlite/
+  * Subversion: http://subversion.tigris.org/
+
+## How to use ##
+Please read the [README](http://code.google.com/p/subdms/source/browse/trunk/README) file
+
+## Feedback ##
+Tell me what you think. All comments, bugs and improvement ideas are welcome. Add an ["issue"](http://code.google.com/p/pyhdf5io/issues/list) on the project page or drop me an email.
+
+## News ##
+**2009-07-16** Version 0.3.4 Released!
+  * Updated documentation
+
+**2009-07-16** Version 0.3.3 Released!
+  * Fixed command-line interface regression bug
+  * Fix user defined file types option bug
+
+**2009-07-09** Version 0.3.2 Released!
+  * Fixed encoding problem with non us-ascii characters in document integration of tex-files.
+
+**2009-07-01** Version 0.3.1 Released!
+  * Fixed documentation
+
+**2009-07-01** Version 0.3.0 Released!
+
+  * **ODF-support!!!** Subdms now supports the Open Document Format.
+  * User can define additional file types to be handled by Subdms.
+  * Included check of server-side at client start-up.
+  * Added a tab in the document info dialog where the revision history is shown.
+  * Added set document to obsolete option.
+
+"Mom, it supports ODF!!!" Yes the ODF-support is really something to write
+home about and is the big thing in this release. The default .odt template
+shows what is possible in terms of how ODF-documents are integrated with Subdms.
+Again the template sucks when it comes to layout and general design, please
+improve it if you have any ideas.
+
+**Known problems:**
+  * Tex-file document integration still does not work for non us-ascii characters. So avoid using non us-ascii in title, project name, document types and keywords for now.
+
+**2009-05-06** Version 0.2.0 Released!
+
+This version includes the following improvements:
+  * Added document info dialog
+  * Included option to Install templates
+  * Included right-click menu in document list
+  * Restrict commits on released and obsolete documents
+  * Show-case document integration
+  * Added support for .zip and .pdf files
+  * Added support for Document Keywords
+  * Added option to change document title
+  * Added view document option
+  * Added support multi-line document titles
+  * Disabled actions inappropriate for selected document
+  * Improved the "New Project" dialog
+  * Improved the "Commit Changes" dialog
+  * Included upgrade script
+
+**Known problems:**
+  * Document integration does not work for non us-ascii characters. So avoid using non us-ascii in title, project name, document types and keywords.
+
+Notes:
+  * The most exciting feature is the document integration, for now only .tex files support these feature, to see how it works base a document on the default.tex template and edit it to  see what happens, pretty close to magic if you ask me!
+  * The default .tex template sort of sucks though, so if have any ideas on how to improve it, do not hesitate to contact me.
+  * If you have installed and used the previous 0.1.0 version you might want to upgrade the subdms-server side, see the documentation for details.
+
+**2009-04-02** Version 0.1.0 Released!
+
+This version is still alpha, although it is a significant improvement over the 0.0.1 version, which justifies the jump in version number.
+
+This version includes the following improvements:
+  * Improved user interface.
+  * Improved document list.
+  * Three ways to create documents: from template, from file, from existing document
+  * Ability to release documents.
+  * Ability to create new issues of a document.
+  * Support of .tex files.
+  * Command-line interface to add files to the DMS.
+
+There is no direct upgrade path from version 0.0.1 to 0.1.0, due to internal changes. You have to back up your documents, remove the database and repository, install the new version, and then re-add all documents back.
+
+**2009-03-17** Version 0.0.1 Released!
+
+This alpha version implements the very basic functions of a Document Management System.
+
+With it you can:
+  * Create projects and documents
+  * List created documents
+  * Edit and check-in documents
+
+Atm the system can only handle text files, is not yet completely server/client, and the user interface is very basic. All this will of course improve with the coming releases.
+
